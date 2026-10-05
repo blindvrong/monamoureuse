@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Heart, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
@@ -430,21 +431,24 @@ function LoveLetter() {
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p aria-live="polite">{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" type="button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
     <section className="love-letters" aria-labelledby="love-letters-title">
       {isAllReadConfirmed ? (
-        <div className="letters-thank-you" role="status">
-          <Heart className="letters-thank-you-heart" fill="currentColor" aria-hidden="true" />
-          <h3 id="love-letters-title">MERCI LÏA<br />D’AVOIR TOUT LU<br /><span>JE T’AIME</span></h3>
-          {notificationStatus && <p className="letter-notification-status" aria-live="polite">{notificationStatus}</p>}
-          {!isFinalNotificationSent && (
-            <button
-              className="next-letter-button"
-              type="button"
-              disabled={notificationStatus === 'Envoi de l’alerte e-mail…'}
-              onClick={confirmAllLettersRead}
-            >
-              Renvoyer l’alerte
-            </button>
-          )}
-        </div>
+        createPortal(
+          <div className="letters-thank-you" role="dialog" aria-modal="true" aria-labelledby="love-letters-title">
+            <Heart className="letters-thank-you-heart" fill="currentColor" aria-hidden="true" />
+            <h3 id="love-letters-title">MERCI LÏA<br />D’AVOIR TOUT LU<br /><span>JE T’AIME</span></h3>
+            {notificationStatus && <p className="letter-notification-status" aria-live="polite">{notificationStatus}</p>}
+            {!isFinalNotificationSent && (
+              <button
+                className="next-letter-button"
+                type="button"
+                disabled={notificationStatus === 'Envoi de l’alerte e-mail…'}
+                onClick={confirmAllLettersRead}
+              >
+                Renvoyer l’alerte
+              </button>
+            )}
+          </div>,
+          document.body,
+        )
       ) : (
         <>
           <div className="love-letters-heading">
@@ -561,7 +565,6 @@ export default function Page() {
           <div className="empty-results" role="status"><p>Aucun morceau à afficher.</p></div>
         )}
       </section>
-      <footer><p>j&apos;ai fait ça en pensant à toi.</p><span>pour toi, Lïa</span></footer>
     </div>
     {isSurpriseOpen && <div className={`surprise-overlay${isRevealing ? ' is-leaving' : ''}`} role="dialog" aria-modal="true" aria-labelledby="surprise-title">
       <div className="surprise-card">
