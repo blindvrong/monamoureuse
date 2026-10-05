@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Heart, Pause, Play, Search, Shuffle } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Heart, Play, Search, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
 const songs = [
@@ -237,9 +237,6 @@ function SongCard({ song, index }: { song: typeof songs[number]; index: number }
 function LoveLetter() {
   const [reasonIndex, setReasonIndex] = useState(0)
   const [dailyLetterIndex, setDailyLetterIndex] = useState(0)
-  const [musicPlaying, setMusicPlaying] = useState(false)
-  const [musicBlocked, setMusicBlocked] = useState(false)
-  const musicRef = useRef<HTMLAudioElement>(null)
   const reason = reasons[reasonIndex]
 
   useEffect(() => {
@@ -252,26 +249,7 @@ function LoveLetter() {
     const elapsedDays = Math.floor((todayUtc - anchor) / 86_400_000)
     setDailyLetterIndex(((elapsedDays % loveLetters.length) + loveLetters.length) % loveLetters.length)
 
-    const audio = musicRef.current
-    if (audio) {
-      audio.volume = 0.14
-      audio.play().then(() => setMusicPlaying(true)).catch(() => setMusicBlocked(true))
-    }
   }, [])
-
-  function toggleMusic() {
-    const audio = musicRef.current
-    if (!audio) return
-    if (audio.paused) {
-      audio.play().then(() => {
-        setMusicPlaying(true)
-        setMusicBlocked(false)
-      }).catch(() => setMusicBlocked(true))
-    } else {
-      audio.pause()
-      setMusicPlaying(false)
-    }
-  }
 
   function showRandomReason() {
     setReasonIndex((current) => {
@@ -301,20 +279,15 @@ function LoveLetter() {
         <div className="love-letter-music">
           <div className="love-letter-music-copy">
             <span className="music-note" aria-hidden="true">♪</span>
-            <span><strong>Piano doux</strong><small>Musique originale · en boucle</small></span>
+            <span><strong>Passionfruit</strong><small>Drake · un de tes morceaux préférés</small></span>
           </div>
-          <button
-            className="music-toggle"
-            type="button"
-            onClick={toggleMusic}
-            aria-pressed={musicPlaying}
-            aria-label={musicPlaying ? 'Mettre la musique en pause' : 'Lancer la musique'}
-          >
-            {musicPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-            <span>{musicPlaying ? 'Pause' : 'Écouter'}</span>
-          </button>
-          {musicBlocked && <small className="music-hint">Le navigateur a bloqué le démarrage automatique. Appuie sur « Écouter » pour lancer la musique.</small>}
-          <audio ref={musicRef} src="piano-doux.wav" autoPlay loop preload="auto" />
+          <iframe
+            className="spotify-player"
+            src="https://open.spotify.com/embed/track/5mCPDVBb16L4XQwDdbRUpz?utm_source=generator&autoplay=1"
+            title="Passionfruit de Drake sur Spotify"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="eager"
+          />
         </div>
       </article>
     </section>
