@@ -566,6 +566,10 @@ html {
   display: none;
 }
 
+main.site-shell header.topbar nav {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
