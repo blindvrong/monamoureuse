@@ -41,9 +41,34 @@ test('sends an alert through Web3Forms with the letter details', async () => {
     assert.deepEqual(JSON.parse(emailRequest.init.body), {
       access_key: env.WEB3FORMS_ACCESS_KEY,
       from_name: 'Monamoureuse',
-      subject: 'Elle a lu la lettre 3/30',
-      message: 'Elle vient de terminer la lettre 3/30 : « Ton sourire », puis a cliqué sur « Lettre suivante ».',
+      subject: 'Elle a lu la lettre 3/100',
+      message: 'Elle vient de terminer la lettre 3/100 : « Ton sourire », puis a cliqué sur « Lettre suivante ».',
     })
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test('accepts a notification for the hundredth letter', async () => {
+  const originalFetch = globalThis.fetch
+  let emailRequest
+  globalThis.fetch = async (url, init) => {
+    emailRequest = { url, init }
+    return Response.json({ success: true })
+  }
+
+  try {
+    const response = await worker.fetch(
+      postRequest({ letterNumber: 100, letterTitle: 'La dernière lettre' }),
+      env,
+    )
+
+    assert.equal(response.status, 200)
+    assert.deepEqual(await response.json(), { ok: true })
+    assert.equal(
+      JSON.parse(emailRequest.init.body).subject,
+      'Elle a lu la lettre 100/100',
+    )
   } finally {
     globalThis.fetch = originalFetch
   }
@@ -66,7 +91,7 @@ test('rejects malformed letter details without sending an e-mail', async () => {
 
   try {
     const response = await worker.fetch(
-      postRequest({ letterNumber: 31, letterTitle: 'Out of range' }),
+      postRequest({ letterNumber: 101, letterTitle: 'Out of range' }),
       env,
     )
 

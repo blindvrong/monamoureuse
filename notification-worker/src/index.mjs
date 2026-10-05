@@ -1,3 +1,5 @@
+const totalLetters = 100
+
 function jsonResponse(body, status, origin) {
   return new Response(JSON.stringify(body), {
     status,
@@ -61,7 +63,7 @@ export default {
     if (
       !Number.isInteger(letterNumber)
       || letterNumber < 1
-      || letterNumber > 30
+      || letterNumber > totalLetters
       || typeof letterTitle !== 'string'
       || letterTitle.trim().length === 0
       || letterTitle.length > 120
@@ -79,8 +81,8 @@ export default {
       body: JSON.stringify({
         access_key: env.WEB3FORMS_ACCESS_KEY,
         from_name: 'Monamoureuse',
-        subject: `Elle a lu la lettre ${letterNumber}/30`,
-        message: `Elle vient de terminer la lettre ${letterNumber}/30 : « ${title} », puis a cliqué sur « Lettre suivante ».`,
+        subject: `Elle a lu la lettre ${letterNumber}/${totalLetters}`,
+        message: `Elle vient de terminer la lettre ${letterNumber}/${totalLetters} : « ${title} », puis a cliqué sur « Lettre suivante ».`,
       }),
     })
 
