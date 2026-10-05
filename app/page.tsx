@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Heart, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 import { loveLetters } from '@/lib/love-letters'
@@ -280,21 +280,22 @@ export default function Page() {
   const [isSurpriseOpen, setIsSurpriseOpen] = useState(true)
   const [isRevealing, setIsRevealing] = useState(false)
   const [isReturningVisitor, setIsReturningVisitor] = useState(false)
+  const hasCheckedVisit = useRef(false)
 
   useEffect(() => {
+    if (hasCheckedVisit.current) return
+    hasCheckedVisit.current = true
+
     try {
-      setIsReturningVisitor(localStorage.getItem(siteVisitKey) === 'true')
+      const isReturning = localStorage.getItem(siteVisitKey) === 'true'
+      setIsReturningVisitor(isReturning)
+      localStorage.setItem(siteVisitKey, 'true')
     } catch (error) {
-      console.error('Impossible de vérifier la visite précédente.', error)
+      console.error('Impossible d’enregistrer la visite du site.', error)
     }
   }, [])
 
   function revealSurprise() {
-    try {
-      localStorage.setItem(siteVisitKey, 'true')
-    } catch (error) {
-      console.error('Impossible d’enregistrer cette visite.', error)
-    }
     setIsRevealing(true)
     const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 750
     window.setTimeout(() => setIsSurpriseOpen(false), delay)
