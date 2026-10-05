@@ -23,7 +23,6 @@ const songs: Song[] = [
 
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
 const letterProgressKey = 'monamoureuse-letter-progress'
-const letterRevealKey = 'monamoureuse-letters-revealed'
 const letterSongs = [
   { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
   { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
@@ -342,12 +341,6 @@ function LoveLetter() {
     setCurrentLetterIndex(initialLetter)
     setIsLetterProgressLoaded(true)
 
-    try {
-      setAreLettersRevealed(localStorage.getItem(letterRevealKey) === 'true')
-    } catch (error) {
-      console.error('Impossible de charger le déverrouillage des lettres.', error)
-    }
-
   }, [])
 
   useEffect(() => {
@@ -381,11 +374,6 @@ function LoveLetter() {
 
   function revealLetters() {
     setAreLettersRevealed(true)
-    try {
-      localStorage.setItem(letterRevealKey, 'true')
-    } catch (error) {
-      console.error('Impossible d’enregistrer le déverrouillage des lettres.', error)
-    }
   }
 
   const isCurrentLetterCompleted = completedLetters.has(currentLetterIndex)
