@@ -137,7 +137,10 @@ function LoveLetter() {
   }
 
   async function notifyLetterRead(letterIndex: number) {
-    if (!letterNotificationUrl) return false
+    if (!letterNotificationUrl) {
+      setNotificationStatus('Les alertes e-mail ne sont pas configurées sur le site.')
+      return false
+    }
     setNotificationStatus('Envoi de l’alerte e-mail…')
     try {
       const response = await fetch(letterNotificationUrl, {
@@ -148,8 +151,12 @@ function LoveLetter() {
           letterTitle: loveLetters[letterIndex].title,
         }),
       })
+      if (response.status === 503) {
+        setNotificationStatus('Le service e-mail doit être configuré dans Cloudflare avant de pouvoir envoyer une alerte.')
+        return false
+      }
       if (!response.ok) throw new Error(`Le service d’alerte a répondu ${response.status}.`)
-      setNotificationStatus('')
+      setNotificationStatus('Alerte e-mail envoyée.')
       return true
     } catch (error) {
       console.error('Impossible d’envoyer l’alerte e-mail de lecture.', error)
@@ -253,6 +260,7 @@ function LoveLetter() {
               )}
             </div>
           </div>
+          {notificationStatus && <p className="letter-notification-status" role="status" aria-live="polite">{notificationStatus}</p>}
           {!areLettersRevealed && (
             <div className="letter-reveal-overlay" role="status">
               <span className="letter-reveal-heart" aria-hidden="true">♥</span>
