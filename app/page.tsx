@@ -15,30 +15,30 @@ const moods = ['Tous', ...Array.from(new Set(songs.map((song) => song.mood))).sl
 
 const loveLetters = [
   {
-    title: 'Pour les jours ordinaires',
-    preview: 'Parce que le bonheur se cache souvent dans les petits moments.',
+    title: 'Un petit mot comme ça',
+    preview: 'J’avais juste envie de te le dire.',
     paragraphs: [
-      'Mon amour,',
-      'Je voulais te rappeler que je n’ai pas besoin d’un grand événement pour être heureux avec toi. Un message de toi, une conversation qui part dans tous les sens, ou simplement savoir que tu es là suffit à rendre ma journée plus douce.',
-      'J’aime ce qu’on partage, même dans les moments les plus simples. Merci d’être toi, et de mettre un peu de lumière dans mon quotidien.',
+      'Coucou toi,',
+      'Je pensais à toi alors je t’écris. J’aime bien nos conversations, même quand on commence par un truc tout bête et qu’on finit par parler de tout. Et recevoir un message de toi, ça me fait toujours plaisir.',
+      'Voilà, c’est tout. Je voulais juste te le dire.',
     ],
   },
   {
     title: 'Quand tu me manques',
-    preview: 'Quelques mots pour te sentir un peu plus près.',
+    preview: 'Juste pour te dire que je pense à toi.',
     paragraphs: [
       'Ma belle,',
-      'Il y a des moments où tu me manques plus que je ne sais le dire. Alors je repense à ton sourire, à ta voix, à nos discussions, et tout paraît déjà un peu moins loin.',
-      'J’espère que ces mots te rappelleront que je pense à toi et que tu as une place immense dans mon cœur. J’ai hâte de retrouver notre petit monde à nous.',
+      'Tu me manques un peu aujourd’hui. J’espère que ta journée se passe bien. Raconte-moi quand tu auras le temps, ça me fera plaisir de te lire.',
+      'À bientôt, j’espère. Je t’embrasse.',
     ],
   },
   {
-    title: 'Je te choisirais encore',
-    preview: 'Une promesse toute simple, mais sincère.',
+    title: 'Ce que j’aime chez nous',
+    preview: 'Sans grand discours.',
     paragraphs: [
       'Lïa,',
-      'Parmi toutes les personnes que j’aurais pu rencontrer, je suis tellement heureux que nos chemins se soient croisés. Ce que j’aime chez toi, ce n’est pas une seule chose : c’est la personne entière que tu es, avec ta façon bien à toi de rendre les choses plus belles.',
-      'Je ne sais pas ce que chaque journée nous réserve, mais je sais que j’ai envie de continuer à les partager avec toi, une à une.',
+      'Je ne suis pas toujours très fort pour dire les choses, mais je suis vraiment bien avec toi. J’aime nos délires, nos discussions et même les moments où on ne fait rien de spécial.',
+      'J’espère qu’on continuera à en avoir plein. Je t’aime.',
     ],
   },
 ]
@@ -56,9 +56,9 @@ function LoveLetter() {
   const [noteOrder, setNoteOrder] = useState([0, 1, 2])
   const [activeLetter, setActiveLetter] = useState(0)
   const loveNotes = [
-    'Tu es mon plus joli hasard.',
-    'Avec toi, même les jours ordinaires deviennent précieux.',
-    'Je te choisirais encore, dans toutes les vies.',
+    'J’aime bien quand tu me racontes ta journée.',
+    'Tu me fais rire, même quand tu pars dans tes explications.',
+    'Je suis bien avec toi, même quand on ne fait rien.',
   ]
   const reason = reasons[reasonIndex]
 
@@ -79,7 +79,7 @@ function LoveLetter() {
 
   return <section className="letter-section" id="lettre" aria-labelledby="lettre-title">
     <div className="section-heading letter-heading"><div><p className="eyebrow">une petite lettre pour lïa</p><h2 id="lettre-title">Quelques mots<br /><em>rien que pour toi.</em></h2></div><Heart className="letter-heart" fill="currentColor" aria-hidden="true" /></div>
-    <p className="letter-intro">Lïa, j&apos;ai mis ici les petits morceaux de toi que je garde dans ma tête. Et si tu veux savoir pourquoi je t&apos;aime, laisse le hasard choisir une raison.</p>
+    <p className="letter-intro">Lïa, j&apos;avais envie de te laisser quelques mots ici. Et si tu veux, tu peux piocher une raison pour laquelle je t&apos;aime.</p>
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p aria-live="polite">{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" type="button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
     <div className="love-signoff"><span>je t&apos;aime,</span><strong>Lïa</strong></div>
     <div className="love-notes" aria-label="Petits mots pour Lïa">
@@ -89,7 +89,7 @@ function LoveLetter() {
       <div className="love-letters-heading">
         <p className="eyebrow">à ouvrir quand tu veux</p>
         <h3 id="love-letters-title">Des lettres <em>pour toi.</em></h3>
-        <p>Quelques mots à garder près de ton cœur, aujourd’hui ou un autre jour.</p>
+        <p>Choisis juste celle que tu as envie de lire.</p>
       </div>
       <div className="love-letters-layout">
         <div className="love-letter-list" role="group" aria-label="Choisir une lettre">
