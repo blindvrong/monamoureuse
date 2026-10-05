@@ -12,6 +12,30 @@ This repository is linked to a [v0](https://v0.app) project. You can continue de
 
 The site is published with GitHub Pages at [blindvrong.github.io/monamoureuse](https://blindvrong.github.io/monamoureuse/). Changes pushed to `main` are built and deployed automatically by the `Deploy to GitHub Pages` workflow.
 
+## E-mail alerts when a letter is read
+
+The optional alert service runs as a Cloudflare Worker and sends mail through Resend. The Resend API key and recipient address are stored only as Worker secrets; never add them to the site or this repository.
+
+1. Create a Cloudflare account and a Resend account using the recipient e-mail address. Verify the address in Resend. Without a domain you control, Resend's test sender can only deliver to the verified address on your Resend account.
+2. From `notification-worker/`, run `npx wrangler login`, then set the Worker secrets:
+
+   ```sh
+   npx wrangler secret put RESEND_API_KEY
+   npx wrangler secret put NOTIFICATION_EMAIL
+   ```
+
+   Enter the Resend API key and verified recipient address when prompted. The configured sender is Resend's test sender.
+3. Deploy the Worker:
+
+   ```sh
+   npx wrangler deploy
+   ```
+
+4. In the repository's GitHub settings, add the Actions repository variable `LETTER_NOTIFICATION_URL` with the deployed Worker URL. The Pages workflow embeds this public endpoint URL at build time; it is not a secret.
+5. Push or manually run the Pages workflow to rebuild the site with the alert endpoint.
+
+The Worker only accepts requests from this site's origin and rate-limits requests by client IP. On each “Lettre suivante” click it emails the number and title of the letter just completed.
+
 ## Getting Started
 
 First, run the development server:

@@ -461,6 +461,13 @@ html {
   font: italic 500 1rem 'Playfair Display', serif;
 }
 
+.letter-notification-status {
+  margin: 0.8rem 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
 .letter-audio-gate {
   margin-bottom: 1.5rem;
 }

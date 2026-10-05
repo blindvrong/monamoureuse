@@ -1,0 +1,16 @@
+name = "monamoureuse-letter-alerts"
+main = "src/index.mjs"
+compatibility_date = "2026-10-05"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "https://blindvrong.github.io"
+FROM_EMAIL = "Monamoureuse <onboarding@resend.dev>"
+
+[[ratelimits]]
+name = "NOTIFICATION_LIMITER"
+namespace_id = "2026100519"
+
+  [ratelimits.simple]
+    limit = 30
+  period = 60

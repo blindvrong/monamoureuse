@@ -22,6 +22,7 @@ const songs: Song[] = [
 ]
 
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
+const letterNotificationUrl = process.env.NEXT_PUBLIC_LETTER_NOTIFICATION_URL
 const letterProgressKey = 'monamoureuse-letter-progress'
 const letterSongs = [
   { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
@@ -293,6 +294,7 @@ function LoveLetter() {
   const [completedLetters, setCompletedLetters] = useState<Set<number>>(new Set())
   const [isLetterProgressLoaded, setIsLetterProgressLoaded] = useState(false)
   const [areLettersRevealed, setAreLettersRevealed] = useState(false)
+  const [notificationStatus, setNotificationStatus] = useState('')
   const reason = reasons[reasonIndex]
 
   useEffect(() => {
@@ -376,6 +378,36 @@ function LoveLetter() {
     setAreLettersRevealed(true)
   }
 
+  async function goToNextLetter() {
+    const nextLetterIndex = nextUnreadLetterIndex
+    if (nextLetterIndex === -1) return
+
+    const readLetter = loveLetters[currentLetterIndex]
+    setCurrentLetterIndex(nextLetterIndex)
+
+    if (!letterNotificationUrl) {
+      setNotificationStatus('Les alertes e-mail ne sont pas encore configurées.')
+      return
+    }
+
+    setNotificationStatus('Envoi de l’alerte e-mail…')
+    try {
+      const response = await fetch(letterNotificationUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          letterNumber: currentLetterIndex + 1,
+          letterTitle: readLetter.title,
+        }),
+      })
+      if (!response.ok) throw new Error(`Le service d’alerte a répondu ${response.status}.`)
+      setNotificationStatus('Alerte e-mail envoyée.')
+    } catch (error) {
+      console.error('Impossible d’envoyer l’alerte e-mail de lecture.', error)
+      setNotificationStatus('La lettre suivante est ouverte, mais l’alerte e-mail n’a pas pu être envoyée.')
+    }
+  }
+
   const isCurrentLetterCompleted = completedLetters.has(currentLetterIndex)
   const nextUnreadLetterIndex = loveLetters.findIndex(
     (_, index) => index > currentLetterIndex && !completedLetters.has(index),
@@ -426,12 +458,13 @@ function LoveLetter() {
                   className="next-letter-button"
                   type="button"
                   disabled={!isCurrentLetterCompleted || nextUnreadLetterIndex === -1}
-                  onClick={() => setCurrentLetterIndex(nextUnreadLetterIndex)}
+                  onClick={goToNextLetter}
                 >
                   Lettre suivante <span aria-hidden="true">→</span>
                 </button>
               )}
             </div>
+            {notificationStatus && <p className="letter-notification-status" role="status">{notificationStatus}</p>}
           </div>
           {!areLettersRevealed && (
             <div className="letter-reveal-overlay" role="status">
