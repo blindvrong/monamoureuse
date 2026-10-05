@@ -16,15 +16,16 @@ const songs: Song[] = [
   { title: 'Silence', artist: 'Marshmello, Khalid', mood: 'Nostalgique', color: 'peach', spotifyId: '7vGuf3Y35N4wmASOKLUVVU' },
   { title: "Who's Lovin' You", artist: 'The Jackson 5', mood: 'Soul', color: 'gold' },
   { title: 'Only Girl (In The World)', artist: 'Rihanna', mood: 'Énergie', color: 'rose' },
+  { title: 'Make It Up', artist: 'Taylor Scott', mood: 'À découvrir', color: 'plum' },
 ]
 
-const artists = ['Drake', 'Hamza', 'The Marías', 'The Weeknd', 'The Neighbourhood', 'Cigarettes After Sex']
+const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
 const moods = ['Tous', ...Array.from(new Set(songs.map((song) => song.mood))).slice(0, 6)]
 const loveLetters = [
   {
     title: 'À toi, Lïa',
     paragraphs: [
-      'Je sais pas vraiment par où commencer, alors je vais juste te dire les choses simplement : tu comptes énormément pour moi.',
+      'Je sais pas vraiment par où commencer. Je sais juste que tu comptes énormément pour moi, et que je t’aime peut-être plus que je sais te le dire.',
       'J’aime passer du temps avec toi, parler de tout et de rien, rigoler pour rien, ou rester près de toi sans avoir besoin de trouver quoi dire.',
       'Je suis bien avec toi, même quand on ne fait rien. Tu me fais rire, même quand tu pars dans tes explications, et j’aime bien quand tu me racontes ta journée.',
     ],
@@ -32,7 +33,7 @@ const loveLetters = [
   {
     title: 'Ta façon de parler',
     paragraphs: [
-      'J’aime t’écouter parler, même quand le sujet part dans tous les sens.',
+      'J’aime t’écouter parler, même quand le sujet part dans tous les sens. J’aime quand tu pars dans tes explications et que j’ai juste envie de t’écouter.',
       'Ta façon de raconter les choses, de t’exprimer et de réagir, c’est vraiment toi. Et moi, j’aime ça.',
     ],
   },
@@ -40,13 +41,13 @@ const loveLetters = [
     title: 'Ton sourire',
     paragraphs: [
       'Ton sourire, c’est une de ces choses toutes simples qui me font du bien.',
-      'Et quand je réussis à te faire rire, même pour une bêtise, je suis content. Voilà, je voulais que tu le saches.',
+      'Ton sourire, ta voix, ta façon d’être… tout chez toi me fait du bien. Et quand je réussis à te faire rire, même pour une bêtise, je suis content.',
     ],
   },
   {
     title: 'Même sans parler',
     paragraphs: [
-      'J’aime aussi les moments où on ne fait rien de particulier.',
+      'J’aime aussi les moments où on ne fait rien de particulier. Même quand on fait rien du tout, être à côté de toi me suffit.',
       'Être avec toi, sans devoir remplir chaque silence, ça me va très bien. Je me sens bien, c’est tout.',
     ],
   },
@@ -54,7 +55,7 @@ const loveLetters = [
     title: 'Ta voix',
     paragraphs: [
       'Il y a quelque chose dans ta voix qui me fait toujours plaisir à entendre.',
-      'Quand tu me racontes ta journée ou juste un petit truc qui te passe par la tête, j’aime être là pour t’écouter.',
+      'Quand tu me racontes ta journée ou juste un petit truc qui te passe par la tête, j’aime être là pour t’écouter. Ça rend mes journées plus douces sans même que tu le remarques.',
     ],
   },
   {
@@ -124,7 +125,7 @@ const loveLetters = [
     title: 'Tu me fais du bien',
     paragraphs: [
       'Il suffit parfois d’un message de toi pour changer un peu ma journée.',
-      'Je ne sais pas si tu t’en rends compte, mais ta présence compte beaucoup pour moi.',
+      'Je ne sais pas si tu t’en rends compte, mais ta présence compte beaucoup pour moi. Penser à toi, c’est devenu mon endroit préféré.',
     ],
   },
   {
@@ -151,7 +152,7 @@ const loveLetters = [
   {
     title: 'Ta façon d’écrire',
     paragraphs: [
-      'J’aime recevoir tes messages et voir ton nom apparaître sur mon téléphone.',
+      'J’aime recevoir tes messages et voir ton nom apparaître sur mon téléphone. Chaque fois que ton nom s’affiche, ça me fait sourire.',
       'Même quelques mots de toi, ça me fait plaisir.',
     ],
   },
@@ -361,6 +362,9 @@ export default function Page() {
           <p className="eyebrow">TES SONS</p>
           <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
           <p className="section-intro">Les morceaux que tu écoutes souvent. Chaque fois que j’en entends un, je pense à toi.</p>
+          <ul className="song-artist-tags" aria-label="Artistes de ta sélection">
+            {artists.map((artist) => <li key={artist}>{artist}</li>)}
+          </ul>
         </div>
         <div className="song-total" aria-live="polite"><strong>{filtered.length}</strong><span>morceaux<br />affichés</span></div>
       </div>
