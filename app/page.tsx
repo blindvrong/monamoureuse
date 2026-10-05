@@ -23,6 +23,7 @@ const songs: Song[] = [
 
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
 const letterProgressKey = 'monamoureuse-letter-progress'
+const letterRevealKey = 'monamoureuse-letters-revealed'
 const letterSongs = [
   { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
   { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
@@ -271,7 +272,7 @@ function CompactSongRow({ song }: { song: Song }) {
   </article>
 }
 
-function LetterSongPlayer({ song }: { song: (typeof letterSongs)[number] }) {
+function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]; onPlay: () => void }) {
   return <div className="love-letter-music">
     <div className="love-letter-music-copy">
       <span className="music-note" aria-hidden="true">♪</span>
@@ -280,7 +281,7 @@ function LetterSongPlayer({ song }: { song: (typeof letterSongs)[number] }) {
         <small>{song.artist} · rien que pour toi</small>
       </span>
     </div>
-    <audio className="love-letter-audio" controls preload="none">
+    <audio className="love-letter-audio" controls preload="none" onPlay={onPlay}>
       <source src={song.src} type="audio/mpeg" />
       Ton navigateur ne peut pas lire ce fichier audio.
     </audio>
@@ -292,6 +293,7 @@ function LoveLetter() {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0)
   const [completedLetters, setCompletedLetters] = useState<Set<number>>(new Set())
   const [isLetterProgressLoaded, setIsLetterProgressLoaded] = useState(false)
+  const [areLettersRevealed, setAreLettersRevealed] = useState(false)
   const reason = reasons[reasonIndex]
 
   useEffect(() => {
@@ -340,6 +342,12 @@ function LoveLetter() {
     setCurrentLetterIndex(initialLetter)
     setIsLetterProgressLoaded(true)
 
+    try {
+      setAreLettersRevealed(localStorage.getItem(letterRevealKey) === 'true')
+    } catch (error) {
+      console.error('Impossible de charger le déverrouillage des lettres.', error)
+    }
+
   }, [])
 
   useEffect(() => {
@@ -371,6 +379,15 @@ function LoveLetter() {
     })
   }
 
+  function revealLetters() {
+    setAreLettersRevealed(true)
+    try {
+      localStorage.setItem(letterRevealKey, 'true')
+    } catch (error) {
+      console.error('Impossible d’enregistrer le déverrouillage des lettres.', error)
+    }
+  }
+
   const isCurrentLetterCompleted = completedLetters.has(currentLetterIndex)
   const nextUnreadLetterIndex = loveLetters.findIndex(
     (_, index) => index > currentLetterIndex && !completedLetters.has(index),
@@ -385,43 +402,57 @@ function LoveLetter() {
         <h3 id="love-letters-title">La lettre pour mon amour</h3>
       </div>
       <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
-        <div className="love-letter-paper-topline">
-          <span className="love-letter-paper-index">LETTRE {String(currentLetterIndex + 1).padStart(2, '0')} / {loveLetters.length}</span>
-          <Heart size={17} aria-hidden="true" />
+        <div className="letter-audio-gate">
+          {letterSongs.map((song) => <LetterSongPlayer key={song.title} song={song} onPlay={revealLetters} />)}
+          {!areLettersRevealed && <p className="letter-audio-hint">Lance l’un des deux sons pour découvrir les lettres.</p>}
         </div>
-        <div className="letter-progress" role="progressbar" aria-label="Lettres terminées" aria-valuemin={0} aria-valuemax={loveLetters.length} aria-valuenow={completedLetters.size}>
-          <span style={{ width: `${(completedLetters.size / loveLetters.length) * 100}%` }} />
-        </div>
-        <p className="love-letter-title">{loveLetters[currentLetterIndex].title}</p>
-        <div className="love-letter-body">
-          {loveLetters[currentLetterIndex].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-        </div>
-        <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
-        <div className="letter-navigation">
-          <label className="letter-complete-label">
-            <input
-              type="checkbox"
-              checked={isCurrentLetterCompleted}
-              disabled={!isLetterProgressLoaded}
-              onChange={(event) => setCurrentLetterCompleted(event.target.checked)}
-            />
-            <span>J&apos;ai fini de lire cette lettre</span>
-          </label>
-          <span className="letters-read-count">{completedLetters.size} / {loveLetters.length} lues</span>
-          {completedLetters.size === loveLetters.length ? (
-            <p className="letters-finished-message">Tu as lu toutes les lettres. Je t’aime, Lïa. ♥</p>
-          ) : (
-            <button
-              className="next-letter-button"
-              type="button"
-              disabled={!isCurrentLetterCompleted || nextUnreadLetterIndex === -1}
-              onClick={() => setCurrentLetterIndex(nextUnreadLetterIndex)}
-            >
-              Lettre suivante <span aria-hidden="true">→</span>
-            </button>
+        <div className={`letter-reveal-wrap${areLettersRevealed ? '' : ' is-locked'}`}>
+          <div className="letter-reveal-content" inert={!areLettersRevealed} aria-hidden={!areLettersRevealed}>
+            <div className="love-letter-paper-topline">
+              <span className="love-letter-paper-index">LETTRE {String(currentLetterIndex + 1).padStart(2, '0')} / {loveLetters.length}</span>
+              <Heart size={17} aria-hidden="true" />
+            </div>
+            <div className="letter-progress" role="progressbar" aria-label="Lettres terminées" aria-valuemin={0} aria-valuemax={loveLetters.length} aria-valuenow={completedLetters.size}>
+              <span style={{ width: `${(completedLetters.size / loveLetters.length) * 100}%` }} />
+            </div>
+            <p className="love-letter-title">{loveLetters[currentLetterIndex].title}</p>
+            <div className="love-letter-body">
+              {loveLetters[currentLetterIndex].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+            <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
+            <div className="letter-navigation">
+              <label className="letter-complete-label">
+                <input
+                  type="checkbox"
+                  checked={isCurrentLetterCompleted}
+                  disabled={!isLetterProgressLoaded}
+                  onChange={(event) => setCurrentLetterCompleted(event.target.checked)}
+                />
+                <span>J&apos;ai fini de lire cette lettre</span>
+              </label>
+              <span className="letters-read-count">{completedLetters.size} / {loveLetters.length} lues</span>
+              {completedLetters.size === loveLetters.length ? (
+                <p className="letters-finished-message">Tu as lu toutes les lettres. Je t’aime, Lïa. ♥</p>
+              ) : (
+                <button
+                  className="next-letter-button"
+                  type="button"
+                  disabled={!isCurrentLetterCompleted || nextUnreadLetterIndex === -1}
+                  onClick={() => setCurrentLetterIndex(nextUnreadLetterIndex)}
+                >
+                  Lettre suivante <span aria-hidden="true">→</span>
+                </button>
+              )}
+            </div>
+          </div>
+          {!areLettersRevealed && (
+            <div className="letter-reveal-overlay" role="status">
+              <span className="letter-reveal-heart" aria-hidden="true">♥</span>
+              <p>Tes lettres t’attendent</p>
+              <small>Écoute un son juste au-dessus pour les révéler.</small>
+            </div>
           )}
         </div>
-        {letterSongs.map((song) => <LetterSongPlayer key={song.title} song={song} />)}
       </article>
     </section>
   </section>

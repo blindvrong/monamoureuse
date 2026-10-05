@@ -461,6 +461,67 @@ html {
   font: italic 500 1rem 'Playfair Display', serif;
 }
 
+.letter-audio-gate {
+  margin-bottom: 1.5rem;
+}
+
+.letter-audio-gate .love-letter-music {
+  margin-top: 0;
+}
+
+.letter-audio-gate .love-letter-music + .love-letter-music {
+  margin-top: 0.8rem;
+}
+
+.letter-audio-hint {
+  margin: 1rem 0 0;
+  color: var(--accent);
+  font: italic 500 0.95rem 'Playfair Display', serif;
+  text-align: center;
+}
+
+.letter-reveal-wrap {
+  position: relative;
+}
+
+.letter-reveal-wrap.is-locked .letter-reveal-content {
+  filter: blur(8px);
+  opacity: 0.45;
+  user-select: none;
+}
+
+.letter-reveal-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  border: 1px solid rgb(246 240 232 / 10%);
+  border-radius: 4px;
+  background: rgb(28 23 22 / 78%);
+  text-align: center;
+}
+
+.letter-reveal-heart {
+  color: var(--accent);
+  font-size: 1.5rem;
+}
+
+.letter-reveal-overlay p {
+  margin: 0;
+  color: var(--cream);
+  font: italic 500 1.3rem 'Playfair Display', serif;
+}
+
+.letter-reveal-overlay small {
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
 .love-letter-music {
   display: flex;
   align-items: center;
