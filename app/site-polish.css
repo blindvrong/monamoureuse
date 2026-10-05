@@ -1105,3 +1105,34 @@ body {
 .song-card.aqua {
   background: linear-gradient(145deg, #315e77, #1c394a);
 }
+
+.surprise-card,
+.reason-card,
+.stat-card,
+.artist-row,
+.song-card,
+.empty-results,
+.music-player-section,
+.player-card,
+.love-letter-paper,
+.letter-reveal-overlay,
+.letters-thank-you,
+.featured-song-card,
+.compact-song-row {
+  border-radius: 16px;
+}
+
+.artist-list,
+.stats-grid {
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+button:not(.surprise-button):not(.play-button),
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select,
+audio,
+iframe {
+  border-radius: 12px;
+}
