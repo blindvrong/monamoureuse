@@ -13,6 +13,36 @@ const songs = [
 const artists = ['Drake', 'Hamza', 'The Marías', 'The Weeknd', 'The Neighbourhood', 'Cigarettes After Sex']
 const moods = ['Tous', ...Array.from(new Set(songs.map((song) => song.mood))).slice(0, 6)]
 
+const loveLetters = [
+  {
+    title: 'Pour les jours ordinaires',
+    preview: 'Parce que le bonheur se cache souvent dans les petits moments.',
+    paragraphs: [
+      'Mon amour,',
+      'Je voulais te rappeler que je n’ai pas besoin d’un grand événement pour être heureux avec toi. Un message de toi, une conversation qui part dans tous les sens, ou simplement savoir que tu es là suffit à rendre ma journée plus douce.',
+      'J’aime ce qu’on partage, même dans les moments les plus simples. Merci d’être toi, et de mettre un peu de lumière dans mon quotidien.',
+    ],
+  },
+  {
+    title: 'Quand tu me manques',
+    preview: 'Quelques mots pour te sentir un peu plus près.',
+    paragraphs: [
+      'Ma belle,',
+      'Il y a des moments où tu me manques plus que je ne sais le dire. Alors je repense à ton sourire, à ta voix, à nos discussions, et tout paraît déjà un peu moins loin.',
+      'J’espère que ces mots te rappelleront que je pense à toi et que tu as une place immense dans mon cœur. J’ai hâte de retrouver notre petit monde à nous.',
+    ],
+  },
+  {
+    title: 'Je te choisirais encore',
+    preview: 'Une promesse toute simple, mais sincère.',
+    paragraphs: [
+      'Lïa,',
+      'Parmi toutes les personnes que j’aurais pu rencontrer, je suis tellement heureux que nos chemins se soient croisés. Ce que j’aime chez toi, ce n’est pas une seule chose : c’est la personne entière que tu es, avec ta façon bien à toi de rendre les choses plus belles.',
+      'Je ne sais pas ce que chaque journée nous réserve, mais je sais que j’ai envie de continuer à les partager avec toi, une à une.',
+    ],
+  },
+]
+
 function SongCard({ song, index }: { song: typeof songs[number]; index: number }) {
   return <article className={`song-card ${song.color}`}>
     <div className="cover"><span>{String(index + 1).padStart(2, '0')}</span><b>♪</b></div>
@@ -24,6 +54,7 @@ function SongCard({ song, index }: { song: typeof songs[number]; index: number }
 function LoveLetter() {
   const [reasonIndex, setReasonIndex] = useState(0)
   const [noteOrder, setNoteOrder] = useState([0, 1, 2])
+  const [activeLetter, setActiveLetter] = useState(0)
   const loveNotes = [
     'Tu es mon plus joli hasard.',
     'Avec toi, même les jours ordinaires deviennent précieux.',
@@ -54,6 +85,41 @@ function LoveLetter() {
     <div className="love-notes" aria-label="Petits mots pour Lïa">
       {noteOrder.map((noteIndex) => <p key={noteIndex}>{loveNotes[noteIndex]}</p>)}
     </div>
+    <section className="love-letters" aria-labelledby="love-letters-title">
+      <div className="love-letters-heading">
+        <p className="eyebrow">à ouvrir quand tu veux</p>
+        <h3 id="love-letters-title">Des lettres <em>pour toi.</em></h3>
+        <p>Quelques mots à garder près de ton cœur, aujourd’hui ou un autre jour.</p>
+      </div>
+      <div className="love-letters-layout">
+        <div className="love-letter-list" role="group" aria-label="Choisir une lettre">
+          {loveLetters.map((letter, index) => (
+            <button
+              type="button"
+              className={`love-letter-choice${activeLetter === index ? ' active' : ''}`}
+              aria-pressed={activeLetter === index}
+              key={letter.title}
+              onClick={() => setActiveLetter(index)}
+            >
+              <span className="love-letter-index">0{index + 1}</span>
+              <span className="love-letter-choice-copy">
+                <strong>{letter.title}</strong>
+                <small>{letter.preview}</small>
+              </span>
+              <span className="love-letter-arrow" aria-hidden="true">↗</span>
+            </button>
+          ))}
+        </div>
+        <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
+          <span className="love-letter-paper-index">LETTRE {String(activeLetter + 1).padStart(2, '0')} / 03</span>
+          <h4>{loveLetters[activeLetter].title}</h4>
+          <div className="love-letter-body">
+            {loveLetters[activeLetter].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          </div>
+          <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
+        </article>
+      </div>
+    </section>
   </section>
 }
 

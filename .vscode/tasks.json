@@ -1,0 +1,273 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Inspect publish changes",
+			"type": "shell",
+			"command": "git status --short --branch && git --no-pager diff --stat && git --no-pager diff -- app/page.tsx app/layout.tsx app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish site to main",
+			"type": "shell",
+			"command": "git add -- app/page.tsx app/layout.tsx app/site-polish.css && git commit -m \"Improve responsive site experience\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check deployment runs",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 10 --json databaseId,name,headBranch,headSha,status,conclusion,url,createdAt",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect deployment workflow",
+			"type": "shell",
+			"command": "gh workflow list --repo blindvrong/monamoureuse && gh run view 37315276355 --repo blindvrong/monamoureuse --json workflowName,status,conclusion,jobs,url,event,headSha && gh run view 37315276355 --repo blindvrong/monamoureuse --log-failed",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check hosting deployment",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments --jq '.[] | {id,environment,created_at,sha,task,description}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify production deployment",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments/6859946489/statuses --jq '.[0] | {state,environment_url,target_url,created_at,description}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Locate Deno workflow",
+			"type": "shell",
+			"command": "git status --short --branch && find .github/workflows -maxdepth 2 -type f -print",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Remove Deno workflow",
+			"type": "shell",
+			"command": "git add -- .github/workflows/deno.yml && git commit -m \"Remove Deno workflow\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect latest deployments",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments --jq '.[0:8][] | {id,environment,created_at,sha,task}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub head",
+			"type": "shell",
+			"command": "git status --short --branch && git log -5 --oneline --decorate && gh api repos/blindvrong/monamoureuse/commits/main --jq '{sha:.sha, message:.commit.message}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify exact production commit",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments/6859998248/statuses --jq '.[0] | {state,environment_url,target_url,created_at,description}' && gh api repos/blindvrong/monamoureuse/contents/app/site-polish.css?ref=main --jq '{path:.path,sha:.sha}' && gh api repos/blindvrong/monamoureuse/contents/.github/workflows/deno.yml?ref=main --jq '.message // .path'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect GitHub Pages readiness",
+			"type": "shell",
+			"command": "git status --short --branch && git remote -v && gh repo view blindvrong/monamoureuse --json visibility,url,defaultBranchRef",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages and asset setup",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse --jq '{private,visibility,has_pages,default_branch}' && (gh api repos/blindvrong/monamoureuse/pages 2>&1 || true) && find public -maxdepth 2 -type f -print && find .github -maxdepth 3 -type f -print",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub plan limits",
+			"type": "shell",
+			"command": "gh api user --jq '{login,plan:.plan.name}' 2>&1 || true",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build GitHub Pages site",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && grep -oE '(/monamoureuse)?/_next/static[^\" ]*|/monamoureuse/(icon.svg|apple-icon.png)' out/index.html | head -10 && test -f out/index.html && test -f out/404.html",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Commit GitHub Pages setup",
+			"type": "shell",
+			"command": "git add -- next.config.mjs app/layout.tsx .github/workflows/deploy-pages.yml && git commit -m \"Deploy site with GitHub Pages\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Ignore Pages build output",
+			"type": "shell",
+			"command": "git add -- .gitignore && git commit -m \"Ignore static export output\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Make repository and Pages public",
+			"type": "shell",
+			"command": "gh repo edit blindvrong/monamoureuse --visibility public --accept-visibility-change-consequences && gh api repos/blindvrong/monamoureuse/pages -X POST -f build_type=workflow && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check public repo readiness",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse --jq '{private,visibility,default_branch}' && git status --short --branch && git log -3 --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Refresh GitHub public access",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse --jq '{private,visibility,default_branch}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Enable and deploy GitHub Pages",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages -X POST -f build_type=workflow && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Push Pages deployment workflow",
+			"type": "shell",
+			"command": "git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages deployment run",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 5 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect Pages run status",
+			"type": "shell",
+			"command": "gh run view 37317141062 --repo blindvrong/monamoureuse --json status,conclusion,jobs,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages activation status",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages --jq '{html_url,build_type,https_enforced}' 2>&1 || true",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for Pages deployment",
+			"type": "shell",
+			"command": "gh run watch 37317141062 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect Pages deploy failure",
+			"type": "shell",
+			"command": "gh run view 37317141062 --repo blindvrong/monamoureuse --json conclusion,jobs,url && gh run view 37317141062 --repo blindvrong/monamoureuse --log-failed",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Retry Pages activation",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages -X POST -f build_type=workflow",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages workflow",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 5 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub Pages settings",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages --jq '{html_url,build_type,https_enforced}' 2>&1 || true",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Trigger GitHub Pages deployment",
+			"type": "shell",
+			"command": "gh workflow run deploy-pages.yml --repo blindvrong/monamoureuse --ref main && gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 3 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Trigger Pages from main push",
+			"type": "shell",
+			"command": "git add -- README.md && git commit -m \"Document public GitHub Pages site\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 3 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect post-push workflows",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --branch main --limit 10 --json name,databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for GitHub Pages deploy",
+			"type": "shell",
+			"command": "gh run watch 37317624768 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify Pages deployment URL",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages --jq '{html_url,build_type,https_enforced}' && gh api repos/blindvrong/monamoureuse/deployments --jq '[.[] | select(.environment == \"github-pages\")][0] | {id,sha,created_at}' && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check song card state",
+			"type": "shell",
+			"command": "git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build site without song card",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Publish removed song card",
+			"type": "shell",
+			"command": "git add -- app/page.tsx && git commit -m \"Remove MOOO song card\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
