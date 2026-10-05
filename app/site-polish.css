@@ -462,21 +462,20 @@ html {
 }
 
 .letters-thank-you {
-  position: fixed;
-  z-index: 50;
-  inset: 0;
   display: grid;
   align-content: center;
   justify-items: center;
   gap: 1.25rem;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  width: min(100%, 780px);
+  min-height: clamp(24rem, 60vh, 42rem);
+  margin: 0 auto;
   padding: clamp(2.5rem, 9vw, 6rem) 1.5rem;
-  border: 0;
+  border: 1px solid rgb(233 145 117 / 28%);
+  border-radius: 4px;
   background:
     radial-gradient(ellipse at 50% 0%, rgb(233 145 117 / 13%), transparent 65%),
     #211c1b;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 18%);
   text-align: center;
 }
 
