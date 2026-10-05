@@ -558,6 +558,7 @@ export default function Page() {
           <div className="empty-results" role="status"><p>Aucun morceau à afficher.</p></div>
         )}
       </section>
+      <footer><p>j&apos;ai fait ça en pensant à toi.</p></footer>
     </div>
     {isSurpriseOpen && <div className={`surprise-overlay${isRevealing ? ' is-leaving' : ''}`} role="dialog" aria-modal="true" aria-labelledby="surprise-title">
       <div className="surprise-card">
