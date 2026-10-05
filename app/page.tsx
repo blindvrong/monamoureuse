@@ -9,32 +9,6 @@ const songs = [
   { title: "Who's Lovin' You", artist: 'The Jackson 5', mood: 'Soul', color: 'gold' },
   { title: 'Only Girl (In The World)', artist: 'Rihanna', mood: 'Énergie', color: 'rose' },
   { title: 'MOOO!', artist: 'Doja Cat', mood: 'Confiance', color: 'lilac' },
-  { title: 'Na Na', artist: 'Trey Songz', mood: 'R&B', color: 'blue' },
-  { title: 'Hoe Phase', artist: 'Drake', mood: 'Late night', color: 'plum' },
-  { title: "Hold On, We're Going Home", artist: 'Drake', mood: 'Coup de cœur', color: 'mint' },
-  { title: 'Canzoni Preferite (Torture Dance Song)', artist: 'Geek Music', mood: 'Bizarre', color: 'yellow' },
-  { title: 'melodrama', artist: 'Disiz, Theodora', mood: 'Français', color: 'coral' },
-  { title: "Nothin' on You", artist: 'B.o.B, Bruno Mars', mood: 'Soleil', color: 'orange' },
-  { title: 'Is There Someone Else?', artist: 'The Weeknd', mood: 'Minuit', color: 'violet' },
-  { title: 'Glamorous', artist: 'Ludacris, Fergie', mood: 'Iconique', color: 'pink' },
-  { title: 'Shot For Me', artist: 'Drake', mood: 'Intime', color: 'sky' },
-  { title: 'The Cut That Always Bleeds', artist: 'Conan Gray', mood: 'Cœur fragile', color: 'red' },
-  { title: 'Careless Whisper', artist: 'George Michael', mood: 'Classique', color: 'teal' },
-  { title: 'Flemme', artist: 'Angèle', mood: 'Chill', color: 'cream' },
-  { title: 'Mystery of Love', artist: 'Sufjan Stevens', mood: 'Tendre', color: 'green' },
-  { title: 'Flashing Lights', artist: 'Kanye West', mood: 'Nocturne', color: 'indigo' },
-  { title: 'Starboy', artist: 'The Weeknd, Daft Punk', mood: 'Néon', color: 'magenta' },
-  { title: 'we fell in love in october', artist: 'girl in red', mood: 'Automne', color: 'sage' },
-  { title: 'Die For You', artist: 'The Weeknd', mood: 'Passion', color: 'burgundy' },
-  { title: 'Transform', artist: 'Daniel Caesar, Charlotte Day Wilson', mood: 'Velours', color: 'brown' },
-  { title: 'Be Like a Woman', artist: 'Chris Rainbow', mood: 'Découverte', color: 'aqua' },
-  { title: 'Wonderwall', artist: 'Oasis', mood: 'Souvenir', color: 'blue' },
-  { title: 'I Feel It Coming', artist: 'The Weeknd, Daft Punk', mood: 'Doux', color: 'gold' },
-  { title: 'Le passé', artist: 'Aya Nakamura', mood: 'Français', color: 'rose' },
-  { title: 'Cleopatre', artist: 'Tiakola', mood: 'Rap français', color: 'plum' },
-  { title: "Don't", artist: 'Bryson Tiller', mood: 'R&B', color: 'coral' },
-  { title: 'Pink + White', artist: 'Frank Ocean', mood: 'Coucher de soleil', color: 'peach' },
-  { title: 'NIGHT DANCER', artist: 'imase', mood: 'Japon', color: 'lilac' },
 ]
 
 const artists = ['Drake', 'Hamza', 'The Marías', 'The Weeknd', 'The Neighbourhood', 'Cigarettes After Sex']
@@ -66,6 +40,11 @@ function LoveLetter() {
     <p className="letter-intro">Lïa, tu es {loveWords[reasonIndex % loveWords.length]}. Et si tu veux savoir pourquoi, laisse le hasard choisir une raison.</p>
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p>{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
     <div className="love-signoff"><span>je t&apos;aime,</span><strong>Lïa</strong></div>
+    <div className="love-notes" aria-label="Petits mots pour Lïa">
+      <p>Tu es mon plus joli hasard.</p>
+      <p>Avec toi, même les jours ordinaires deviennent précieux.</p>
+      <p>Je te choisirais encore, dans toutes les vies.</p>
+    </div>
   </section>
 }
 
