@@ -15,8 +15,38 @@ html {
   position: sticky;
   top: 0;
   z-index: 5;
+  height: 80px;
+  gap: 1rem;
+  border-bottom-color: rgb(246 240 232 / 18%);
   background: rgb(25 22 21 / 92%);
   backdrop-filter: blur(16px);
+}
+
+.topbar nav {
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.topbar nav a {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.topbar nav a:hover {
+  border-color: rgb(246 240 232 / 12%);
+  background: rgb(246 240 232 / 6%);
+}
+
+.date-pill {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgb(246 240 232 / 14%);
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
 .artist-row,
@@ -374,11 +404,11 @@ html {
 
   .topbar {
     height: auto;
-    min-height: 76px;
+    min-height: 72px;
     flex-wrap: wrap;
     column-gap: 0.75rem;
     row-gap: 0.65rem;
-    padding-block: 0.8rem;
+    padding-block: 0.7rem;
   }
 
   .brand {
@@ -395,9 +425,17 @@ html {
     order: 3;
     flex-basis: 100%;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: 0.25rem;
     padding-top: 0.4rem;
     font-size: 0.58rem;
+  }
+
+  .site-shell .topbar nav a {
+    padding: 0.55rem 0.6rem;
+  }
+
+  .date-pill {
+    padding: 0.5rem 0.65rem;
   }
 
   .letter-section,
