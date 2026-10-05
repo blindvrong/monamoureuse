@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Surprise mon chou',
   description: 'Une petite bande-son de toi, entre nostalgie, R&B et nuits étoilées.',
   generator: 'v0.app',
-  icons: { icon: [], apple: [] },
+  icons: { icon: `${basePath}/favicon.svg`, apple: [] },
 }
 
 export const viewport: Viewport = {
