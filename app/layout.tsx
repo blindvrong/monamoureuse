@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import './site-polish.css'
+import './header-note.css'
 
 const basePath = process.env.GITHUB_ACTIONS === 'true' ? '/monamoureuse' : ''
 

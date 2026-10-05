@@ -1,0 +1,39 @@
+.topbar-note {
+  position: absolute;
+  left: 59%;
+  gap: 0.45rem;
+  transform: translateX(-50%);
+}
+
+.topbar-note-mark {
+  width: 24px;
+  height: 24px;
+}
+
+.topbar-note-kicker {
+  display: none;
+}
+
+.topbar-note-title {
+  font-size: 0.82rem;
+}
+
+.date-pill {
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .topbar-note {
+    left: 50%;
+    gap: 0.4rem;
+  }
+
+  .topbar-note-mark {
+    width: 22px;
+    height: 22px;
+  }
+
+  .topbar-note-title {
+    font-size: 0.76rem;
+  }
+}
