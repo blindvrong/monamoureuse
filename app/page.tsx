@@ -295,7 +295,6 @@ function LoveLetter() {
   const [isLetterProgressLoaded, setIsLetterProgressLoaded] = useState(false)
   const [areLettersRevealed, setAreLettersRevealed] = useState(false)
   const [notificationStatus, setNotificationStatus] = useState('')
-  const [isFinalNotificationSent, setIsFinalNotificationSent] = useState(false)
   const [isAllReadConfirmed, setIsAllReadConfirmed] = useState(false)
   const reason = reasons[reasonIndex]
 
@@ -393,7 +392,7 @@ function LoveLetter() {
         }),
       })
       if (!response.ok) throw new Error(`Le service d’alerte a répondu ${response.status}.`)
-      setNotificationStatus('Alerte e-mail envoyée.')
+      setNotificationStatus('')
       return true
     } catch (error) {
       console.error('Impossible d’envoyer l’alerte e-mail de lecture.', error)
@@ -403,6 +402,7 @@ function LoveLetter() {
   }
 
   async function goToNextLetter() {
+    if (notificationStatus === 'Envoi de l’alerte e-mail…') return
     const nextLetterIndex = nextUnreadLetterIndex
     if (nextLetterIndex === -1) return
 
@@ -411,9 +411,9 @@ function LoveLetter() {
   }
 
   async function confirmAllLettersRead() {
-    if (isFinalNotificationSent || notificationStatus === 'Envoi de l’alerte e-mail…') return
+    if (notificationStatus === 'Envoi de l’alerte e-mail…') return
     setIsAllReadConfirmed(true)
-    if (await notifyLetterRead(currentLetterIndex)) setIsFinalNotificationSent(true)
+    await notifyLetterRead(currentLetterIndex)
   }
 
   const isCurrentLetterCompleted = completedLetters.has(currentLetterIndex)
@@ -433,17 +433,6 @@ function LoveLetter() {
         <div className="letters-thank-you" role="status">
           <Heart className="letters-thank-you-heart" fill="currentColor" aria-hidden="true" />
           <h3>MERCI LÏA<br />D’AVOIR TOUT LU<br /><span>JE T’AIME</span></h3>
-          {notificationStatus && <p className="letter-notification-status" aria-live="polite">{notificationStatus}</p>}
-          {!isFinalNotificationSent && (
-            <button
-              className="next-letter-button"
-              type="button"
-              disabled={notificationStatus === 'Envoi de l’alerte e-mail…'}
-              onClick={confirmAllLettersRead}
-            >
-              Renvoyer l’alerte
-            </button>
-          )}
         </div>
       ) : (
         <>
@@ -483,10 +472,10 @@ function LoveLetter() {
                   <button
                     className="next-letter-button"
                     type="button"
-                    disabled={isFinalNotificationSent || notificationStatus === 'Envoi de l’alerte e-mail…'}
+                    disabled={notificationStatus === 'Envoi de l’alerte e-mail…'}
                     onClick={confirmAllLettersRead}
                   >
-                    {isFinalNotificationSent ? 'C’est envoyé ♥' : 'J’ai tout lu'}
+                    J’ai tout lu
                   </button>
                 </>
               ) : (
@@ -500,7 +489,6 @@ function LoveLetter() {
                 </button>
               )}
             </div>
-            {notificationStatus && <p className="letter-notification-status" role="status">{notificationStatus}</p>}
           </div>
           {!areLettersRevealed && (
             <div className="letter-reveal-overlay" role="status">
