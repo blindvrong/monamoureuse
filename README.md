@@ -14,17 +14,16 @@ The site is published with GitHub Pages at [blindvrong.github.io/monamoureuse](h
 
 ## E-mail alerts when a letter is read
 
-The optional alert service runs as a Cloudflare Worker and sends mail through Resend. The Resend API key and recipient address are stored only as Worker secrets; never add them to the site or this repository.
+The alert service runs as a Cloudflare Worker and sends mail through Web3Forms, so it does not require owning a domain. The Web3Forms access key is stored only as a Worker secret; never add it to the site or this repository.
 
-1. Create a Cloudflare account and a Resend account using the recipient e-mail address. Verify the address in Resend. Without a domain you control, Resend's test sender can only deliver to the verified address on your Resend account.
-2. From `notification-worker/`, run `npx wrangler login`, then set the Worker secrets:
+1. Create a Web3Forms access key at [web3forms.com](https://web3forms.com/) using the e-mail address where you want to receive alerts. Retrieve the key from the e-mail they send you.
+2. From `notification-worker/`, run `npx wrangler login`, then set the Worker secret:
 
    ```sh
-   npx wrangler secret put RESEND_API_KEY
-   npx wrangler secret put NOTIFICATION_EMAIL
+   npx wrangler secret put WEB3FORMS_ACCESS_KEY
    ```
 
-   Enter the Resend API key and verified recipient address when prompted. The configured sender is Resend's test sender.
+   Enter the Web3Forms access key when prompted. The key is linked to the recipient address used to create it.
 3. Deploy the Worker:
 
    ```sh

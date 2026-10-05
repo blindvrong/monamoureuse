@@ -5,10 +5,8 @@ import worker from './index.mjs'
 const origin = 'https://blindvrong.github.io'
 const env = {
   ALLOWED_ORIGIN: origin,
-  FROM_EMAIL: 'Monamoureuse <onboarding@resend.dev>',
-  NOTIFICATION_EMAIL: 'reader@example.com',
   NOTIFICATION_LIMITER: { limit: async () => ({ success: true }) },
-  RESEND_API_KEY: 'test-key',
+  WEB3FORMS_ACCESS_KEY: 'test-key',
 }
 
 function postRequest(body, requestOrigin = origin) {
@@ -23,12 +21,12 @@ function postRequest(body, requestOrigin = origin) {
   })
 }
 
-test('sends an alert to the configured address with the letter details', async () => {
+test('sends an alert through Web3Forms with the letter details', async () => {
   const originalFetch = globalThis.fetch
   let emailRequest
   globalThis.fetch = async (url, init) => {
     emailRequest = { url, init }
-    return Response.json({ id: 'email-id' })
+    return Response.json({ success: true })
   }
 
   try {
@@ -39,13 +37,12 @@ test('sends an alert to the configured address with the letter details', async (
 
     assert.equal(response.status, 200)
     assert.deepEqual(await response.json(), { ok: true })
-    assert.equal(emailRequest.url, 'https://api.resend.com/emails')
-    assert.equal(emailRequest.init.headers.Authorization, 'Bearer test-key')
+    assert.equal(emailRequest.url, 'https://api.web3forms.com/submit')
     assert.deepEqual(JSON.parse(emailRequest.init.body), {
-      from: env.FROM_EMAIL,
-      to: env.NOTIFICATION_EMAIL,
+      access_key: env.WEB3FORMS_ACCESS_KEY,
+      from_name: 'Monamoureuse',
       subject: 'Elle a lu la lettre 3/30',
-      text: 'Elle vient de terminer la lettre 3/30 : « Ton sourire », puis a cliqué sur « Lettre suivante ».',
+      message: 'Elle vient de terminer la lettre 3/30 : « Ton sourire », puis a cliqué sur « Lettre suivante ».',
     })
   } finally {
     globalThis.fetch = originalFetch

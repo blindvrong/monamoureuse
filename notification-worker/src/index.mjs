@@ -68,27 +68,30 @@ export default {
     ) {
       return jsonResponse({ error: 'Invalid letter details' }, 400, origin)
     }
-    if (!env.RESEND_API_KEY || !env.NOTIFICATION_EMAIL || !env.FROM_EMAIL) {
+    if (!env.WEB3FORMS_ACCESS_KEY) {
       return jsonResponse({ error: 'E-mail service is not configured' }, 503, origin)
     }
 
     const title = letterTitle.replace(/[\r\n\t]/g, ' ').trim()
-    const emailResponse = await fetch('https://api.resend.com/emails', {
+    const emailResponse = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: env.FROM_EMAIL,
-        to: env.NOTIFICATION_EMAIL,
+        access_key: env.WEB3FORMS_ACCESS_KEY,
+        from_name: 'Monamoureuse',
         subject: `Elle a lu la lettre ${letterNumber}/30`,
-        text: `Elle vient de terminer la lettre ${letterNumber}/30 : « ${title} », puis a cliqué sur « Lettre suivante ».`,
+        message: `Elle vient de terminer la lettre ${letterNumber}/30 : « ${title} », puis a cliqué sur « Lettre suivante ».`,
       }),
     })
 
     if (!emailResponse.ok) {
-      console.error('Resend e-mail request failed with status', emailResponse.status)
+      console.error('Web3Forms e-mail request failed with status', emailResponse.status)
+      return jsonResponse({ error: 'E-mail could not be sent' }, 502, origin)
+    }
+
+    const emailResult = await emailResponse.json()
+    if (emailResult.success !== true) {
+      console.error('Web3Forms did not accept the e-mail request')
       return jsonResponse({ error: 'E-mail could not be sent' }, 502, origin)
     }
 
