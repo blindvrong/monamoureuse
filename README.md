@@ -8,6 +8,10 @@ This repository is linked to a [v0](https://v0.app) project. You can continue de
 
 [Continue working on v0 →](https://v0.app/chat/projects/prj_pnJuZZSFxCNWGQE2w4TsA8xHuBRo)
 
+## Public site
+
+The site is published with GitHub Pages at [blindvrong.github.io/monamoureuse](https://blindvrong.github.io/monamoureuse/). Changes pushed to `main` are built and deployed automatically by the `Deploy to GitHub Pages` workflow.
+
 ## Getting Started
 
 First, run the development server:
