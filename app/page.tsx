@@ -8,6 +8,7 @@ import { loveLetters } from '@/lib/love-letters'
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
 const letterNotificationUrl = process.env.NEXT_PUBLIC_LETTER_NOTIFICATION_URL
 const letterProgressKey = 'monamoureuse-letter-progress-v4'
+const siteVisitKey = 'monamoureuse-site-visited-v1'
 const letterSongs = [
   { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
   { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
@@ -278,8 +279,22 @@ function LoveLetter() {
 export default function Page() {
   const [isSurpriseOpen, setIsSurpriseOpen] = useState(true)
   const [isRevealing, setIsRevealing] = useState(false)
+  const [isReturningVisitor, setIsReturningVisitor] = useState(false)
+
+  useEffect(() => {
+    try {
+      setIsReturningVisitor(localStorage.getItem(siteVisitKey) === 'true')
+    } catch (error) {
+      console.error('Impossible de vérifier la visite précédente.', error)
+    }
+  }, [])
 
   function revealSurprise() {
+    try {
+      localStorage.setItem(siteVisitKey, 'true')
+    } catch (error) {
+      console.error('Impossible d’enregistrer cette visite.', error)
+    }
     setIsRevealing(true)
     const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 750
     window.setTimeout(() => setIsSurpriseOpen(false), delay)
@@ -302,8 +317,8 @@ export default function Page() {
     {isSurpriseOpen && <div className={`surprise-overlay${isRevealing ? ' is-leaving' : ''}`} role="dialog" aria-modal="true" aria-labelledby="surprise-title">
       <div className="surprise-card">
         <span className="surprise-eyebrow">J&apos;AI QUELQUE CHOSE POUR TOI</span>
-        <h1 id="surprise-title">Surprise<br /><em>mon chou</em></h1>
-        <p>J&apos;ai préparé une petite surprise rien que pour toi.</p>
+        <h1 id="surprise-title">{isReturningVisitor ? <>Bon retour<br /><em>mon chou</em></> : <>Surprise<br /><em>mon chou</em></>}</h1>
+        <p>{isReturningVisitor ? 'Ça me fait plaisir de te retrouver, Lïa.' : 'J’ai préparé une petite surprise rien que pour toi.'}</p>
         <button className="surprise-button" type="button" onClick={revealSurprise} aria-label="Ouvrir la surprise">
           <Heart size={28} fill="currentColor" aria-hidden="true" />
         </button>
