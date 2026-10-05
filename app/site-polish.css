@@ -506,20 +506,6 @@ html {
   line-height: 1.5;
 }
 
-.love-letter-lyrics-link {
-  display: inline-block;
-  margin-top: 0.45rem;
-  color: var(--accent);
-  font-size: 0.68rem;
-  text-decoration: underline;
-  text-decoration-color: rgb(233 145 117 / 40%);
-  text-underline-offset: 3px;
-}
-
-.love-letter-lyrics-link:hover {
-  text-decoration-color: currentColor;
-}
-
 .love-letter-audio {
   flex: 1 1 280px;
   width: min(100%, 352px);

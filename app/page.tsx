@@ -24,7 +24,7 @@ const songs: Song[] = [
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
 const letterProgressKey = 'monamoureuse-letter-progress'
 const letterSongs = [
-  { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3`, lyricsUrl: 'https://genius.com/Drake-passionfruit-lyrics' },
+  { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
   { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
 ]
 
@@ -278,11 +278,6 @@ function LetterSongPlayer({ song }: { song: (typeof letterSongs)[number] }) {
       <span>
         <strong>{song.title}</strong>
         <small>{song.artist} · rien que pour toi</small>
-        {'lyricsUrl' in song && (
-          <a className="love-letter-lyrics-link" href={song.lyricsUrl} target="_blank" rel="noreferrer">
-            Voir les paroles sur Genius ↗
-          </a>
-        )}
       </span>
     </div>
     <audio className="love-letter-audio" controls preload="none">
