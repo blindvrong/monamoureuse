@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { Heart, Play, Search, Shuffle, Volume2 } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Heart, Pause, Play, Search, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
 const songs = [
@@ -12,52 +12,215 @@ const songs = [
 
 const artists = ['Drake', 'Hamza', 'The Marías', 'The Weeknd', 'The Neighbourhood', 'Cigarettes After Sex']
 const moods = ['Tous', ...Array.from(new Set(songs.map((song) => song.mood))).slice(0, 6)]
-const loveLetterMusic = {
-  title: 'Gymnopédie No. 1',
-  artist: 'Erik Satie · Philippe Entremont',
-  trackId: '5NGtFXVpXSvwunEIGeviY3',
-}
-
 const loveLetters = [
   {
-    title: 'À toi, Lïa ❤️',
-    preview: 'Tout ce que j’aime chez toi, simplement.',
+    title: 'À toi, Lïa',
     paragraphs: [
-      'Je sais pas vraiment par où commencer, parce que j’ai beaucoup de choses à te dire.',
-      'Tu as une place immense dans ma vie. Tu es la personne à qui je pense, avec qui j’aime passer du temps, parler de tout et de rien, rire pour absolument rien, ou juste rester là sans forcément parler.',
-      'J’aime énormément de choses chez toi : ton sourire, ton regard, ta façon de parler, ta voix, tes petites habitudes et tes réactions. J’aime quand tu rougis quand je te dis que je t’aime, quand j’arrive à te faire sourire, et te voir être simplement toi-même.',
-      'Mais ce que j’aime surtout, c’est la personne que tu es.',
-      'J’aime notre complicité, nos délires, nos discussions random et tous ces moments simples qui comptent beaucoup pour moi. Même quand on ne fait rien de spécial, je me sens bien avec toi.',
-      'Parfois, on ne se comprend pas tout de suite. Pour moi, l’important, c’est qu’on puisse se parler, s’écouter et se rassurer.',
-      'Je ne cherche pas une relation parfaite. Je veux quelque chose de vrai, où on peut être nous-mêmes, dire ce qu’on ressent et se sentir bien ensemble.',
-      'Si je devais résumer tout ça en une phrase : je t’aime pas seulement pour ce que tu fais ou ce que tu as. Je t’aime parce que c’est toi.',
+      'Je sais pas vraiment par où commencer, alors je vais juste te dire les choses simplement : tu comptes énormément pour moi.',
+      'J’aime passer du temps avec toi, parler de tout et de rien, rigoler pour rien, ou rester près de toi sans avoir besoin de trouver quoi dire.',
     ],
   },
   {
-    title: 'Un petit mot comme ça',
-    preview: 'J’avais juste envie de te le dire.',
+    title: 'Ta façon de parler',
     paragraphs: [
-      'Coucou toi,',
-      'Je pensais à toi alors je t’écris. J’aime bien nos conversations, même quand on commence par un truc tout bête et qu’on finit par parler de tout. Et recevoir un message de toi, ça me fait toujours plaisir.',
-      'Voilà, c’est tout. Je voulais juste te le dire.',
+      'J’aime t’écouter parler, même quand le sujet part dans tous les sens.',
+      'Ta façon de raconter les choses, de t’exprimer et de réagir, c’est vraiment toi. Et moi, j’aime ça.',
     ],
   },
   {
-    title: 'Quand tu me manques',
-    preview: 'Juste pour te dire que je pense à toi.',
+    title: 'Ton sourire',
     paragraphs: [
-      'Ma belle,',
-      'Tu me manques un peu aujourd’hui. J’espère que ta journée se passe bien. Raconte-moi quand tu auras le temps, ça me fera plaisir de te lire.',
-      'À bientôt, j’espère. Je t’embrasse.',
+      'Ton sourire, c’est une de ces choses toutes simples qui me font du bien.',
+      'Et quand je réussis à te faire rire, même pour une bêtise, je suis content. Voilà, je voulais que tu le saches.',
     ],
   },
   {
-    title: 'Ce que j’aime chez nous',
-    preview: 'Sans grand discours.',
+    title: 'Même sans parler',
     paragraphs: [
-      'Lïa,',
-      'Je ne suis pas toujours très fort pour dire les choses, mais je suis vraiment bien avec toi. J’aime nos délires, nos discussions et même les moments où on ne fait rien de spécial.',
-      'J’espère qu’on continuera à en avoir plein. Je t’aime.',
+      'J’aime aussi les moments où on ne fait rien de particulier.',
+      'Être avec toi, sans devoir remplir chaque silence, ça me va très bien. Je me sens bien, c’est tout.',
+    ],
+  },
+  {
+    title: 'Ta voix',
+    paragraphs: [
+      'Il y a quelque chose dans ta voix qui me fait toujours plaisir à entendre.',
+      'Quand tu me racontes ta journée ou juste un petit truc qui te passe par la tête, j’aime être là pour t’écouter.',
+    ],
+  },
+  {
+    title: 'Tes petites habitudes',
+    paragraphs: [
+      'J’aime les petits détails qui font que tu es toi : tes habitudes, tes expressions, tes réactions.',
+      'Ce ne sont peut-être que des choses simples, mais je les remarque et elles me font sourire.',
+    ],
+  },
+  {
+    title: 'Quand tu rougis',
+    paragraphs: [
+      'J’avoue, j’aime bien quand tu rougis quand je te dis que je t’aime.',
+      'Pas pour te mettre mal à l’aise, juste parce que je trouve ça touchant de voir que ces mots te font quelque chose.',
+    ],
+  },
+  {
+    title: 'Nos discussions',
+    paragraphs: [
+      'J’aime qu’on puisse parler de tout et de rien, passer d’un sujet à un autre sans prévenir.',
+      'Avec toi, une conversation toute simple me suffit largement.',
+    ],
+  },
+  {
+    title: 'Tes délires',
+    paragraphs: [
+      'Nos délires me font du bien. Même quand personne d’autre ne comprend pourquoi on rigole.',
+      'J’aime cette complicité qu’on a, et la légèreté qu’elle apporte à ma journée.',
+    ],
+  },
+  {
+    title: 'Ton regard',
+    paragraphs: [
+      'J’aime ton regard et toutes les petites expressions qui passent sur ton visage.',
+      'Il y a beaucoup de choses que j’aime chez toi, mais celle-là, je ne voulais pas l’oublier.',
+    ],
+  },
+  {
+    title: 'Juste toi',
+    paragraphs: [
+      'Tu n’as pas besoin d’en faire plus pour me plaire.',
+      'J’aime la personne que tu es, dans les bons jours comme dans les jours plus ordinaires. C’est toi que j’aime.',
+    ],
+  },
+  {
+    title: 'Ton humour',
+    paragraphs: [
+      'J’aime ton humour et ta façon de me faire rire, parfois sans même essayer.',
+      'Même une petite remarque de toi peut me mettre de bonne humeur.',
+    ],
+  },
+  {
+    title: 'Quand tu me racontes',
+    paragraphs: [
+      'J’aime quand tu me racontes ce que tu aimes, ce qui t’intéresse ou ce qui t’arrive.',
+      'Je suis content que tu partages ces petits bouts de ta journée avec moi.',
+    ],
+  },
+  {
+    title: 'Ta douceur',
+    paragraphs: [
+      'J’aime les moments où tu me rassures et où tu me montres que je compte pour toi.',
+      'Ça me fait du bien de pouvoir être moi-même avec toi.',
+    ],
+  },
+  {
+    title: 'Tu me fais du bien',
+    paragraphs: [
+      'Il suffit parfois d’un message de toi pour changer un peu ma journée.',
+      'Je ne sais pas si tu t’en rends compte, mais ta présence compte beaucoup pour moi.',
+    ],
+  },
+  {
+    title: 'Ta personnalité',
+    paragraphs: [
+      'J’aime ta personnalité, ta manière de penser et ta façon de voir les choses.',
+      'Même quand on n’a pas exactement le même avis, j’aime découvrir comment tu réfléchis.',
+    ],
+  },
+  {
+    title: 'Être moi avec toi',
+    paragraphs: [
+      'Avec toi, je peux parler de moi et être simplement comme je suis.',
+      'C’est précieux pour moi, et je voulais te remercier pour ça.',
+    ],
+  },
+  {
+    title: 'Nos moments simples',
+    paragraphs: [
+      'Pas besoin d’un programme incroyable pour que je sois heureux avec toi.',
+      'Une discussion, un rire ou un moment tranquille ensemble, ça me suffit.',
+    ],
+  },
+  {
+    title: 'Ta façon d’écrire',
+    paragraphs: [
+      'J’aime recevoir tes messages et voir ton nom apparaître sur mon téléphone.',
+      'Même quelques mots de toi, ça me fait plaisir.',
+    ],
+  },
+  {
+    title: 'Quand tu es contente',
+    paragraphs: [
+      'J’aime te voir heureuse et entendre parler de ce qui te fait plaisir.',
+      'Ton enthousiasme est contagieux, et ça me rend heureux aussi.',
+    ],
+  },
+  {
+    title: 'Notre complicité',
+    paragraphs: [
+      'J’aime ce petit truc à nous : nos blagues, nos regards et nos conversations qui n’appartiennent qu’à nous.',
+      'Je me sens proche de toi, et ça compte beaucoup.',
+    ],
+  },
+  {
+    title: 'Tes réactions',
+    paragraphs: [
+      'J’aime tes réactions, même les plus spontanées.',
+      'Elles me rappellent à quel point tu es toi, et c’est justement ça qui me plaît.',
+    ],
+  },
+  {
+    title: 'Prendre soin de toi',
+    paragraphs: [
+      'J’aime prendre soin de toi et être là quand tu as besoin de parler.',
+      'Tu peux me dire ce que tu as sur le cœur. Je t’écoute.',
+    ],
+  },
+  {
+    title: 'On peut se parler',
+    paragraphs: [
+      'On n’est pas obligés d’être d’accord sur tout ni de tout comprendre du premier coup.',
+      'Je préfère qu’on puisse se parler franchement, s’écouter et se rassurer.',
+    ],
+  },
+  {
+    title: 'Ta façon de penser',
+    paragraphs: [
+      'J’aime quand tu défends ton avis et que tu m’expliques ce que tu en penses.',
+      'Tu me fais réfléchir, et j’aime apprendre à mieux te connaître.',
+    ],
+  },
+  {
+    title: 'Les petits détails',
+    paragraphs: [
+      'Il y a plein de petits trucs que tu fais sans y penser et que je trouve attachants.',
+      'Je ne vais pas tous les lister, mais je les remarque. Et ça me plaît.',
+    ],
+  },
+  {
+    title: 'Tu comptes pour moi',
+    paragraphs: [
+      'Tu as une place importante dans ma vie, Lïa.',
+      'Je tiens à toi, et j’aime pouvoir te le dire simplement, sans avoir besoin d’une occasion spéciale.',
+    ],
+  },
+  {
+    title: 'Notre petit monde',
+    paragraphs: [
+      'J’aime ce qu’on est quand on est tous les deux : nos discussions, nos rires et notre façon d’être ensemble.',
+      'Je me sens bien dans ces moments-là.',
+    ],
+  },
+  {
+    title: 'Ce que je vois en toi',
+    paragraphs: [
+      'J’aime les côtés de toi que tu ne montres pas forcément à tout le monde.',
+      'Merci de me laisser te connaître comme tu es.',
+    ],
+  },
+  {
+    title: 'Je t’aime parce que c’est toi',
+    paragraphs: [
+      'Je pourrais parler longtemps de ton sourire, de ta voix, de tes habitudes et de tout ce qu’on aime faire ensemble.',
+      'Mais au fond, la raison la plus simple reste la meilleure : je t’aime parce que c’est toi. Personne d’autre ne peut être toi.',
     ],
   },
 ]
@@ -66,14 +229,17 @@ function SongCard({ song, index }: { song: typeof songs[number]; index: number }
   return <article className={`song-card ${song.color}`}>
     <div className="cover"><span>{String(index + 1).padStart(2, '0')}</span><b>♪</b></div>
     <div className="song-info"><span className="song-mood">{song.mood}</span><h3>{song.title}</h3><p>{song.artist}</p></div>
-    <a className="play-button" href={`https://open.spotify.com/search/${encodeURIComponent(`${song.title} ${song.artist}`)}`} target="_blank" rel="noreferrer" aria-label={`Écouter ${song.title} de ${song.artist}`}><Play size={14} fill="currentColor" /></a>
+    <a className="play-button" href={`https://music.youtube.com/search?q=${encodeURIComponent(`${song.title} ${song.artist}`)}`} target="_blank" rel="noreferrer" aria-label={`Chercher ${song.title} de ${song.artist} sur YouTube Music`}><Play size={14} fill="currentColor" /></a>
   </article>
 }
 
 function LoveLetter() {
   const [reasonIndex, setReasonIndex] = useState(0)
   const [noteOrder, setNoteOrder] = useState([0, 1, 2])
-  const [activeLetter, setActiveLetter] = useState(0)
+  const [dailyLetterIndex, setDailyLetterIndex] = useState(0)
+  const [musicPlaying, setMusicPlaying] = useState(false)
+  const [musicBlocked, setMusicBlocked] = useState(false)
+  const musicRef = useRef<HTMLAudioElement>(null)
   const loveNotes = [
     'J’aime bien quand tu me racontes ta journée.',
     'Tu me fais rire, même quand tu pars dans tes explications.',
@@ -86,7 +252,33 @@ function LoveLetter() {
     const shuffledNotes = [0, 1, 2].sort(() => Math.random() - 0.5)
     setReasonIndex(nextReason)
     setNoteOrder(shuffledNotes)
+
+    const anchor = Date.UTC(2026, 9, 5)
+    const today = new Date()
+    const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+    const elapsedDays = Math.floor((todayUtc - anchor) / 86_400_000)
+    setDailyLetterIndex(((elapsedDays % loveLetters.length) + loveLetters.length) % loveLetters.length)
+
+    const audio = musicRef.current
+    if (audio) {
+      audio.volume = 0.14
+      audio.play().then(() => setMusicPlaying(true)).catch(() => setMusicBlocked(true))
+    }
   }, [])
+
+  function toggleMusic() {
+    const audio = musicRef.current
+    if (!audio) return
+    if (audio.paused) {
+      audio.play().then(() => {
+        setMusicPlaying(true)
+        setMusicBlocked(false)
+      }).catch(() => setMusicBlocked(true))
+    } else {
+      audio.pause()
+      setMusicPlaying(false)
+    }
+  }
 
   function showRandomReason() {
     setReasonIndex((current) => {
@@ -98,7 +290,7 @@ function LoveLetter() {
 
   return <section className="letter-section" id="lettre" aria-labelledby="lettre-title">
     <div className="section-heading letter-heading"><div><p className="eyebrow">une petite lettre pour lïa</p><h2 id="lettre-title">Quelques mots<br /><em>rien que pour toi.</em></h2></div><Heart className="letter-heart" fill="currentColor" aria-hidden="true" /></div>
-    <p className="letter-intro">Lïa, j&apos;avais envie de te laisser quelques mots ici. Et si tu veux, tu peux piocher une raison pour laquelle je t&apos;aime.</p>
+    <p className="letter-intro">Lïa, je t&apos;aime pour plein de petites choses. Tu peux en découvrir une au hasard.</p>
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p aria-live="polite">{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" type="button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
     <div className="love-signoff"><span>je t&apos;aime,</span><strong>Lïa</strong></div>
     <div className="love-notes" aria-label="Petits mots pour Lïa">
@@ -106,52 +298,37 @@ function LoveLetter() {
     </div>
     <section className="love-letters" aria-labelledby="love-letters-title">
       <div className="love-letters-heading">
-        <p className="eyebrow">à ouvrir quand tu veux</p>
-        <h3 id="love-letters-title">Des lettres <em>pour toi.</em></h3>
-        <p>Choisis juste celle que tu as envie de lire.</p>
+        <h3 id="love-letters-title">La lettre <em>du jour.</em></h3>
       </div>
-      <div className="love-letters-layout">
-        <div className="love-letter-list" role="group" aria-label="Choisir une lettre">
-          {loveLetters.map((letter, index) => (
-            <button
-              type="button"
-              className={`love-letter-choice${activeLetter === index ? ' active' : ''}`}
-              aria-pressed={activeLetter === index}
-              key={letter.title}
-              onClick={() => setActiveLetter(index)}
-            >
-              <span className="love-letter-index">0{index + 1}</span>
-              <span className="love-letter-choice-copy">
-                <strong>{letter.title}</strong>
-                <small>{letter.preview}</small>
-              </span>
-              <span className="love-letter-arrow" aria-hidden="true">↗</span>
-            </button>
-          ))}
+      <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
+        <div className="love-letter-paper-topline">
+          <span className="love-letter-paper-index">JOUR {String(dailyLetterIndex + 1).padStart(2, '0')} / 30</span>
+          <Heart size={17} aria-hidden="true" />
         </div>
-        <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
-          <span className="love-letter-paper-index">LETTRE {String(activeLetter + 1).padStart(2, '0')} / {String(loveLetters.length).padStart(2, '0')}</span>
-          <h4>{loveLetters[activeLetter].title}</h4>
-          <div className="love-letter-body">
-            {loveLetters[activeLetter].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        <h4>{loveLetters[dailyLetterIndex].title}</h4>
+        <div className="love-letter-body">
+          {loveLetters[dailyLetterIndex].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </div>
+        <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
+        <div className="love-letter-music">
+          <div className="love-letter-music-copy">
+            <span className="music-note" aria-hidden="true">♪</span>
+            <span><strong>Piano tout doux</strong><small>En boucle pendant ta lecture</small></span>
           </div>
-          <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
-          {activeLetter === 0 && (
-            <div className="love-letter-music">
-              <p>Gymnopédie No. 1 · Erik Satie</p>
-              <iframe
-                title={`${loveLetterMusic.title} de ${loveLetterMusic.artist} — musique douce pour accompagner la lettre`}
-                src={`https://open.spotify.com/embed/track/${loveLetterMusic.trackId}?utm_source=generator&theme=0&autoplay=1`}
-                width="100%"
-                height="152"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="eager"
-              />
-              <small>Si ton navigateur bloque la lecture automatique, appuie sur lecture.</small>
-            </div>
-          )}
-        </article>
-      </div>
+          <button
+            className="music-toggle"
+            type="button"
+            onClick={toggleMusic}
+            aria-pressed={musicPlaying}
+            aria-label={musicPlaying ? 'Mettre la musique en pause' : 'Lancer la musique'}
+          >
+            {musicPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
+            <span>{musicPlaying ? 'Pause' : 'Écouter'}</span>
+          </button>
+          {musicBlocked && <small className="music-hint">Appuie sur « Écouter » pour lancer le piano.</small>}
+          <audio ref={musicRef} src="piano-doux.wav" loop preload="auto" />
+        </div>
+      </article>
     </section>
   </section>
 }
@@ -173,9 +350,7 @@ export default function Page() {
     <LoveLetter />
     <section className="stats-grid" id="analyse" aria-label="Analyse de tes écoutes"><div className="stat-card featured"><span className="stat-label">TEMPS ÉCOUTÉ</span><strong>2h 40</strong><p>47 écoutes analysées</p><div className="mini-bars">{[40,72,52,86,64,100,48,80].map((height, i) => <i key={i} style={{ height: `${height}%` }} />)}</div></div><div className="stat-card"><span className="stat-label">TON ARTISTE N°1</span><strong>Drake</strong><p>Le plus présent dans tes écoutes</p><span className="rank">01 / 20</span></div><div className="stat-card"><span className="stat-label">TON GENRE</span><strong>R&B</strong><p>Mais toujours un peu de chaos à côté</p><span className="rank">dreamy · nocturne · soul</span></div></section>
     <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
-    <section className="music-player-section top-player" aria-label="Ta musique préférée"><div><p className="eyebrow">LE SON QUI TE RESSEMBLE LE PLUS</p><h2>{loveLetterMusic.title} <em>en fond.</em></h2><p>{loveLetterMusic.artist} · un peu de douceur</p></div><div className="player-card"><div className="player-art">♪</div><div><strong>{loveLetterMusic.title}</strong><span>{loveLetterMusic.artist}</span><div className="player-line"><i /></div></div><Volume2 size={18} aria-hidden="true" /><a href={`https://open.spotify.com/track/${loveLetterMusic.trackId}`} target="_blank" rel="noreferrer" aria-label={`Écouter ${loveLetterMusic.title} sur Spotify`}><Play size={15} fill="currentColor" /></a></div></section>
     <section className="songs-section" id="sons"><div className="section-heading songs-heading"><div><p className="eyebrow">les morceaux que je garde pour toi</p><h2>Tes sons préférés</h2><p className="section-intro">Ceux que tu écoutes souvent. Ceux qui me font penser à toi, même quand tu n&apos;es pas là.</p></div><div className="song-total" aria-live="polite"><strong>{filtered.length}</strong><span>morceaux<br />affichés</span></div></div><div className="controls"><label className="search"><Search size={16} aria-hidden="true" /><input type="search" aria-label="Rechercher un morceau" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un morceau ou un artiste" /></label><div className="filters" aria-label="Filtrer par ambiance">{moods.map((mood) => <button type="button" aria-pressed={activeMood === mood} className={activeMood === mood ? 'active' : ''} key={mood} onClick={() => setActiveMood(mood)}>{mood}</button>)}</div></div>{filtered.length > 0 ? <div className="song-grid">{filtered.map((song, index) => <SongCard key={`${song.title}-${song.artist}`} song={song} index={index} />)}</div> : <div className="empty-results" role="status"><p>Aucun morceau ne correspond à ta recherche.</p><button type="button" onClick={() => { setQuery(''); setActiveMood('Tous') }}>Effacer les filtres</button></div>}</section>
-    <section className="music-player-section bottom-player" aria-label="Musique de fond pour Lïa"><div><p className="eyebrow">À ÉCOUTER EN LISANT</p><h2>Le son de Lïa.</h2><p>Un piano tout doux pour accompagner ta lettre.</p></div><a className="spotify-frame" href={`https://open.spotify.com/track/${loveLetterMusic.trackId}`} target="_blank" rel="noreferrer" aria-label={`Ouvrir ${loveLetterMusic.title} de ${loveLetterMusic.artist} sur Spotify`}><div className="spotify-frame-art">♪</div><div><strong>{loveLetterMusic.title}</strong><span>{loveLetterMusic.artist}</span><small>Écouter sur Spotify ↗</small></div></a></section>
     <footer><p>j&apos;ai fait ça en pensant à toi.</p><span>pour toi, Lïa</span></footer>
   </main>
 }

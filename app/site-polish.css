@@ -67,20 +67,19 @@ html {
 }
 
 .love-letters {
-  margin-top: 5rem;
-  padding-top: 4rem;
+  margin-top: 3.5rem;
+  padding-top: 2.75rem;
   border-top: 1px solid var(--line);
 }
 
 .love-letters-heading {
-  max-width: 540px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .love-letters-heading h3 {
   margin: 0;
   color: var(--cream);
-  font: 500 clamp(2.2rem, 5vw, 3.5rem) 'Playfair Display', serif;
+  font: 500 clamp(2rem, 4vw, 3rem) 'Playfair Display', serif;
   letter-spacing: -0.06em;
 }
 
@@ -89,99 +88,43 @@ html {
   font-weight: 500;
 }
 
-.love-letters-heading > p:last-child {
-  max-width: 400px;
-  margin: 0.8rem 0 0;
-  color: var(--muted);
-  line-height: 1.65;
-}
-
-.love-letters-layout {
-  display: grid;
-  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
-  align-items: stretch;
-  gap: 1.25rem;
-}
-
-.love-letter-list {
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid var(--line);
-}
-
-.love-letter-choice {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) 18px;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding: 1.1rem 0.25rem;
-  border-bottom: 1px solid var(--line);
-  background: transparent;
-  color: var(--ink);
-  text-align: left;
-  cursor: pointer;
-}
-
-.love-letter-choice.active {
-  padding-inline: 0.75rem;
-  background: rgb(255 255 255 / 4%);
-}
-
-.love-letter-index,
 .love-letter-paper-index {
   color: var(--accent);
   font: 500 0.62rem 'DM Mono', monospace;
   letter-spacing: 0.08em;
 }
 
-.love-letter-choice-copy {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.love-letter-choice-copy strong {
-  font: 500 1rem 'Playfair Display', serif;
-}
-
-.love-letter-choice-copy small {
-  color: var(--muted);
-  font-size: 0.72rem;
-  line-height: 1.5;
-}
-
-.love-letter-arrow {
-  color: var(--accent);
-  transition: transform 180ms ease;
-}
-
-.love-letter-choice:hover .love-letter-arrow,
-.love-letter-choice.active .love-letter-arrow {
-  transform: translate(2px, -2px);
-}
-
 .love-letter-paper {
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border: 1px solid rgb(246 240 232 / 10%);
-  border-radius: 3px;
+  max-width: 780px;
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  border: 1px solid rgb(246 240 232 / 12%);
+  border-radius: 4px;
   background:
-    radial-gradient(ellipse at 100% 0%, rgb(233 145 117 / 12%), transparent 55%),
+    radial-gradient(ellipse at 100% 0%, rgb(233 145 117 / 8%), transparent 55%),
     #211c1b;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 18%);
+}
+
+.love-letter-paper-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--accent);
 }
 
 .love-letter-paper h4 {
-  margin: 1.25rem 0 1.5rem;
+  margin: 1.4rem 0 2rem;
   color: var(--cream);
-  font: 500 clamp(1.7rem, 3vw, 2.4rem) 'Playfair Display', serif;
+  font: 500 clamp(2rem, 4vw, 3rem) 'Playfair Display', serif;
   letter-spacing: -0.04em;
 }
 
 .love-letter-body {
   display: grid;
-  gap: 1rem;
-  color: #c5bbb2;
-  font-size: 0.9rem;
-  line-height: 1.8;
+  gap: 1.2rem;
+  color: #d2c9c1;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  line-height: 1.9;
 }
 
 .love-letter-body p {
@@ -197,7 +140,7 @@ html {
   display: grid;
   justify-items: end;
   gap: 0.2rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   color: var(--muted);
   font: italic 1rem 'Playfair Display', serif;
 }
@@ -208,30 +151,79 @@ html {
 }
 
 .love-letter-music {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
   margin-top: 2rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--line);
 }
 
-.love-letter-music p {
-  margin: 0 0 0.85rem;
-  color: var(--muted);
-  font: 500 0.62rem 'DM Mono', monospace;
-  letter-spacing: 0.04em;
+.love-letter-music-copy {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
-.love-letter-music iframe {
-  display: block;
-  border: 0;
-  border-radius: 8px;
+.music-note {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--accent);
+  font: 1.2rem 'Playfair Display', serif;
 }
 
-.love-letter-music small {
+.love-letter-music-copy strong,
+.love-letter-music-copy small {
   display: block;
-  margin-top: 0.65rem;
+}
+
+.love-letter-music-copy strong {
+  color: var(--cream);
+  font: 500 0.9rem 'Playfair Display', serif;
+}
+
+.love-letter-music-copy small,
+.music-hint {
+  margin-top: 0.25rem;
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   line-height: 1.5;
+}
+
+.music-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-width: 112px;
+  min-height: 42px;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgb(233 145 117 / 50%);
+  border-radius: 2rem;
+  background: rgb(233 145 117 / 10%);
+  color: var(--cream);
+  font: 500 0.65rem 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.music-toggle:hover {
+  background: rgb(233 145 117 / 20%);
+}
+
+.music-hint {
+  flex-basis: 100%;
+}
+
+.love-letter-music audio {
+  display: none;
 }
 
 @media (hover: hover) {
@@ -317,16 +309,21 @@ html {
     padding-top: 3rem;
   }
 
-  .love-letters-layout {
-    grid-template-columns: minmax(0, 1fr);
+  .love-letters {
+    margin-top: 3rem;
+    padding-top: 2rem;
   }
 
-  .love-letter-list {
-    border-top: 0;
+  .love-letter-paper {
+    padding: 1.35rem;
   }
 
-  .love-letter-choice {
-    padding-inline: 0.15rem;
+  .love-letter-paper h4 {
+    margin: 1rem 0 1.5rem;
+  }
+
+  .love-letter-music {
+    align-items: flex-start;
   }
 
   .letter-heart {
