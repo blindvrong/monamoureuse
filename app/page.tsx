@@ -22,6 +22,7 @@ const songs: Song[] = [
 ]
 
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
+const letterProgressKey = 'monamoureuse-letter-progress'
 
 const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
 const loveLetters = [
@@ -268,20 +269,70 @@ function CompactSongRow({ song }: { song: Song }) {
 
 function LoveLetter() {
   const [reasonIndex, setReasonIndex] = useState(0)
-  const [dailyLetterIndex, setDailyLetterIndex] = useState(0)
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0)
+  const [completedLetters, setCompletedLetters] = useState<Set<number>>(new Set())
+  const [isLetterProgressLoaded, setIsLetterProgressLoaded] = useState(false)
   const reason = reasons[reasonIndex]
 
   useEffect(() => {
     const nextReason = Math.floor(Math.random() * reasons.length)
     setReasonIndex(nextReason)
 
-    const anchor = Date.UTC(2026, 9, 5)
-    const today = new Date()
-    const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
-    const elapsedDays = Math.floor((todayUtc - anchor) / 86_400_000)
-    setDailyLetterIndex(((elapsedDays % loveLetters.length) + loveLetters.length) % loveLetters.length)
+    let storedCompleted: number[] = []
+    let storedCurrent = 0
+    try {
+      const savedProgress = localStorage.getItem(letterProgressKey)
+      if (savedProgress) {
+        const parsed: unknown = JSON.parse(savedProgress)
+        if (typeof parsed === 'object' && parsed !== null) {
+          const progress = parsed as { completed?: unknown; current?: unknown }
+          if (Array.isArray(progress.completed)) {
+            storedCompleted = progress.completed.filter(
+              (index): index is number => Number.isInteger(index) && index >= 0 && index < loveLetters.length,
+            )
+          }
+          if (
+            typeof progress.current === 'number'
+            && Number.isInteger(progress.current)
+            && progress.current >= 0
+            && progress.current < loveLetters.length
+          ) {
+            storedCurrent = progress.current
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Impossible de charger la progression des lettres.', error)
+    }
+
+    const completed = new Set(storedCompleted)
+    const nextUnread = loveLetters.findIndex((_, index) => index > storedCurrent && !completed.has(index))
+    const firstUnread = loveLetters.findIndex((_, index) => !completed.has(index))
+    const initialLetter = !completed.has(storedCurrent)
+      ? storedCurrent
+      : nextUnread !== -1
+        ? nextUnread
+        : firstUnread !== -1
+          ? firstUnread
+          : loveLetters.length - 1
+
+    setCompletedLetters(completed)
+    setCurrentLetterIndex(initialLetter)
+    setIsLetterProgressLoaded(true)
 
   }, [])
+
+  useEffect(() => {
+    if (!isLetterProgressLoaded) return
+    try {
+      localStorage.setItem(letterProgressKey, JSON.stringify({
+        completed: Array.from(completedLetters),
+        current: currentLetterIndex,
+      }))
+    } catch (error) {
+      console.error('Impossible d’enregistrer la progression des lettres.', error)
+    }
+  }, [completedLetters, currentLetterIndex, isLetterProgressLoaded])
 
   function showRandomReason() {
     setReasonIndex((current) => {
@@ -290,6 +341,20 @@ function LoveLetter() {
       return next
     })
   }
+
+  function setCurrentLetterCompleted(isCompleted: boolean) {
+    setCompletedLetters((current) => {
+      const updated = new Set(current)
+      if (isCompleted) updated.add(currentLetterIndex)
+      else updated.delete(currentLetterIndex)
+      return updated
+    })
+  }
+
+  const isCurrentLetterCompleted = completedLetters.has(currentLetterIndex)
+  const nextUnreadLetterIndex = loveLetters.findIndex(
+    (_, index) => index > currentLetterIndex && !completedLetters.has(index),
+  )
 
   return <section className="letter-section" id="lettre" aria-labelledby="lettre-title">
     <div className="section-heading letter-heading"><div><h2 id="lettre-title">Quelques mots<br /><em>rien que pour toi.</em></h2></div><Heart className="letter-heart" fill="currentColor" aria-hidden="true" /></div>
@@ -301,13 +366,41 @@ function LoveLetter() {
       </div>
       <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
         <div className="love-letter-paper-topline">
-          <span className="love-letter-paper-index">JOUR {String(dailyLetterIndex + 1).padStart(2, '0')} / 30</span>
+          <span className="love-letter-paper-index">LETTRE {String(currentLetterIndex + 1).padStart(2, '0')} / {loveLetters.length}</span>
           <Heart size={17} aria-hidden="true" />
         </div>
+        <div className="letter-progress" role="progressbar" aria-label="Lettres terminées" aria-valuemin={0} aria-valuemax={loveLetters.length} aria-valuenow={completedLetters.size}>
+          <span style={{ width: `${(completedLetters.size / loveLetters.length) * 100}%` }} />
+        </div>
+        <p className="love-letter-title">{loveLetters[currentLetterIndex].title}</p>
         <div className="love-letter-body">
-          {loveLetters[dailyLetterIndex].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {loveLetters[currentLetterIndex].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
         <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
+        <div className="letter-navigation">
+          <label className="letter-complete-label">
+            <input
+              type="checkbox"
+              checked={isCurrentLetterCompleted}
+              disabled={!isLetterProgressLoaded}
+              onChange={(event) => setCurrentLetterCompleted(event.target.checked)}
+            />
+            <span>J&apos;ai fini de lire cette lettre</span>
+          </label>
+          <span className="letters-read-count">{completedLetters.size} / {loveLetters.length} lues</span>
+          {completedLetters.size === loveLetters.length ? (
+            <p className="letters-finished-message">Tu as lu toutes les lettres. Je t’aime, Lïa. ♥</p>
+          ) : (
+            <button
+              className="next-letter-button"
+              type="button"
+              disabled={!isCurrentLetterCompleted || nextUnreadLetterIndex === -1}
+              onClick={() => setCurrentLetterIndex(nextUnreadLetterIndex)}
+            >
+              Lettre suivante <span aria-hidden="true">→</span>
+            </button>
+          )}
+        </div>
         <div className="love-letter-music">
           <div className="love-letter-music-copy">
             <span className="music-note" aria-hidden="true">♪</span>

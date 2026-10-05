@@ -338,6 +338,28 @@ html {
   color: var(--accent);
 }
 
+.letter-progress {
+  overflow: hidden;
+  height: 3px;
+  margin: 1.25rem 0 1.5rem;
+  border-radius: 99px;
+  background: rgb(246 240 232 / 10%);
+}
+
+.letter-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 240ms ease;
+}
+
+.love-letter-title {
+  margin: 0 0 1rem;
+  color: var(--accent);
+  font: italic 500 1.2rem 'Playfair Display', serif;
+}
+
 .love-letter-body {
   display: grid;
   gap: 1.2rem;
@@ -367,6 +389,76 @@ html {
 .love-letter-signoff strong {
   color: var(--accent);
   font-size: 1.8rem;
+}
+
+.letter-navigation {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.letter-complete-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #d2c9c1;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.letter-complete-label input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.letters-read-count {
+  color: var(--muted);
+  font: 500 0.58rem 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+}
+
+.next-letter-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-left: auto;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgb(233 145 117 / 38%);
+  border-radius: 999px;
+  background: rgb(233 145 117 / 9%);
+  color: var(--cream);
+  font: 500 0.68rem 'DM Mono', monospace;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.next-letter-button:not(:disabled):hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  background: rgb(233 145 117 / 18%);
+}
+
+.next-letter-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.letters-finished-message {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--accent);
+  font: italic 500 1rem 'Playfair Display', serif;
 }
 
 .love-letter-music {
@@ -669,6 +761,14 @@ html {
 
   .love-letter-paper {
     padding: 1.35rem;
+  }
+
+  .letter-navigation {
+    align-items: flex-start;
+  }
+
+  .next-letter-button {
+    margin-left: 0;
   }
 
   .love-letter-paper h4 {
