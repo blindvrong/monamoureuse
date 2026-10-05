@@ -295,6 +295,7 @@ function LoveLetter() {
   const [isLetterProgressLoaded, setIsLetterProgressLoaded] = useState(false)
   const [areLettersRevealed, setAreLettersRevealed] = useState(false)
   const [notificationStatus, setNotificationStatus] = useState('')
+  const [isFinalNotificationSent, setIsFinalNotificationSent] = useState(false)
   const reason = reasons[reasonIndex]
 
   useEffect(() => {
@@ -378,31 +379,39 @@ function LoveLetter() {
     setAreLettersRevealed(true)
   }
 
-  async function goToNextLetter() {
-    const nextLetterIndex = nextUnreadLetterIndex
-    if (nextLetterIndex === -1) return
-
-    const readLetter = loveLetters[currentLetterIndex]
-    setCurrentLetterIndex(nextLetterIndex)
-
-    if (!letterNotificationUrl) return
-
+  async function notifyLetterRead(letterIndex: number) {
+    if (!letterNotificationUrl) return false
     setNotificationStatus('Envoi de l’alerte e-mail…')
     try {
       const response = await fetch(letterNotificationUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          letterNumber: currentLetterIndex + 1,
-          letterTitle: readLetter.title,
+          letterNumber: letterIndex + 1,
+          letterTitle: loveLetters[letterIndex].title,
         }),
       })
       if (!response.ok) throw new Error(`Le service d’alerte a répondu ${response.status}.`)
       setNotificationStatus('Alerte e-mail envoyée.')
+      return true
     } catch (error) {
       console.error('Impossible d’envoyer l’alerte e-mail de lecture.', error)
-      setNotificationStatus('La lettre suivante est ouverte, mais l’alerte e-mail n’a pas pu être envoyée.')
+      setNotificationStatus('L’alerte e-mail n’a pas pu être envoyée.')
+      return false
     }
+  }
+
+  async function goToNextLetter() {
+    const nextLetterIndex = nextUnreadLetterIndex
+    if (nextLetterIndex === -1) return
+
+    setCurrentLetterIndex(nextLetterIndex)
+    await notifyLetterRead(currentLetterIndex)
+  }
+
+  async function confirmAllLettersRead() {
+    if (isFinalNotificationSent || notificationStatus === 'Envoi de l’alerte e-mail…') return
+    if (await notifyLetterRead(currentLetterIndex)) setIsFinalNotificationSent(true)
   }
 
   const isCurrentLetterCompleted = completedLetters.has(currentLetterIndex)
@@ -449,7 +458,17 @@ function LoveLetter() {
               </label>
               <span className="letters-read-count">{completedLetters.size} / {loveLetters.length} lues</span>
               {completedLetters.size === loveLetters.length ? (
-                <p className="letters-finished-message">Tu as lu toutes les lettres. Je t’aime, Lïa. ♥</p>
+                <>
+                  <p className="letters-finished-message">Tu as lu toutes les lettres. Je t’aime, Lïa. ♥</p>
+                  <button
+                    className="next-letter-button"
+                    type="button"
+                    disabled={isFinalNotificationSent || notificationStatus === 'Envoi de l’alerte e-mail…'}
+                    onClick={confirmAllLettersRead}
+                  >
+                    {isFinalNotificationSent ? 'C’est envoyé ♥' : 'J’ai tout lu'}
+                  </button>
+                </>
               ) : (
                 <button
                   className="next-letter-button"
