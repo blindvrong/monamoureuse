@@ -86,14 +86,21 @@ export default {
       }),
     })
 
-    if (!emailResponse.ok) {
-      console.error('Web3Forms e-mail request failed with status', emailResponse.status)
+    let emailResult
+    try {
+      emailResult = await emailResponse.json()
+    } catch {
+      console.error('Web3Forms returned an unreadable response with status', emailResponse.status)
       return jsonResponse({ error: 'E-mail could not be sent' }, 502, origin)
     }
 
-    const emailResult = await emailResponse.json()
-    if (emailResult.success !== true) {
-      console.error('Web3Forms did not accept the e-mail request')
+    if (!emailResponse.ok || emailResult.success !== true) {
+      const providerMessage = typeof emailResult.message === 'string'
+        ? emailResult.message
+          .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted email]')
+          .slice(0, 300)
+        : 'No error details provided'
+      console.error('Web3Forms rejected the e-mail request:', emailResponse.status, providerMessage)
       return jsonResponse({ error: 'E-mail could not be sent' }, 502, origin)
     }
 
