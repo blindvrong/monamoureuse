@@ -27,6 +27,7 @@ const letterProgressKey = 'monamoureuse-letter-progress-v2'
 const letterSongs = [
   { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
   { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
+  { title: 'Nervous', src: `${audioBasePath}/nervous.mp3` },
 ]
 
 const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
@@ -278,7 +279,7 @@ function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]
       <span className="music-note" aria-hidden="true">♪</span>
       <span>
         <strong>{song.title}</strong>
-        <small>{song.artist} · rien que pour toi</small>
+        <small>{song.artist ? `${song.artist} · ` : ''}rien que pour toi</small>
       </span>
     </div>
     <audio className="love-letter-audio" controls preload="none" onPlay={onPlay}>
@@ -439,7 +440,7 @@ function LoveLetter() {
           <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
         <div className="letter-audio-gate">
           {letterSongs.map((song) => <LetterSongPlayer key={song.title} song={song} onPlay={revealLetters} />)}
-          {!areLettersRevealed && <p className="letter-audio-hint">Lance l’un des deux sons pour découvrir les lettres.</p>}
+          {!areLettersRevealed && <p className="letter-audio-hint">Lance l’un des {letterSongs.length} sons pour découvrir les lettres.</p>}
         </div>
         <div className={`letter-reveal-wrap${areLettersRevealed ? '' : ' is-locked'}`}>
           <div className="letter-reveal-content" inert={!areLettersRevealed} aria-hidden={!areLettersRevealed}>
