@@ -21,6 +21,8 @@ const songs: Song[] = [
   { title: 'The Blonde', artist: 'TV Girl', spotifyId: '72cGBEqu7RitIOoACXYjfR' },
 ]
 
+const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
+
 const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
 const loveLetters = [
   {
@@ -309,15 +311,12 @@ function LoveLetter() {
         <div className="love-letter-music">
           <div className="love-letter-music-copy">
             <span className="music-note" aria-hidden="true">♪</span>
-            <span><strong>Passionfruit</strong><small>Drake · un de tes morceaux préférés</small></span>
+            <span><strong>Make It Up</strong><small>Taylor Scott · rien que pour toi</small></span>
           </div>
-          <iframe
-            className="spotify-player"
-            src="https://open.spotify.com/embed/track/5mCPDVBb16L4XQwDdbRUpz?utm_source=generator&autoplay=1"
-            title="Passionfruit de Drake sur Spotify"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="eager"
-          />
+          <audio className="love-letter-audio" controls preload="none">
+            <source src={`${audioBasePath}/make-it-up.mp3`} type="audio/mpeg" />
+            Ton navigateur ne peut pas lire ce fichier audio.
+          </audio>
         </div>
       </article>
     </section>
