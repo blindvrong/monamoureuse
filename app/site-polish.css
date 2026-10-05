@@ -112,13 +112,6 @@ html {
   color: var(--accent);
 }
 
-.love-letter-paper h4 {
-  margin: 1.4rem 0 2rem;
-  color: var(--cream);
-  font: 500 clamp(2rem, 4vw, 3rem) 'Playfair Display', serif;
-  letter-spacing: -0.04em;
-}
-
 .love-letter-body {
   display: grid;
   gap: 1.2rem;
@@ -188,42 +181,19 @@ html {
   font: 500 0.9rem 'Playfair Display', serif;
 }
 
-.love-letter-music-copy small,
-.music-hint {
+.love-letter-music-copy small {
   margin-top: 0.25rem;
   color: var(--muted);
   font-size: 0.7rem;
   line-height: 1.5;
 }
 
-.music-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  min-width: 112px;
-  min-height: 42px;
-  padding: 0.65rem 1rem;
-  border: 1px solid rgb(233 145 117 / 50%);
-  border-radius: 2rem;
-  background: rgb(233 145 117 / 10%);
-  color: var(--cream);
-  font: 500 0.65rem 'DM Mono', monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-}
-
-.music-toggle:hover {
-  background: rgb(233 145 117 / 20%);
-}
-
-.music-hint {
-  flex-basis: 100%;
-}
-
-.love-letter-music audio {
-  display: none;
+.spotify-player {
+  flex: 1 1 280px;
+  width: min(100%, 352px);
+  height: 152px;
+  border: 0;
+  border-radius: 12px;
 }
 
 @media (hover: hover) {

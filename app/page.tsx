@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Heart, Pause, Play, Search, Shuffle } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Heart, Play, Search, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
 const songs = [
@@ -18,6 +18,7 @@ const loveLetters = [
     paragraphs: [
       'Je sais pas vraiment par où commencer, alors je vais juste te dire les choses simplement : tu comptes énormément pour moi.',
       'J’aime passer du temps avec toi, parler de tout et de rien, rigoler pour rien, ou rester près de toi sans avoir besoin de trouver quoi dire.',
+      'Je suis bien avec toi, même quand on ne fait rien. Tu me fais rire, même quand tu pars dans tes explications, et j’aime bien quand tu me racontes ta journée.',
     ],
   },
   {
@@ -229,56 +230,25 @@ function SongCard({ song, index }: { song: typeof songs[number]; index: number }
   return <article className={`song-card ${song.color}`}>
     <div className="cover"><span>{String(index + 1).padStart(2, '0')}</span><b>♪</b></div>
     <div className="song-info"><span className="song-mood">{song.mood}</span><h3>{song.title}</h3><p>{song.artist}</p></div>
-    <a className="play-button" href={`https://music.youtube.com/search?q=${encodeURIComponent(`${song.title} ${song.artist}`)}`} target="_blank" rel="noreferrer" aria-label={`Chercher ${song.title} de ${song.artist} sur YouTube Music`}><Play size={14} fill="currentColor" /></a>
+    <a className="play-button" href={`https://open.spotify.com/search/${encodeURIComponent(`${song.title} ${song.artist}`)}`} target="_blank" rel="noreferrer" aria-label={`Chercher ${song.title} de ${song.artist} sur Spotify`}><Play size={14} fill="currentColor" /></a>
   </article>
 }
 
 function LoveLetter() {
   const [reasonIndex, setReasonIndex] = useState(0)
-  const [noteOrder, setNoteOrder] = useState([0, 1, 2])
   const [dailyLetterIndex, setDailyLetterIndex] = useState(0)
-  const [musicPlaying, setMusicPlaying] = useState(false)
-  const [musicBlocked, setMusicBlocked] = useState(false)
-  const musicRef = useRef<HTMLAudioElement>(null)
-  const loveNotes = [
-    'J’aime bien quand tu me racontes ta journée.',
-    'Tu me fais rire, même quand tu pars dans tes explications.',
-    'Je suis bien avec toi, même quand on ne fait rien.',
-  ]
   const reason = reasons[reasonIndex]
 
   useEffect(() => {
     const nextReason = Math.floor(Math.random() * reasons.length)
-    const shuffledNotes = [0, 1, 2].sort(() => Math.random() - 0.5)
     setReasonIndex(nextReason)
-    setNoteOrder(shuffledNotes)
 
     const anchor = Date.UTC(2026, 9, 5)
     const today = new Date()
     const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
     const elapsedDays = Math.floor((todayUtc - anchor) / 86_400_000)
     setDailyLetterIndex(((elapsedDays % loveLetters.length) + loveLetters.length) % loveLetters.length)
-
-    const audio = musicRef.current
-    if (audio) {
-      audio.volume = 0.14
-      audio.play().then(() => setMusicPlaying(true)).catch(() => setMusicBlocked(true))
-    }
   }, [])
-
-  function toggleMusic() {
-    const audio = musicRef.current
-    if (!audio) return
-    if (audio.paused) {
-      audio.play().then(() => {
-        setMusicPlaying(true)
-        setMusicBlocked(false)
-      }).catch(() => setMusicBlocked(true))
-    } else {
-      audio.pause()
-      setMusicPlaying(false)
-    }
-  }
 
   function showRandomReason() {
     setReasonIndex((current) => {
@@ -292,20 +262,15 @@ function LoveLetter() {
     <div className="section-heading letter-heading"><div><p className="eyebrow">une petite lettre pour lïa</p><h2 id="lettre-title">Quelques mots<br /><em>rien que pour toi.</em></h2></div><Heart className="letter-heart" fill="currentColor" aria-hidden="true" /></div>
     <p className="letter-intro">Lïa, je t&apos;aime pour plein de petites choses. Tu peux en découvrir une au hasard.</p>
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p aria-live="polite">{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" type="button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
-    <div className="love-signoff"><span>je t&apos;aime,</span><strong>Lïa</strong></div>
-    <div className="love-notes" aria-label="Petits mots pour Lïa">
-      {noteOrder.map((noteIndex) => <p key={noteIndex}>{loveNotes[noteIndex]}</p>)}
-    </div>
     <section className="love-letters" aria-labelledby="love-letters-title">
       <div className="love-letters-heading">
-        <h3 id="love-letters-title">La lettre <em>du jour.</em></h3>
+        <h3 id="love-letters-title">La lettre pour mon amour</h3>
       </div>
       <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
         <div className="love-letter-paper-topline">
           <span className="love-letter-paper-index">JOUR {String(dailyLetterIndex + 1).padStart(2, '0')} / 30</span>
           <Heart size={17} aria-hidden="true" />
         </div>
-        <h4>{loveLetters[dailyLetterIndex].title}</h4>
         <div className="love-letter-body">
           {loveLetters[dailyLetterIndex].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
@@ -313,20 +278,15 @@ function LoveLetter() {
         <div className="love-letter-music">
           <div className="love-letter-music-copy">
             <span className="music-note" aria-hidden="true">♪</span>
-            <span><strong>Piano tout doux</strong><small>En boucle pendant ta lecture</small></span>
+            <span><strong>Gymnopédie n° 1</strong><small>Erik Satie · choisie pour toi</small></span>
           </div>
-          <button
-            className="music-toggle"
-            type="button"
-            onClick={toggleMusic}
-            aria-pressed={musicPlaying}
-            aria-label={musicPlaying ? 'Mettre la musique en pause' : 'Lancer la musique'}
-          >
-            {musicPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-            <span>{musicPlaying ? 'Pause' : 'Écouter'}</span>
-          </button>
-          {musicBlocked && <small className="music-hint">Appuie sur « Écouter » pour lancer le piano.</small>}
-          <audio ref={musicRef} src="piano-doux.wav" loop preload="auto" />
+          <iframe
+            className="spotify-player"
+            src="https://open.spotify.com/embed/track/5NGtFXVpXSvwunEIGeviY3?utm_source=generator"
+            title="Gymnopédie n° 1 d’Erik Satie sur Spotify"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          />
         </div>
       </article>
     </section>
