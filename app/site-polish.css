@@ -18,9 +18,9 @@ html {
   height: 54px;
   gap: 1rem;
   justify-content: space-between;
-  border-bottom-color: rgb(246 240 232 / 10%);
-  background: rgb(25 22 21 / 92%);
-  backdrop-filter: blur(16px);
+  border-bottom-color: transparent;
+  background: transparent;
+  backdrop-filter: none;
 }
 
 .topbar-note {
