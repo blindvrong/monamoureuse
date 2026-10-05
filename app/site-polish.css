@@ -463,13 +463,12 @@ html {
 
 .letters-thank-you {
   display: grid;
-  align-content: center;
-  justify-items: center;
+  align-content: start;
+  justify-items: stretch;
   gap: 1.25rem;
   width: min(100%, 780px);
-  min-height: clamp(24rem, 60vh, 42rem);
   margin: 0 auto;
-  padding: clamp(2.5rem, 9vw, 6rem) 1.5rem;
+  padding: clamp(1.5rem, 5vw, 3rem);
   border: 1px solid rgb(233 145 117 / 28%);
   border-radius: 4px;
   background:
@@ -477,6 +476,12 @@ html {
     #211c1b;
   box-shadow: 0 24px 70px rgb(0 0 0 / 18%);
   text-align: center;
+}
+
+.final-letter-heading {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
 }
 
 .letters-thank-you-heart {
@@ -488,12 +493,40 @@ html {
 .letters-thank-you h3 {
   margin: 0;
   color: var(--cream);
-  font: 500 clamp(2rem, 7vw, 5rem) / 1.2 'Playfair Display', serif;
+  font: 500 clamp(2rem, 7vw, 3.5rem) / 1.2 'Playfair Display', serif;
   letter-spacing: -0.06em;
 }
 
 .letters-thank-you h3 span {
   color: var(--accent);
+}
+
+.final-letter-body {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 640px);
+  margin-inline: auto;
+  color: #d2c9c1;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  text-align: left;
+}
+
+.final-letter-body p {
+  margin: 0;
+}
+
+.final-letter-body p:nth-child(4),
+.final-letter-body p:nth-child(10),
+.final-letter-body p:nth-child(11) {
+  color: var(--cream);
+  font: italic 500 1.05rem / 1.8 'Playfair Display', serif;
+}
+
+.final-letter-signoff {
+  margin: 0;
+  color: var(--accent);
+  font: italic 500 1.25rem 'Playfair Display', serif;
 }
 
 .letters-thank-you .letter-notification-status {

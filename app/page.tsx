@@ -245,6 +245,20 @@ const loveLetters = [
   },
 ]
 
+const finalLetterParagraphs = [
+  'Je sais pas vraiment par où commencer parce qu’au final, j’ai tellement de choses à te dire que même une lettre entière suffirait pas.',
+  'Depuis que t’es entrée dans ma vie, t’as pris une place énorme. T’es devenue une personne à qui je pense énormément, une personne avec qui j’aime passer du temps, parler de tout et de rien, rigoler pour absolument rien et même juste rester là sans forcément parler.',
+  'J’aime énormément de choses chez toi. Ton sourire, ton regard, ta façon de parler, ta façon de t’exprimer, ta voix, tes petites habitudes, tes réactions… même les petits trucs que tu fais sans t’en rendre compte. J’aime quand tu rougis quand je te dis que je t’aime, j’aime quand j’arrive à te faire sourire et j’aime simplement te voir être toi-même.',
+  'Mais ce que j’aime surtout, c’est la personne que t’es.',
+  'J’aime notre complicité, nos délires, nos discussions random, nos souvenirs et tous ces petits moments qui peuvent sembler simples mais qui comptent énormément pour moi. Même un moment où on fait rien peut devenir un bon souvenir juste parce que je suis avec toi.',
+  'On a aussi eu des moments compliqués. On s’est parfois mal compris, on s’est embrouillés, on a pu se blesser sans forcément le vouloir. Mais malgré ça, ce qui compte pour moi, c’est qu’on arrive à parler, à se comprendre et à avancer ensemble.',
+  'Je veux pas d’une relation parfaite où on ne se dispute jamais. Je veux juste quelque chose de vrai. Quelque chose où on peut être nous-mêmes, se dire quand quelque chose va pas, se rassurer et continuer à construire notre histoire.',
+  'Je veux encore plein de souvenirs avec toi. Encore plein de moments où on rigole pour rien, de conversations interminables, de journées simples qui deviennent importantes juste parce qu’on les a vécues ensemble.',
+  'Et si je devais résumer tout ça en une seule phrase :',
+  'je t’aime pas seulement pour tout ce que tu fais ou tout ce que t’as, je t’aime parce que c’est toi.',
+  'Et personne d’autre pourrait être toi.',
+]
+
 function FeaturedSong({ song }: { song: Song }) {
   return <article className="featured-song-card">
     <div className="featured-song-label">
@@ -431,10 +445,16 @@ function LoveLetter() {
         <h3 id="love-letters-title">La lettre pour mon amour</h3>
       </div>
       {isAllReadConfirmed ? (
-        <div className="letters-thank-you" role="status">
-          <Heart className="letters-thank-you-heart" fill="currentColor" aria-hidden="true" />
-          <h3>MERCI LÏA<br />D’AVOIR TOUT LU<br /><span>JE T’AIME</span></h3>
-        </div>
+        <article className="letters-thank-you" aria-labelledby="final-letter-title">
+          <header className="final-letter-heading">
+            <Heart className="letters-thank-you-heart" fill="currentColor" aria-hidden="true" />
+            <h3 id="final-letter-title">À toi, Lïa <span aria-hidden="true">❤️</span></h3>
+          </header>
+          <div className="final-letter-body">
+            {finalLetterParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          </div>
+          <p className="final-letter-signoff">Je t’aime Lïa <span aria-hidden="true">❤️</span></p>
+        </article>
       ) : (
         <>
           <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
