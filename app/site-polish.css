@@ -15,39 +15,38 @@ html {
   position: sticky;
   top: 0;
   z-index: 5;
-  height: 80px;
+  height: 72px;
   gap: 1rem;
   justify-content: flex-end;
-  border-bottom-color: rgb(246 240 232 / 18%);
+  border-bottom-color: rgb(246 240 232 / 10%);
   background: rgb(25 22 21 / 92%);
   backdrop-filter: blur(16px);
 }
 
 .topbar nav {
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.topbar nav a {
-  padding: 0.7rem 0.9rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease;
-}
-
-.topbar nav a:hover {
-  border-color: rgb(246 240 232 / 12%);
-  background: rgb(246 240 232 / 6%);
+  display: none;
 }
 
 .date-pill {
-  padding: 0.6rem 0.8rem;
-  border: 1px solid rgb(246 240 232 / 14%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgb(246 240 232 / 12%);
   border-radius: 999px;
+  background: rgb(246 240 232 / 4%);
+  color: #c8bdb3;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
   white-space: nowrap;
+}
+
+.date-pill::before {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--accent);
+  content: '';
 }
 
 .artist-row,
@@ -405,11 +404,11 @@ html {
 
   .topbar {
     height: auto;
-    min-height: 72px;
+    min-height: 64px;
     flex-wrap: wrap;
     column-gap: 0.75rem;
     row-gap: 0.65rem;
-    padding-block: 0.7rem;
+    padding-block: 0.4rem;
   }
 
   .brand {
@@ -421,22 +420,9 @@ html {
     font-size: 0.58rem;
   }
 
-  .site-shell .topbar nav {
-    display: flex;
-    order: 3;
-    flex-basis: 100%;
-    justify-content: space-between;
-    gap: 0.25rem;
-    padding-top: 0.4rem;
-    font-size: 0.58rem;
-  }
-
-  .site-shell .topbar nav a {
-    padding: 0.55rem 0.6rem;
-  }
-
   .date-pill {
-    padding: 0.5rem 0.65rem;
+    margin-left: auto;
+    padding: 0.5rem 0.7rem;
   }
 
   .letter-section,
@@ -560,14 +546,6 @@ html {
     flex-direction: column;
     gap: 0.5rem;
   }
-}
-
-.topbar nav {
-  display: none;
-}
-
-main.site-shell header.topbar nav {
-  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
