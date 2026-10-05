@@ -6,8 +6,14 @@ import './header-note.css'
 const basePath = process.env.GITHUB_ACTIONS === 'true' ? '/monamoureuse' : ''
 
 export const metadata: Metadata = {
-  title: 'Surprise mon chou',
-  description: 'Une petite bande-son de toi, entre nostalgie, R&B et nuits étoilées.',
+  title: 'Une surprise pour ma reine ✨',
+  description: 'J’ai préparé quelque chose rien que pour toi… Ouvre quand tu es prête, ma reine 💌',
+  openGraph: {
+    title: 'Une surprise pour ma reine ✨',
+    description: 'J’ai préparé quelque chose rien que pour toi… Ouvre quand tu es prête, ma reine 💌',
+    locale: 'fr_FR',
+    type: 'website',
+  },
   generator: 'v0.app',
   icons: { icon: `${basePath}/favicon.svg`, apple: [] },
 }
