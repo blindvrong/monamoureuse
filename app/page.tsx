@@ -282,7 +282,7 @@ function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]
         <small>{song.artist ? `${song.artist} · ` : ''}rien que pour toi</small>
       </span>
     </div>
-    <audio className="love-letter-audio" controls preload="none" onPlay={onPlay}>
+    <audio className="love-letter-audio" controls preload="metadata" onPlay={onPlay}>
       <source src={song.src} type="audio/mpeg" />
       Ton navigateur ne peut pas lire ce fichier audio.
     </audio>

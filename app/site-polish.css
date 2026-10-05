@@ -534,7 +534,9 @@ html {
 }
 
 .letter-audio-gate .love-letter-audio {
-  flex: 0 1 352px;
+  flex: none;
+  width: min(100%, 352px);
+  height: 42px;
 }
 
 .letter-audio-hint {
