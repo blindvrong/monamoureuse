@@ -340,6 +340,15 @@ function LoveLetter() {
 export default function Page() {
   const [query, setQuery] = useState('')
   const [activeMood, setActiveMood] = useState('Tous')
+  const [songOfTheDayIndex, setSongOfTheDayIndex] = useState(0)
+  useEffect(() => {
+    const anchor = Date.UTC(2026, 9, 5)
+    const today = new Date()
+    const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+    const elapsedDays = Math.floor((todayUtc - anchor) / 86_400_000)
+    setSongOfTheDayIndex(((elapsedDays % songs.length) + songs.length) % songs.length)
+  }, [])
+
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase('fr')
     return songs.filter((song) =>
@@ -347,8 +356,9 @@ export default function Page() {
       (activeMood === 'Tous' || song.mood === activeMood),
     )
   }, [query, activeMood])
-  const featuredSong = filtered[0]
-  const otherSongs = filtered.slice(1)
+  const scheduledSong = songs[songOfTheDayIndex]
+  const featuredSong = filtered.includes(scheduledSong) ? scheduledSong : filtered[0]
+  const otherSongs = filtered.filter((song) => song !== featuredSong)
 
   return <main className="site-shell" id="top">
     <div className="ambient ambient-one" /><div className="ambient ambient-two" />
