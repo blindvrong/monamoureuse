@@ -755,6 +755,12 @@ html {
     align-items: flex-start;
     flex-direction: column;
   }
+
+  footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
