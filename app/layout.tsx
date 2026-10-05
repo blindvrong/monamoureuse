@@ -1,6 +1,22 @@
-import { Analytics } from '@vercel/analytics/next'
+import { DM_Mono, DM_Sans, Playfair_Display } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+})
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-display',
+})
 
 export const metadata: Metadata = {
   title: 'Pour toi — tes sons préférés',
@@ -17,8 +33,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr">
-      <body className="antialiased">{children}{process.env.NODE_ENV === 'production' && <Analytics />}</body>
+    <html lang="fr" className={`${dmSans.variable} ${dmMono.variable} ${playfair.variable}`}>
+      <body className="antialiased">{children}</body>
     </html>
   )
 }
