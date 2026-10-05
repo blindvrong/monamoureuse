@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Heart, Play, Search, Shuffle, Volume2 } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
@@ -24,8 +24,20 @@ function SongCard({ song, index }: { song: typeof songs[number]; index: number }
 
 function LoveLetter() {
   const [reasonIndex, setReasonIndex] = useState(0)
-  const loveWords = ['mon évidence', 'mon endroit préféré', 'ma douceur', 'mon plus beau hasard', 'mon chez-moi']
+  const [noteOrder, setNoteOrder] = useState([0, 1, 2])
+  const loveNotes = [
+    'Tu es mon plus joli hasard.',
+    'Avec toi, même les jours ordinaires deviennent précieux.',
+    'Je te choisirais encore, dans toutes les vies.',
+  ]
   const reason = reasons[reasonIndex]
+
+  useEffect(() => {
+    const nextReason = Math.floor(Math.random() * reasons.length)
+    const shuffledNotes = [0, 1, 2].sort(() => Math.random() - 0.5)
+    setReasonIndex(nextReason)
+    setNoteOrder(shuffledNotes)
+  }, [])
 
   function showRandomReason() {
     setReasonIndex((current) => {
@@ -41,9 +53,7 @@ function LoveLetter() {
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p>{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
     <div className="love-signoff"><span>je t&apos;aime,</span><strong>Lïa</strong></div>
     <div className="love-notes" aria-label="Petits mots pour Lïa">
-      <p>Tu es mon plus joli hasard.</p>
-      <p>Avec toi, même les jours ordinaires deviennent précieux.</p>
-      <p>Je te choisirais encore, dans toutes les vies.</p>
+      {noteOrder.map((noteIndex) => <p key={noteIndex}>{loveNotes[noteIndex]}</p>)}
     </div>
   </section>
 }
