@@ -17,10 +17,43 @@ html {
   z-index: 5;
   height: 72px;
   gap: 1rem;
-  justify-content: flex-end;
+  justify-content: space-between;
   border-bottom-color: rgb(246 240 232 / 10%);
   background: rgb(25 22 21 / 92%);
   backdrop-filter: blur(16px);
+}
+
+.topbar-note {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topbar-note-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgb(233 145 117 / 28%);
+  border-radius: 50%;
+  background: rgb(233 145 117 / 8%);
+  color: var(--accent);
+}
+
+.topbar-note-copy {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.topbar-note-kicker {
+  color: var(--muted);
+  font: 500 0.52rem 'DM Mono', monospace;
+  letter-spacing: 0.13em;
+}
+
+.topbar-note-title {
+  color: var(--cream);
+  font: italic 500 0.95rem 'Playfair Display', serif;
 }
 
 .topbar nav {
@@ -568,10 +601,29 @@ html {
   .topbar {
     height: auto;
     min-height: 64px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     column-gap: 0.75rem;
     row-gap: 0.65rem;
     padding-block: 0.4rem;
+  }
+
+  .topbar-note {
+    min-width: 0;
+    gap: 0.55rem;
+  }
+
+  .topbar-note-mark {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+  }
+
+  .topbar-note-kicker {
+    font-size: 0.46rem;
+  }
+
+  .topbar-note-title {
+    font-size: 0.85rem;
   }
 
   .brand {
@@ -702,12 +754,6 @@ html {
   .empty-results {
     align-items: flex-start;
     flex-direction: column;
-  }
-
-  footer {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.5rem;
   }
 }
 
