@@ -382,10 +382,7 @@ function LoveLetter() {
   }
 
   async function notifyLetterRead(letterIndex: number) {
-    if (!letterNotificationUrl) {
-      setNotificationStatus('L’alerte e-mail n’est pas configurée.')
-      return false
-    }
+    if (!letterNotificationUrl) return false
     setNotificationStatus('Envoi de l’alerte e-mail…')
     try {
       const response = await fetch(letterNotificationUrl, {
