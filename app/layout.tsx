@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import './site-polish.css'
 
 export const metadata: Metadata = {
   title: 'Pour toi — tes sons préférés',
