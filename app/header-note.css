@@ -10,16 +10,12 @@
   height: 24px;
 }
 
-.topbar-note-kicker {
-  display: none;
-}
-
 .topbar-note-title {
   font-size: 0.82rem;
 }
 
-.date-pill {
-  margin-left: auto;
+.topbar-note .date-pill {
+  margin-left: 0.25rem;
 }
 
 @media (max-width: 600px) {
@@ -35,5 +31,11 @@
 
   .topbar-note-title {
     font-size: 0.76rem;
+  }
+
+  .topbar-note .date-pill {
+    margin-left: 0.1rem;
+    padding: 0.3rem 0.45rem;
+    font-size: 0.5rem;
   }
 }
