@@ -207,6 +207,25 @@ html {
   font-size: 1.8rem;
 }
 
+.love-letter-music {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.love-letter-music p {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font: 500 0.62rem 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
+.love-letter-music iframe {
+  display: block;
+  border: 0;
+  border-radius: 8px;
+}
+
 @media (hover: hover) {
   .song-card:hover {
     transform: translateY(-4px);

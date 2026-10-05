@@ -15,6 +15,20 @@ const moods = ['Tous', ...Array.from(new Set(songs.map((song) => song.mood))).sl
 
 const loveLetters = [
   {
+    title: 'À toi, Lïa ❤️',
+    preview: 'Tout ce que j’aime chez toi, simplement.',
+    paragraphs: [
+      'Je sais pas vraiment par où commencer, parce que j’ai beaucoup de choses à te dire.',
+      'Tu as une place immense dans ma vie. Tu es la personne à qui je pense, avec qui j’aime passer du temps, parler de tout et de rien, rire pour absolument rien, ou juste rester là sans forcément parler.',
+      'J’aime énormément de choses chez toi : ton sourire, ton regard, ta façon de parler, ta voix, tes petites habitudes et tes réactions. J’aime quand tu rougis quand je te dis que je t’aime, quand j’arrive à te faire sourire, et te voir être simplement toi-même.',
+      'Mais ce que j’aime surtout, c’est la personne que tu es.',
+      'J’aime notre complicité, nos délires, nos discussions random et tous ces moments simples qui comptent beaucoup pour moi. Même quand on ne fait rien de spécial, je me sens bien avec toi.',
+      'Parfois, on ne se comprend pas tout de suite. Pour moi, l’important, c’est qu’on puisse se parler, s’écouter et se rassurer.',
+      'Je ne cherche pas une relation parfaite. Je veux quelque chose de vrai, où on peut être nous-mêmes, dire ce qu’on ressent et se sentir bien ensemble.',
+      'Si je devais résumer tout ça en une phrase : je t’aime pas seulement pour ce que tu fais ou ce que tu as. Je t’aime parce que c’est toi.',
+    ],
+  },
+  {
     title: 'Un petit mot comme ça',
     preview: 'J’avais juste envie de te le dire.',
     paragraphs: [
@@ -111,12 +125,25 @@ function LoveLetter() {
           ))}
         </div>
         <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
-          <span className="love-letter-paper-index">LETTRE {String(activeLetter + 1).padStart(2, '0')} / 03</span>
+          <span className="love-letter-paper-index">LETTRE {String(activeLetter + 1).padStart(2, '0')} / {String(loveLetters.length).padStart(2, '0')}</span>
           <h4>{loveLetters[activeLetter].title}</h4>
           <div className="love-letter-body">
             {loveLetters[activeLetter].paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           </div>
           <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
+          {activeLetter === 0 && (
+            <div className="love-letter-music">
+              <p>Une musique douce, si tu veux l’écouter en lisant.</p>
+              <iframe
+                title="Silence de Marshmello et Khalid — musique pour accompagner la lettre"
+                src="https://open.spotify.com/embed/track/0SpI4pEG1JtTMhKzcpyEVg?utm_source=generator&theme=0"
+                width="100%"
+                height="152"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
+          )}
         </article>
       </div>
     </section>
