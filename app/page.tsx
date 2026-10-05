@@ -296,6 +296,7 @@ function LoveLetter() {
   const [areLettersRevealed, setAreLettersRevealed] = useState(false)
   const [notificationStatus, setNotificationStatus] = useState('')
   const [isFinalNotificationSent, setIsFinalNotificationSent] = useState(false)
+  const [isAllReadConfirmed, setIsAllReadConfirmed] = useState(false)
   const reason = reasons[reasonIndex]
 
   useEffect(() => {
@@ -380,7 +381,10 @@ function LoveLetter() {
   }
 
   async function notifyLetterRead(letterIndex: number) {
-    if (!letterNotificationUrl) return false
+    if (!letterNotificationUrl) {
+      setNotificationStatus('L’alerte e-mail n’est pas configurée.')
+      return false
+    }
     setNotificationStatus('Envoi de l’alerte e-mail…')
     try {
       const response = await fetch(letterNotificationUrl, {
@@ -411,6 +415,7 @@ function LoveLetter() {
 
   async function confirmAllLettersRead() {
     if (isFinalNotificationSent || notificationStatus === 'Envoi de l’alerte e-mail…') return
+    setIsAllReadConfirmed(true)
     if (await notifyLetterRead(currentLetterIndex)) setIsFinalNotificationSent(true)
   }
 
@@ -424,10 +429,28 @@ function LoveLetter() {
     <p className="letter-intro">Lïa, je t&apos;aime pour plein de petites choses. Tu peux en découvrir une au hasard.</p>
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p aria-live="polite">{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" type="button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
     <section className="love-letters" aria-labelledby="love-letters-title">
-      <div className="love-letters-heading">
-        <h3 id="love-letters-title">La lettre pour mon amour</h3>
-      </div>
-      <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
+      {isAllReadConfirmed ? (
+        <div className="letters-thank-you" role="status">
+          <Heart className="letters-thank-you-heart" fill="currentColor" aria-hidden="true" />
+          <h3 id="love-letters-title">MERCI LÏA<br />D’AVOIR TOUT LU<br /><span>JE T’AIME</span></h3>
+          {notificationStatus && <p className="letter-notification-status" aria-live="polite">{notificationStatus}</p>}
+          {!isFinalNotificationSent && (
+            <button
+              className="next-letter-button"
+              type="button"
+              disabled={notificationStatus === 'Envoi de l’alerte e-mail…'}
+              onClick={confirmAllLettersRead}
+            >
+              Renvoyer l’alerte
+            </button>
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="love-letters-heading">
+            <h3 id="love-letters-title">La lettre pour mon amour</h3>
+          </div>
+          <article className="love-letter-paper" aria-live="polite" aria-atomic="true">
         <div className="letter-audio-gate">
           {letterSongs.map((song) => <LetterSongPlayer key={song.title} song={song} onPlay={revealLetters} />)}
           {!areLettersRevealed && <p className="letter-audio-hint">Lance l’un des deux sons pour découvrir les lettres.</p>}
@@ -491,6 +514,8 @@ function LoveLetter() {
           )}
         </div>
       </article>
+        </>
+      )}
     </section>
   </section>
 }
