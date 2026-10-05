@@ -325,31 +325,52 @@ function LoveLetter() {
 }
 
 export default function Page() {
+  const [isSurpriseOpen, setIsSurpriseOpen] = useState(true)
+  const [isRevealing, setIsRevealing] = useState(false)
   const featuredSong = songs[0]
   const otherSongs = songs.slice(1)
 
+  function revealSurprise() {
+    setIsRevealing(true)
+    const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 750
+    window.setTimeout(() => setIsSurpriseOpen(false), delay)
+  }
+
   return <main className="site-shell" id="top">
-    <div className="ambient ambient-one" /><div className="ambient ambient-two" />
-    <header className="topbar"><span className="date-pill">5 OCT. 2026</span></header>
-    <LoveLetter />
-    <section className="stats-grid" id="analyse" aria-label="Analyse de tes écoutes"><div className="stat-card featured"><span className="stat-label">TEMPS ÉCOUTÉ</span><strong>2h 40</strong><p>47 écoutes analysées</p><div className="mini-bars">{[40,72,52,86,64,100,48,80].map((height, i) => <i key={i} style={{ height: `${height}%` }} />)}</div></div><div className="stat-card"><span className="stat-label">TON ARTISTE N°1</span><strong>Drake</strong><p>Le plus présent dans tes écoutes</p><span className="rank">01 / 20</span></div><div className="stat-card"><span className="stat-label">TON GENRE</span><strong>R&B</strong><p>Mais toujours un peu de chaos à côté</p><span className="rank">dreamy · nocturne · soul</span></div></section>
-    <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
-    <section className="songs-section" id="sons">
-      <div className="section-heading songs-heading">
-        <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
+    <div className={`site-content${isSurpriseOpen ? ' is-locked' : ''}${isRevealing ? ' is-revealing' : ''}`} inert={isSurpriseOpen}>
+      <div className="ambient ambient-one" /><div className="ambient ambient-two" />
+      <header className="topbar"><span className="date-pill">5 OCT. 2026</span></header>
+      <LoveLetter />
+      <section className="stats-grid" id="analyse" aria-label="Analyse de tes écoutes"><div className="stat-card featured"><span className="stat-label">TEMPS ÉCOUTÉ</span><strong>2h 40</strong><p>47 écoutes analysées</p><div className="mini-bars">{[40,72,52,86,64,100,48,80].map((height, i) => <i key={i} style={{ height: `${height}%` }} />)}</div></div><div className="stat-card"><span className="stat-label">TON ARTISTE N°1</span><strong>Drake</strong><p>Le plus présent dans tes écoutes</p><span className="rank">01 / 20</span></div><div className="stat-card"><span className="stat-label">TON GENRE</span><strong>R&B</strong><p>Mais toujours un peu de chaos à côté</p><span className="rank">dreamy · nocturne · soul</span></div></section>
+      <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
+      <section className="songs-section" id="sons">
+        <div className="section-heading songs-heading">
+          <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
+        </div>
+        {featuredSong ? (
+          <>
+            <FeaturedSong song={featuredSong} />
+            {otherSongs.length > 0 && <div className="compact-song-list" aria-label="Les autres morceaux">
+              <p className="compact-song-list-label">ET TOUS LES AUTRES</p>
+              {otherSongs.map((song) => <CompactSongRow key={`${song.title}-${song.artist}`} song={song} />)}
+            </div>}
+          </>
+        ) : (
+          <div className="empty-results" role="status"><p>Aucun morceau à afficher.</p></div>
+        )}
+      </section>
+      <footer><p>j&apos;ai fait ça en pensant à toi.</p><span>pour toi, Lïa</span></footer>
+    </div>
+    {isSurpriseOpen && <div className={`surprise-overlay${isRevealing ? ' is-leaving' : ''}`} role="dialog" aria-modal="true" aria-labelledby="surprise-title">
+      <div className="surprise-card">
+        <span className="surprise-eyebrow">J&apos;AI QUELQUE CHOSE POUR TOI</span>
+        <h1 id="surprise-title">Surprise<br /><em>mon chou</em></h1>
+        <p>J&apos;ai préparé une petite surprise rien que pour toi.</p>
+        <button className="surprise-button" type="button" onClick={revealSurprise} aria-label="Ouvrir la surprise">
+          <Heart size={28} fill="currentColor" aria-hidden="true" />
+        </button>
+        <span className="surprise-hint">CLIQUE SUR LE CŒUR</span>
       </div>
-      {featuredSong ? (
-        <>
-          <FeaturedSong song={featuredSong} />
-          {otherSongs.length > 0 && <div className="compact-song-list" aria-label="Les autres morceaux">
-            <p className="compact-song-list-label">ET TOUS LES AUTRES</p>
-            {otherSongs.map((song) => <CompactSongRow key={`${song.title}-${song.artist}`} song={song} />)}
-          </div>}
-        </>
-      ) : (
-        <div className="empty-results" role="status"><p>Aucun morceau à afficher.</p></div>
-      )}
-    </section>
-    <footer><p>j&apos;ai fait ça en pensant à toi.</p><span>pour toi, Lïa</span></footer>
+    </div>}
   </main>
 }
