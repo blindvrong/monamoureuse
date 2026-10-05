@@ -1,22 +1,21 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Heart, Play, Search, Shuffle } from 'lucide-react'
+import { Heart, Search, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
 type Song = {
   title: string
   artist: string
   mood: string
-  color: string
-  spotifyId?: string
+  spotifyId: string
 }
 
 const songs: Song[] = [
-  { title: 'Silence', artist: 'Marshmello, Khalid', mood: 'Nostalgique', color: 'peach', spotifyId: '7vGuf3Y35N4wmASOKLUVVU' },
-  { title: "Who's Lovin' You", artist: 'The Jackson 5', mood: 'Soul', color: 'gold' },
-  { title: 'Only Girl (In The World)', artist: 'Rihanna', mood: 'Énergie', color: 'rose' },
-  { title: 'Make It Up', artist: 'Taylor Scott', mood: 'À découvrir', color: 'plum' },
+  { title: 'Silence', artist: 'Marshmello, Khalid', mood: 'Nostalgique', spotifyId: '7vGuf3Y35N4wmASOKLUVVU' },
+  { title: "Who's Lovin' You", artist: 'The Jackson 5', mood: 'Soul', spotifyId: '6cZrsaNb4Zo9E5KHk7gcz5' },
+  { title: 'Only Girl (In The World)', artist: 'Rihanna', mood: 'Énergie', spotifyId: '0AH6WMe3OlAlUb5miXt2FQ' },
+  { title: 'Make It Up', artist: 'Taylor Scott', mood: 'À découvrir', spotifyId: '12oK0sqmBgZ0yR2G1gSqsI' },
 ]
 
 const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
@@ -235,45 +234,31 @@ const loveLetters = [
   },
 ]
 
-function spotifySearchUrl(song: Song) {
-  return `https://open.spotify.com/search/${encodeURIComponent(`${song.title} ${song.artist}`)}`
-}
-
 function FeaturedSong({ song }: { song: Song }) {
   return <article className="featured-song-card">
     <div className="featured-song-label">
       <span>LE SON DU JOUR</span>
       <p>{song.title} · {song.artist}</p>
     </div>
-    {song.spotifyId ? (
-      <iframe
-        className="featured-song-embed"
-        src={`https://open.spotify.com/embed/track/${song.spotifyId}`}
-        title={`${song.title} de ${song.artist} sur Spotify`}
-        allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"
-      />
-    ) : (
-      <a className={`featured-song-fallback ${song.color}`} href={spotifySearchUrl(song)} target="_blank" rel="noreferrer">
-        <span className="featured-song-art" aria-hidden="true">♪</span>
-        <span><strong>{song.title}</strong><small>{song.artist} · Écouter sur Spotify</small></span>
-        <span className="compact-song-play" aria-hidden="true"><Play size={15} fill="currentColor" /></span>
-      </a>
-    )}
+    <iframe
+      className="featured-song-embed"
+      src={`https://open.spotify.com/embed/track/${song.spotifyId}?theme=0`}
+      title={`${song.title} de ${song.artist} sur Spotify`}
+      allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    />
   </article>
 }
 
-function CompactSongRow({ song, index }: { song: Song; index: number }) {
-  return <article className="compact-song-row">
-    <span className={`compact-song-art ${song.color}`} aria-hidden="true"><span>{String(index + 1).padStart(2, '0')}</span></span>
-    <div className="compact-song-info">
-      <h3>{song.title}</h3>
-      <p>{song.artist}</p>
-      <span className="compact-song-preview">{song.mood}</span>
-    </div>
-    <a className="compact-song-play" href={spotifySearchUrl(song)} target="_blank" rel="noreferrer" aria-label={`Chercher ${song.title} de ${song.artist} sur Spotify`}>
-      <Play size={14} fill="currentColor" />
-    </a>
+function CompactSongRow({ song }: { song: Song }) {
+  return <article className="compact-song-row" aria-label={`${song.title} de ${song.artist}`}>
+    <iframe
+      className="compact-song-embed"
+      src={`https://open.spotify.com/embed/track/${song.spotifyId}?theme=0`}
+      title={`${song.title} de ${song.artist} sur Spotify`}
+      allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    />
   </article>
 }
 
@@ -369,14 +354,8 @@ export default function Page() {
     <section className="songs-section" id="sons">
       <div className="section-heading songs-heading">
         <div>
-          <p className="eyebrow">TES SONS</p>
           <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
-          <p className="section-intro">Les morceaux que tu écoutes souvent. Chaque fois que j’en entends un, je pense à toi.</p>
-          <ul className="song-artist-tags" aria-label="Artistes de ta sélection">
-            {artists.map((artist) => <li key={artist}>{artist}</li>)}
-          </ul>
         </div>
-        <div className="song-total" aria-live="polite"><strong>{filtered.length}</strong><span>morceaux<br />affichés</span></div>
       </div>
       <div className="controls">
         <label className="search"><Search size={16} aria-hidden="true" /><input type="search" aria-label="Rechercher un morceau" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un morceau ou un artiste" /></label>
@@ -387,7 +366,7 @@ export default function Page() {
           <FeaturedSong song={featuredSong} />
           {otherSongs.length > 0 && <div className="compact-song-list" aria-label="Les autres morceaux">
             <p className="compact-song-list-label">ET TOUS LES AUTRES</p>
-            {otherSongs.map((song, index) => <CompactSongRow key={`${song.title}-${song.artist}`} song={song} index={index + 1} />)}
+            {otherSongs.map((song) => <CompactSongRow key={`${song.title}-${song.artist}`} song={song} />)}
           </div>}
         </>
       ) : (
