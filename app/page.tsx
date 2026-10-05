@@ -260,7 +260,6 @@ function LoveLetter() {
               )}
             </div>
           </div>
-          {notificationStatus && <p className="letter-notification-status" role="status" aria-live="polite">{notificationStatus}</p>}
           {!areLettersRevealed && (
             <div className="letter-reveal-overlay" role="status">
               <span className="letter-reveal-heart" aria-hidden="true">♥</span>
