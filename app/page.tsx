@@ -278,14 +278,14 @@ function LoveLetter() {
         <div className="love-letter-music">
           <div className="love-letter-music-copy">
             <span className="music-note" aria-hidden="true">♪</span>
-            <span><strong>Gymnopédie n° 1</strong><small>Erik Satie · choisie pour toi</small></span>
+            <span><strong>Passionfruit</strong><small>Drake · un de tes morceaux préférés</small></span>
           </div>
           <iframe
             className="spotify-player"
-            src="https://open.spotify.com/embed/track/5NGtFXVpXSvwunEIGeviY3?utm_source=generator"
-            title="Gymnopédie n° 1 d’Erik Satie sur Spotify"
+            src="https://open.spotify.com/embed/track/5mCPDVBb16L4XQwDdbRUpz?utm_source=generator&autoplay=1"
+            title="Passionfruit de Drake sur Spotify"
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
+            loading="eager"
           />
         </div>
       </article>
