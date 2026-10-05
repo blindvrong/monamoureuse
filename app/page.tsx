@@ -23,6 +23,10 @@ const songs: Song[] = [
 
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
 const letterProgressKey = 'monamoureuse-letter-progress'
+const letterSongs = [
+  { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3`, lyricsUrl: 'https://genius.com/Drake-passionfruit-lyrics' },
+  { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
+]
 
 const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
 const loveLetters = [
@@ -267,6 +271,27 @@ function CompactSongRow({ song }: { song: Song }) {
   </article>
 }
 
+function LetterSongPlayer({ song }: { song: (typeof letterSongs)[number] }) {
+  return <div className="love-letter-music">
+    <div className="love-letter-music-copy">
+      <span className="music-note" aria-hidden="true">♪</span>
+      <span>
+        <strong>{song.title}</strong>
+        <small>{song.artist} · rien que pour toi</small>
+        {'lyricsUrl' in song && (
+          <a className="love-letter-lyrics-link" href={song.lyricsUrl} target="_blank" rel="noreferrer">
+            Voir les paroles sur Genius ↗
+          </a>
+        )}
+      </span>
+    </div>
+    <audio className="love-letter-audio" controls preload="none">
+      <source src={song.src} type="audio/mpeg" />
+      Ton navigateur ne peut pas lire ce fichier audio.
+    </audio>
+  </div>
+}
+
 function LoveLetter() {
   const [reasonIndex, setReasonIndex] = useState(0)
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0)
@@ -401,16 +426,7 @@ function LoveLetter() {
             </button>
           )}
         </div>
-        <div className="love-letter-music">
-          <div className="love-letter-music-copy">
-            <span className="music-note" aria-hidden="true">♪</span>
-            <span><strong>Make It Up</strong><small>Taylor Scott · rien que pour toi</small></span>
-          </div>
-          <audio className="love-letter-audio" controls preload="none">
-            <source src={`${audioBasePath}/make-it-up.mp3`} type="audio/mpeg" />
-            Ton navigateur ne peut pas lire ce fichier audio.
-          </audio>
-        </div>
+        {letterSongs.map((song) => <LetterSongPlayer key={song.title} song={song} />)}
       </article>
     </section>
   </section>
