@@ -298,6 +298,12 @@ html {
   border-top: 1px solid var(--line);
 }
 
+.returning-visitor-note {
+  margin: -1rem 0 1.25rem;
+  color: var(--accent);
+  font: italic 500 1rem / 1.5 'Playfair Display', serif;
+}
+
 .love-letters-heading {
   margin-bottom: 1.5rem;
 }
