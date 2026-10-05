@@ -34,9 +34,9 @@ html {
   place-items: center;
   width: 28px;
   height: 28px;
-  border: 1px solid rgb(233 145 117 / 28%);
+  border: 1px solid rgb(135 206 250 / 28%);
   border-radius: 50%;
-  background: rgb(233 145 117 / 8%);
+  background: rgb(135 206 250 / 8%);
   color: var(--accent);
 }
 
@@ -140,8 +140,8 @@ html {
   border: 1px solid rgb(246 240 232 / 13%);
   border-radius: 8px;
   background:
-    radial-gradient(ellipse at 50% 0%, rgb(233 145 117 / 14%), transparent 65%),
-    #1c1716;
+    radial-gradient(ellipse at 50% 0%, rgb(135 206 250 / 14%), transparent 65%),
+    #17232d;
   box-shadow: 0 32px 100px rgb(0 0 0 / 50%);
   text-align: center;
   animation: surprise-card-in 700ms 120ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
@@ -179,9 +179,9 @@ html {
   place-items: center;
   width: 76px;
   height: 76px;
-  border: 1px solid rgb(233 145 117 / 55%);
+  border: 1px solid rgb(135 206 250 / 55%);
   border-radius: 50%;
-  background: rgb(233 145 117 / 12%);
+  background: rgb(135 206 250 / 12%);
   color: var(--accent);
   cursor: pointer;
   animation: surprise-heart-pulse 2s 1.2s ease-in-out infinite;
@@ -241,8 +241,8 @@ html {
 }
 
 @keyframes surprise-heart-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgb(233 145 117 / 0%); }
-  50% { box-shadow: 0 0 0 12px rgb(233 145 117 / 9%); }
+  0%, 100% { box-shadow: 0 0 0 0 rgb(135 206 250 / 0%); }
+  50% { box-shadow: 0 0 0 12px rgb(135 206 250 / 9%); }
 }
 
 .artist-row,
@@ -326,8 +326,8 @@ html {
   border: 1px solid rgb(246 240 232 / 12%);
   border-radius: 4px;
   background:
-    radial-gradient(ellipse at 100% 0%, rgb(233 145 117 / 8%), transparent 55%),
-    #211c1b;
+    radial-gradient(ellipse at 100% 0%, rgb(135 206 250 / 8%), transparent 55%),
+    #17232d;
   box-shadow: 0 24px 70px rgb(0 0 0 / 18%);
 }
 
@@ -430,9 +430,9 @@ html {
   gap: 0.7rem;
   margin-left: auto;
   padding: 0.65rem 0.9rem;
-  border: 1px solid rgb(233 145 117 / 38%);
+  border: 1px solid rgb(135 206 250 / 38%);
   border-radius: 999px;
-  background: rgb(233 145 117 / 9%);
+  background: rgb(135 206 250 / 9%);
   color: var(--cream);
   font: 500 0.68rem 'DM Mono', monospace;
   cursor: pointer;
@@ -446,7 +446,7 @@ html {
 .next-letter-button:not(:disabled):hover {
   transform: translateY(-1px);
   border-color: var(--accent);
-  background: rgb(233 145 117 / 18%);
+  background: rgb(135 206 250 / 18%);
 }
 
 .next-letter-button:disabled {
@@ -469,11 +469,11 @@ html {
   width: min(100%, 780px);
   margin: 0 auto;
   padding: clamp(1.5rem, 5vw, 3rem);
-  border: 1px solid rgb(233 145 117 / 28%);
+  border: 1px solid rgb(135 206 250 / 28%);
   border-radius: 4px;
   background:
-    radial-gradient(ellipse at 50% 0%, rgb(233 145 117 / 13%), transparent 65%),
-    #211c1b;
+    radial-gradient(ellipse at 50% 0%, rgb(135 206 250 / 13%), transparent 65%),
+    #17232d;
   box-shadow: 0 24px 70px rgb(0 0 0 / 18%);
   text-align: center;
 }
@@ -600,7 +600,7 @@ html {
   padding: 1.5rem;
   border: 1px solid rgb(246 240 232 / 10%);
   border-radius: 4px;
-  background: rgb(28 23 22 / 78%);
+  background: rgb(18 30 41 / 78%);
   text-align: center;
 }
 
@@ -718,9 +718,9 @@ html {
 
 .song-artist-tags li {
   padding: 0.35rem 0.65rem;
-  border: 1px solid rgb(233 145 117 / 32%);
+  border: 1px solid rgb(135 206 250 / 32%);
   border-radius: 2rem;
-  background: rgb(233 145 117 / 8%);
+  background: rgb(135 206 250 / 8%);
   color: var(--cream);
   font: 500 0.58rem 'DM Mono', monospace;
 }
@@ -1023,4 +1023,85 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+:root {
+  --accent: #87cefa;
+  --bg: #111b24;
+  --cream: #e2f2fc;
+  --ink: #f3f9fd;
+  --line: rgb(190 225 245 / 16%);
+  --muted: #a8bac6;
+}
+
+body {
+  background: var(--bg);
+}
+
+.site-shell {
+  background:
+    radial-gradient(circle at 20% 0%, #203b4c 0, transparent 31rem),
+    var(--bg);
+}
+
+.ambient-one {
+  background: #4a9bc2;
+}
+
+.ambient-two {
+  background: #456d9c;
+}
+
+.surprise-card,
+.letters-thank-you {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(135 206 250 / 14%), transparent 65%),
+    #17232d;
+}
+
+.stat-card {
+  background: #17232d;
+}
+
+.stat-card.featured {
+  background: #244b61;
+}
+
+.featured .stat-label,
+.featured p {
+  color: #c1e6fa;
+}
+
+.mini-bars i {
+  background: #a5ddfa;
+}
+
+.music-player-section {
+  background: linear-gradient(115deg, #172c3a, #24495e);
+}
+
+.song-card.peach,
+.song-card.gold,
+.song-card.rose,
+.song-card.lilac,
+.song-card.blue,
+.song-card.plum,
+.song-card.mint,
+.song-card.yellow,
+.song-card.coral,
+.song-card.orange,
+.song-card.violet,
+.song-card.pink,
+.song-card.sky,
+.song-card.red,
+.song-card.teal,
+.song-card.cream,
+.song-card.green,
+.song-card.indigo,
+.song-card.magenta,
+.song-card.sage,
+.song-card.burgundy,
+.song-card.brown,
+.song-card.aqua {
+  background: linear-gradient(145deg, #315e77, #1c394a);
 }
