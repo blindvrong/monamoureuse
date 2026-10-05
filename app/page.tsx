@@ -5,23 +5,6 @@ import { Heart, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 import { loveLetters } from '@/lib/love-letters'
 
-type Song = {
-  title: string
-  artist: string
-  spotifyId: string
-}
-
-const songs: Song[] = [
-  { title: 'Heart To Heart', artist: 'Mac DeMarco', spotifyId: '7EAMXbLcL0qXmciM5SwMh2' },
-  { title: 'I Wanna Be Yours', artist: 'Arctic Monkeys', spotifyId: '5XeFesFbtLpXzIVDNQP22n' },
-  { title: 'we fell in love in october', artist: 'girl in red', spotifyId: '6IPwKM3fUUzlElbvKw2sKl' },
-  { title: 'Lovers Rock', artist: 'TV Girl', spotifyId: '6dBUzqjtbnIa1TwYbyw5CM' },
-  { title: 'Hush', artist: 'The Marías', spotifyId: '4zXZ5Mq2L6jnsOsTssgRh8' },
-  { title: 'White Ferrari', artist: 'Frank Ocean', spotifyId: '2LMkwUfqC6S6s6qDVlEuzV' },
-  { title: 'Duvet', artist: 'bôa', spotifyId: '42qNWdLKCI41S4uzfamhFM' },
-  { title: 'The Blonde', artist: 'TV Girl', spotifyId: '72cGBEqu7RitIOoACXYjfR' },
-]
-
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
 const letterNotificationUrl = process.env.NEXT_PUBLIC_LETTER_NOTIFICATION_URL
 const letterProgressKey = 'monamoureuse-letter-progress-v4'
@@ -45,34 +28,6 @@ const finalLetterParagraphs = [
   'je t’aime pas seulement pour tout ce que tu fais ou tout ce que t’as, je t’aime parce que c’est toi.',
   'Et personne d’autre pourrait être toi.',
 ]
-
-function FeaturedSong({ song }: { song: Song }) {
-  return <article className="featured-song-card">
-    <div className="featured-song-label">
-      <span>LE SON DU JOUR</span>
-      <p>{song.title} · {song.artist}</p>
-    </div>
-    <iframe
-      className="featured-song-embed"
-      src={`https://open.spotify.com/embed/track/${song.spotifyId}?theme=0`}
-      title={`${song.title} de ${song.artist} sur Spotify`}
-      allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"
-    />
-  </article>
-}
-
-function CompactSongRow({ song }: { song: Song }) {
-  return <article className="compact-song-row" aria-label={`${song.title} de ${song.artist}`}>
-    <iframe
-      className="compact-song-embed"
-      src={`https://open.spotify.com/embed/track/${song.spotifyId}?theme=0`}
-      title={`${song.title} de ${song.artist} sur Spotify`}
-      allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"
-    />
-  </article>
-}
 
 function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]; onPlay: () => void }) {
   return <div className="love-letter-music">
@@ -316,8 +271,6 @@ function LoveLetter() {
 export default function Page() {
   const [isSurpriseOpen, setIsSurpriseOpen] = useState(true)
   const [isRevealing, setIsRevealing] = useState(false)
-  const featuredSong = songs[0]
-  const otherSongs = songs.slice(1)
 
   function revealSurprise() {
     setIsRevealing(true)
@@ -338,23 +291,6 @@ export default function Page() {
       <LoveLetter />
       <section className="stats-grid" id="analyse" aria-label="Analyse de tes écoutes"><div className="stat-card featured"><span className="stat-label">TEMPS ÉCOUTÉ</span><strong>2h 40</strong><p>47 écoutes analysées</p><div className="mini-bars">{[40,72,52,86,64,100,48,80].map((height, i) => <i key={i} style={{ height: `${height}%` }} />)}</div></div><div className="stat-card"><span className="stat-label">TON ARTISTE N°1</span><strong>Drake</strong><p>Le plus présent dans tes écoutes</p><span className="rank">01 / 20</span></div><div className="stat-card"><span className="stat-label">TON GENRE</span><strong>R&B</strong><p>Mais toujours un peu de chaos à côté</p><span className="rank">dreamy · nocturne · soul</span></div></section>
       <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
-      <section className="songs-section" id="sons">
-        <div className="section-heading songs-heading">
-          <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
-        </div>
-        {featuredSong ? (
-          <>
-            <FeaturedSong song={featuredSong} />
-            {otherSongs.length > 0 && <div className="compact-song-list" aria-label="Les autres morceaux">
-              <p className="compact-song-list-label">ET TOUS LES AUTRES</p>
-              {otherSongs.map((song) => <CompactSongRow key={`${song.title}-${song.artist}`} song={song} />)}
-            </div>}
-          </>
-        ) : (
-          <div className="empty-results" role="status"><p>Aucun morceau à afficher.</p></div>
-        )}
-      </section>
-      <footer><p>j&apos;ai fait ça en pensant à toi.</p></footer>
     </div>
     {isSurpriseOpen && <div className={`surprise-overlay${isRevealing ? ' is-leaving' : ''}`} role="dialog" aria-modal="true" aria-labelledby="surprise-title">
       <div className="surprise-card">
