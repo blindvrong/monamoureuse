@@ -1,0 +1,1112 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Inspect publish changes",
+			"type": "shell",
+			"command": "git status --short --branch && git --no-pager diff --stat && git --no-pager diff -- app/page.tsx app/layout.tsx app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish site to main",
+			"type": "shell",
+			"command": "git add -- app/page.tsx app/layout.tsx app/site-polish.css && git commit -m \"Improve responsive site experience\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check deployment runs",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 10 --json databaseId,name,headBranch,headSha,status,conclusion,url,createdAt",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect deployment workflow",
+			"type": "shell",
+			"command": "gh workflow list --repo blindvrong/monamoureuse && gh run view 37315276355 --repo blindvrong/monamoureuse --json workflowName,status,conclusion,jobs,url,event,headSha && gh run view 37315276355 --repo blindvrong/monamoureuse --log-failed",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check hosting deployment",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments --jq '.[] | {id,environment,created_at,sha,task,description}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify production deployment",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments/6859946489/statuses --jq '.[0] | {state,environment_url,target_url,created_at,description}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Locate Deno workflow",
+			"type": "shell",
+			"command": "git status --short --branch && find .github/workflows -maxdepth 2 -type f -print",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Remove Deno workflow",
+			"type": "shell",
+			"command": "git add -- .github/workflows/deno.yml && git commit -m \"Remove Deno workflow\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect latest deployments",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments --jq '.[0:8][] | {id,environment,created_at,sha,task}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub head",
+			"type": "shell",
+			"command": "git status --short --branch && git log -5 --oneline --decorate && gh api repos/blindvrong/monamoureuse/commits/main --jq '{sha:.sha, message:.commit.message}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify exact production commit",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/deployments/6859998248/statuses --jq '.[0] | {state,environment_url,target_url,created_at,description}' && gh api repos/blindvrong/monamoureuse/contents/app/site-polish.css?ref=main --jq '{path:.path,sha:.sha}' && gh api repos/blindvrong/monamoureuse/contents/.github/workflows/deno.yml?ref=main --jq '.message // .path'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect GitHub Pages readiness",
+			"type": "shell",
+			"command": "git status --short --branch && git remote -v && gh repo view blindvrong/monamoureuse --json visibility,url,defaultBranchRef",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages and asset setup",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse --jq '{private,visibility,has_pages,default_branch}' && (gh api repos/blindvrong/monamoureuse/pages 2>&1 || true) && find public -maxdepth 2 -type f -print && find .github -maxdepth 3 -type f -print",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub plan limits",
+			"type": "shell",
+			"command": "gh api user --jq '{login,plan:.plan.name}' 2>&1 || true",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build GitHub Pages site",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && grep -oE '(/monamoureuse)?/_next/static[^\" ]*|/monamoureuse/(icon.svg|apple-icon.png)' out/index.html | head -10 && test -f out/index.html && test -f out/404.html",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Commit GitHub Pages setup",
+			"type": "shell",
+			"command": "git add -- next.config.mjs app/layout.tsx .github/workflows/deploy-pages.yml && git commit -m \"Deploy site with GitHub Pages\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Ignore Pages build output",
+			"type": "shell",
+			"command": "git add -- .gitignore && git commit -m \"Ignore static export output\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Make repository and Pages public",
+			"type": "shell",
+			"command": "gh repo edit blindvrong/monamoureuse --visibility public --accept-visibility-change-consequences && gh api repos/blindvrong/monamoureuse/pages -X POST -f build_type=workflow && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check public repo readiness",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse --jq '{private,visibility,default_branch}' && git status --short --branch && git log -3 --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Refresh GitHub public access",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse --jq '{private,visibility,default_branch}'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Enable and deploy GitHub Pages",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages -X POST -f build_type=workflow && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Push Pages deployment workflow",
+			"type": "shell",
+			"command": "git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages deployment run",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 5 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect Pages run status",
+			"type": "shell",
+			"command": "gh run view 37317141062 --repo blindvrong/monamoureuse --json status,conclusion,jobs,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages activation status",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages --jq '{html_url,build_type,https_enforced}' 2>&1 || true",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for Pages deployment",
+			"type": "shell",
+			"command": "gh run watch 37317141062 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect Pages deploy failure",
+			"type": "shell",
+			"command": "gh run view 37317141062 --repo blindvrong/monamoureuse --json conclusion,jobs,url && gh run view 37317141062 --repo blindvrong/monamoureuse --log-failed",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Retry Pages activation",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages -X POST -f build_type=workflow",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages workflow",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 5 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub Pages settings",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages --jq '{html_url,build_type,https_enforced}' 2>&1 || true",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Trigger GitHub Pages deployment",
+			"type": "shell",
+			"command": "gh workflow run deploy-pages.yml --repo blindvrong/monamoureuse --ref main && gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 3 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Trigger Pages from main push",
+			"type": "shell",
+			"command": "git add -- README.md && git commit -m \"Document public GitHub Pages site\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 3 --json databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect post-push workflows",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --branch main --limit 10 --json name,databaseId,status,conclusion,url,createdAt,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for GitHub Pages deploy",
+			"type": "shell",
+			"command": "gh run watch 37317624768 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify Pages deployment URL",
+			"type": "shell",
+			"command": "gh api repos/blindvrong/monamoureuse/pages --jq '{html_url,build_type,https_enforced}' && gh api repos/blindvrong/monamoureuse/deployments --jq '[.[] | select(.environment == \"github-pages\")][0] | {id,sha,created_at}' && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check song card state",
+			"type": "shell",
+			"command": "git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build site without song card",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Publish removed song card",
+			"type": "shell",
+			"command": "git add -- app/page.tsx && git commit -m \"Remove MOOO song card\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check song removal deploy",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 3 --json databaseId,status,conclusion,url,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Await song card update",
+			"type": "shell",
+			"command": "gh run watch 37318119059 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check repo state",
+			"type": "shell",
+			"command": "git status --short --branch && git log -3 --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect love letter styling",
+			"type": "shell",
+			"command": "tail -c 3500 app/globals.css && printf '\\n---POLISH CSS---\\n' && tail -c 2200 app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build love letters site",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && test -f out/index.html",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Publish love letters",
+			"type": "shell",
+			"command": "git add -- app/page.tsx app/site-polish.css && git commit -m \"Add interactive love letters\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect pushed file set",
+			"type": "shell",
+			"command": "git show --stat --oneline HEAD && git show --format= --name-status HEAD && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check love letters deployment",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 2 --json databaseId,status,conclusion,url,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Remove incidental local files",
+			"type": "shell",
+			"command": "git rm --cached -- .vscode/tasks.json AGENTS.md CLAUDE.md && git commit -m \"Remove local workspace files from repository\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify latest Pages deployment",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 3 --json databaseId,status,conclusion,url,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for latest Pages deploy",
+			"type": "shell",
+			"command": "gh run watch 37318866984 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build natural love letters",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && test -f out/index.html",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check exact pending changes",
+			"type": "shell",
+			"command": "git status --short --branch && git --no-pager diff --stat -- app/page.tsx",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish revised letter copy",
+			"type": "shell",
+			"command": "git add -- app/page.tsx && git commit -m \"Make love letters more personal\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify revised letters deployment",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 2 --json databaseId,status,conclusion,url,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for copy update deploy",
+			"type": "shell",
+			"command": "gh run watch 37319365626 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check letter content diff",
+			"type": "shell",
+			"command": "git --no-pager diff --stat -- app/page.tsx && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Review song letter changes",
+			"type": "shell",
+			"command": "git --no-pager diff -- app/page.tsx app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build letter music embed",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && grep -o 'https://open.spotify.com/embed/track/[^\" ]*' out/index.html | head -1 && test -f out/index.html",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check pending letter changes",
+			"type": "shell",
+			"command": "git status --short --branch && git diff --cached --stat && git --no-pager diff --stat -- app/page.tsx app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish love letter and music",
+			"type": "shell",
+			"command": "git restore --staged -- .vscode/tasks.json AGENTS.md CLAUDE.md && git add -- app/page.tsx app/site-polish.css && git diff --cached --stat && git commit -m \"Add personal letter with soft music\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify letter deployment run",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 2 --json databaseId,status,conclusion,url,headSha",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Await Pages deployment",
+			"type": "shell",
+			"command": "gh run watch 37320227858 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Locate music references",
+			"type": "shell",
+			"command": "grep -n 'Silence\\|Marshmello\\|0SpI4pEG' app/page.tsx",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build softer autoplay music",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && grep -o 'https://open.spotify.com/embed/track/[^\" ]*' out/index.html | head -1 && test -f out/index.html",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check music diff scope",
+			"type": "shell",
+			"command": "git status --short --branch && git --no-pager diff --stat -- app/page.tsx app/site-polish.css && grep -n '0SpI4pEG\\|Gymnopédie\\|autoplay' app/page.tsx",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish gentle autoplay music",
+			"type": "shell",
+			"command": "git restore --staged -- .vscode/tasks.json AGENTS.md CLAUDE.md && git add -- app/page.tsx app/site-polish.css && git diff --cached --stat && git commit -m \"Use gentle piano music with autoplay\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect staged music files",
+			"type": "shell",
+			"command": "git status --short --branch && git diff --cached --stat && git ls-files --stage app/page.tsx app/site-polish.css .vscode/tasks.json AGENTS.md CLAUDE.md",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Push piano autoplay change",
+			"type": "shell",
+			"command": "git add -- app/page.tsx app/site-polish.css && git diff --cached --stat && git commit -m \"Use gentle piano music with autoplay\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main && git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for piano Pages deploy",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 2 --json databaseId,status,conclusion,url,headSha && gh run watch $(gh run list --repo blindvrong/monamoureuse --workflow deploy-pages.yml --limit 1 --json databaseId --jq '.[0].databaseId') --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect assets and repo state",
+			"type": "shell",
+			"command": "git status --short --branch && find public -maxdepth 2 -type f -print && git log -1 --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Generate original piano loop",
+			"type": "shell",
+			"command": "node <<'NODE'\nconst fs = require('node:fs')\nconst sampleRate = 22050\nconst seconds = 32\nconst frames = sampleRate * seconds\nconst left = new Float32Array(frames)\nconst right = new Float32Array(frames)\nconst chords = [\n  [48, 55, 60, 64, 67, 71],\n  [45, 52, 57, 60, 64, 67],\n  [41, 48, 53, 57, 60, 64],\n  [43, 50, 55, 57, 62, 67],\n]\nconst midiFrequency = midi => 440 * 2 ** ((midi - 69) / 12)\nfunction addPluck(midi, start, gain, pan = 0) {\n  const startFrame = Math.floor(start * sampleRate)\n  const count = Math.min(Math.floor(4.4 * sampleRate), frames - startFrame)\n  const base = midiFrequency(midi)\n  for (let i = 0; i < count; i++) {\n    const t = i / sampleRate\n    const attack = Math.min(1, t / 0.018)\n    const decay = Math.exp(-1.35 * t)\n    const fundamental = Math.sin(2 * Math.PI * base * t)\n    const harmonics = 0.32 * Math.sin(2 * Math.PI * base * 2.01 * t) + 0.11 * Math.sin(2 * Math.PI * base * 3.98 * t)\n    const sample = gain * attack * decay * (fundamental + harmonics)\n    const frame = startFrame + i\n    left[frame] += sample * (pan > 0 ? 1 - pan * 0.22 : 1)\n    right[frame] += sample * (pan < 0 ? 1 + pan * 0.22 : 1)\n  }\n}\nfor (let bar = 0; bar < chords.length; bar++) {\n  const chord = chords[bar]\n  const start = bar * 8\n  addPluck(chord[0], start, 0.19, -0.1)\n  addPluck(chord[2], start + 0.35, 0.12, 0.12)\n  addPluck(chord[4], start + 1.7, 0.1, -0.18)\n  addPluck(chord[3], start + 3.3, 0.105, 0.18)\n  addPluck(chord[5], start + 5.0, 0.09, -0.12)\n  addPluck(chord[4], start + 6.55, 0.085, 0.12)\n}\nconst fadeFrames = Math.floor(sampleRate * 0.35)\nfor (let i = 0; i < frames; i++) {\n  const edge = Math.min(1, i / fadeFrames, (frames - 1 - i) / fadeFrames)\n  left[i] *= edge\n  right[i] *= edge\n}\nlet peak = 0\nfor (let i = 0; i < frames; i++) peak = Math.max(peak, Math.abs(left[i]), Math.abs(right[i]))\nconst scale = 0.28 / peak\nconst wav = Buffer.alloc(44 + frames * 4)\nconst write = (offset, text) => wav.write(text, offset, 'ascii')\nwrite(0, 'RIFF')\nwav.writeUInt32LE(wav.length - 8, 4)\nwrite(8, 'WAVE')\nwrite(12, 'fmt ')\nwav.writeUInt32LE(16, 16)\nwav.writeUInt16LE(1, 20)\nwav.writeUInt16LE(2, 22)\nwav.writeUInt32LE(sampleRate, 24)\nwav.writeUInt32LE(sampleRate * 4, 28)\nwav.writeUInt16LE(4, 32)\nwav.writeUInt16LE(16, 34)\nwrite(36, 'data')\nwav.writeUInt32LE(frames * 4, 40)\nfor (let i = 0; i < frames; i++) {\n  wav.writeInt16LE(Math.max(-32768, Math.min(32767, Math.round(left[i] * scale * 32767))), 44 + i * 4)\n  wav.writeInt16LE(Math.max(-32768, Math.min(32767, Math.round(right[i] * scale * 32767))), 46 + i * 4)\n}\nfs.writeFileSync('public/piano-doux.wav', wav)\nconsole.log(`Wrote ${wav.length} bytes, ${seconds}s stereo loop at ${sampleRate} Hz`)\nNODE\nfile public/piano-doux.wav && ls -lh public/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build daily letter site",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && test -f out/index.html && test -f out/piano-doux.wav && stat -c '%n %s bytes' out/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Validate letter count and dates",
+			"type": "shell",
+			"command": "grep -c \"title: '\\|title: \\\"\" app/page.tsx && grep -n 'loveLetterMusic\\|spotify\\|love-letter-choice\\|preview:' app/page.tsx",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify site asset and source",
+			"type": "shell",
+			"command": "grep -R -n 'spotify.com\\|love-letter-choice\\|preview:' app/page.tsx app/site-polish.css || true; file public/piano-doux.wav; git status --short --branch",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Count daily letters",
+			"type": "shell",
+			"command": "sed -n '/^const loveLetters = \\[/,/^\\]/p' app/page.tsx | grep -c '^  {' && grep -o 'spotify.com' app/page.tsx | wc -l",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build 30 day letters",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && test -f out/piano-doux.wav && test -f out/index.html",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Review publish changes",
+			"type": "shell",
+			"command": "git status --short && git diff --stat && git diff -- app/page.tsx app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check publish branch",
+			"type": "shell",
+			"command": "git branch --show-current && git status --short -- app/page.tsx app/site-polish.css public/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish letters and piano",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css public/piano-doux.wav && git diff --cached --check && git commit -m \"Add daily love letters and gentle piano\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub Pages deploy",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 5 --json databaseId,name,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Watch current Pages build",
+			"type": "shell",
+			"command": "gh run watch 37324710104 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify published piano file",
+			"type": "shell",
+			"command": "curl -fsSI https://blindvrong.github.io/monamoureuse/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Confirm release worktree",
+			"type": "shell",
+			"command": "git status --short && git log -1 --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Spotify letter update",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Remove old piano asset",
+			"type": "shell",
+			"command": "git rm -- public/piano-doux.wav && git diff --check && git status --short && git diff --stat",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Review Spotify change diff",
+			"type": "shell",
+			"command": "git diff HEAD -- app/page.tsx app/site-polish.css public/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check requested text and links",
+			"type": "shell",
+			"command": "git diff HEAD -- app/page.tsx app/site-polish.css | grep -E 'spotify|Spotify|Gymnopédie|La lettre|À toi|loveNotes|Piano tout doux|Je suis bien avec toi'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish Spotify letter update",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css public/piano-doux.wav && git diff --cached --check && git commit -m \"Restore Spotify links and update love letter\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Commit and push Spotify update",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css && git diff --cached --check && git commit -m \"Restore Spotify links and update love letter\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check letter redeployment",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 3 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for updated Pages",
+			"type": "shell",
+			"command": "gh run watch 37325902498 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Drake autoplay update",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Publish Drake autoplay change",
+			"type": "shell",
+			"command": "git add app/page.tsx && git diff --cached --check && git commit -m \"Play Lïa's Drake pick in Spotify embed\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify Drake site deploy",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 2 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for Drake deployment",
+			"type": "shell",
+			"command": "gh run watch 37326369463 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Restore original piano audio",
+			"type": "shell",
+			"command": "git show aa42042:public/piano-doux.wav > public/piano-doux.wav && file public/piano-doux.wav && git status --short -- public/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build autoplay piano update",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build && test -f out/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Publish autoplay piano version",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css public/piano-doux.wav && git diff --cached --check && git commit -m \"Autoplay original piano during love letter\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify piano Pages deployment",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 2 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for piano deployment",
+			"type": "shell",
+			"command": "gh run watch 37327621760 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Confirm public audio asset",
+			"type": "shell",
+			"command": "curl -fsSI https://blindvrong.github.io/monamoureuse/piano-doux.wav",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check worktree before song change",
+			"type": "shell",
+			"command": "git status --short && git log -1 --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Passionfruit Spotify update",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check Passionfruit embed",
+			"type": "shell",
+			"command": "curl -fsSI 'https://open.spotify.com/embed/track/5mCPDVBb16L4XQwDdbRUpz?utm_source=generator&autoplay=1' | head -n 8",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish Passionfruit track",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css && git diff --cached --check && git commit -m \"Set Passionfruit as love letter soundtrack\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Passionfruit deployment",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 2 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait Passionfruit Pages deploy",
+			"type": "shell",
+			"command": "gh run watch 37328225598 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish Drake Passionfruit update",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css && git diff --cached --check && git commit -m \"Use Passionfruit as the letter soundtrack\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect current commit changes",
+			"type": "shell",
+			"command": "git status --short && git log -4 --oneline && git show -1 --stat --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check current deploy run",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 4 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Locate song styles",
+			"type": "shell",
+			"command": "grep -nE '^\\.(songs-section|song-grid|song-card|song-info|cover|play-button|song-mood|controls|filters|songs-heading|section-intro)' app/globals.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check applied songs design",
+			"type": "shell",
+			"command": "git status --short && git log -2 --oneline && git show -1 --stat --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Review songs UI diff",
+			"type": "shell",
+			"command": "git diff --check && git diff --stat && git status --short",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build featured songs layout",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Clean unused restored audio",
+			"type": "shell",
+			"command": "rm -- public/piano-doux.wav && git status --short",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Confirm songs layout status",
+			"type": "shell",
+			"command": "git status --short && git diff --stat && git diff -- app/page.tsx | head -n 70 && git show HEAD:app/page.tsx | grep -F 'Ceux qui tournent'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish three song display",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css public/piano-doux.wav && git diff --cached --check && git commit -m \"Style featured and compact Spotify song list\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check songs style deploy",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 2 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait for songs UI deployment",
+			"type": "shell",
+			"command": "gh run watch 37329831747 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify songs deploy complete",
+			"type": "shell",
+			"command": "gh run view 37329831747 --repo blindvrong/monamoureuse --json status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Await queued site deploy",
+			"type": "shell",
+			"command": "sleep 20 && gh run watch 37329831747 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check queued deploy state",
+			"type": "shell",
+			"command": "gh run view 37329831747 --repo blindvrong/monamoureuse --json status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages queue",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 5 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check current branch state",
+			"type": "shell",
+			"command": "git status --short && git log -4 --oneline && gh run list --repo blindvrong/monamoureuse --limit 3 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "List provided ZIP contents",
+			"type": "shell",
+			"command": "unzip -l '/home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-9e22479ddf51/attachments/338b8d12-b595-49b9-b343-95aaeb0c259f/creation-site-pour-copine.zip'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Review local code changes",
+			"type": "shell",
+			"command": "git diff -- app/page.tsx app/site-polish.css | head -n 280 && git status --short",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Extract ZIP song component",
+			"type": "shell",
+			"command": "unzip -p '/home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-9e22479ddf51/attachments/338b8d12-b595-49b9-b343-95aaeb0c259f/creation-site-pour-copine.zip' components/favorite-songs.tsx",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Extract ZIP daily letters",
+			"type": "shell",
+			"command": "unzip -p '/home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-95aaeb0c259f/creation-site-pour-copine.zip' lib/love-letters.ts",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Read ZIP love letters source",
+			"type": "shell",
+			"command": "unzip -p '/home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-95aaeb0c259f/creation-site-pour-copine.zip' 'lib/love-letters.ts'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect uploaded attachment paths",
+			"type": "shell",
+			"command": "ls -lb '/home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-9e22479ddf51/attachments'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Read source letters from ZIP",
+			"type": "shell",
+			"command": "unzip -p /home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-9e22479ddf51/attachments/338b8d12-b595-49b9-b343-95aaeb0c259f/creation-site-pour-copine.zip lib/love-letters.ts",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect uploaded song metadata",
+			"type": "shell",
+			"command": "file '/home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-9e22479ddf51/attachments/06ca60d1-236b-4ab1-89e2-d2d6efa6c7cb/Passionfruit 4.mp3' '/home/codespace/.vscode-remote/data/agentSessionData/55a5ec0b-5f96-4b12-934f-9e22479ddf51/attachments/55f27898-579e-4057-a997-aa5447b88f08/Taylor Scott _ Make it up.mp3'",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Read existing daily letters",
+			"type": "shell",
+			"command": "sed -n '20,230p' app/page.tsx",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build black Spotify song layout",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Review final song changes",
+			"type": "shell",
+			"command": "git status --short && git diff --check && git diff --stat && grep -nE 'Make It Up|song-artist-tags|spotifyId' app/page.tsx app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Confirm styled songs deploy",
+			"type": "shell",
+			"command": "gh run view 37329831747 --repo blindvrong/monamoureuse --json status,conclusion,headSha,url && git status --short && git log -1 --oneline",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect deployment queue",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 8 --json databaseId,status,conclusion,headSha,url,name",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Show pending app diff",
+			"type": "shell",
+			"command": "git diff -- app/page.tsx app/site-polish.css",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish zip-inspired song list",
+			"type": "shell",
+			"command": "git add app/page.tsx app/site-polish.css && git diff --cached --check && git commit -m \"Add Taylor Scott and refine song list\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check final Pages deploy",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 2 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait final Pages deployment",
+			"type": "shell",
+			"command": "gh run watch 37333132600 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect deploy run jobs",
+			"type": "shell",
+			"command": "gh run view 37333132600 --repo blindvrong/monamoureuse --json status,conclusion,jobs,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check latest deployment state",
+			"type": "shell",
+			"command": "gh run view 37333132600 --repo blindvrong/monamoureuse --json status,conclusion,headSha,url && gh run view 37329831747 --repo blindvrong/monamoureuse --json status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check current repo status",
+			"type": "shell",
+			"command": "git status --short && git log -4 --oneline && git diff --stat",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Spotify extra tracks",
+			"type": "shell",
+			"command": "curl -fsSL 'https://open.spotify.com/search/Only%20Girl%20In%20The%20World%20Rihanna' | grep -oE 'spotify:track:[A-Za-z0-9]+' | head -n 5; curl -fsSL 'https://open.spotify.com/search/Who%27s%20Lovin%27%20You%20Jackson%205' | grep -oE 'spotify:track:[A-Za-z0-9]+' | head -n 5",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check current committed UI",
+			"type": "shell",
+			"command": "git status --short && git log -1 --oneline && git show --stat --oneline HEAD",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check published screenshot styles",
+			"type": "shell",
+			"command": "curl -fsSL 'https://blindvrong.github.io/monamoureuse/?v=a485f69' | grep -oE 'Taylor Scott|featured-song-card|compact-song-row|Ceux qui tournent[^<]+' | head -n 10",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Pages action queue now",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 10 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Cancel superseded deploy run",
+			"type": "shell",
+			"command": "gh run cancel 37329831747 --repo blindvrong/monamoureuse",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect Pages deployment state",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 4 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check UI change diff",
+			"type": "shell",
+			"command": "git diff --check && git diff --stat && git status --short",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify daily song selection",
+			"type": "shell",
+			"command": "git status --short && grep -n 'songOfTheDayIndex\\|featuredSong =\\|const songs' app/page.tsx && git log -1 --oneline && gh run view 37333132600 --repo blindvrong/monamoureuse --json status,conclusion,jobs,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Validate deployment workflow diff",
+			"type": "shell",
+			"command": "git diff --check && git diff --stat && git status --short && git diff -- .github/workflows/deploy-pages.yml app/page.tsx",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build song rotation release",
+			"type": "shell",
+			"command": "GITHUB_ACTIONS=true npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Publish daily featured song UI",
+			"type": "shell",
+			"command": "git add app/page.tsx .github/workflows/deploy-pages.yml && git diff --cached --check && git commit -m \"Rotate daily song in ZIP-inspired layout\" -m \"Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\" && git push origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check latest song deploy",
+			"type": "shell",
+			"command": "gh run list --repo blindvrong/monamoureuse --limit 5 --json databaseId,status,conclusion,headSha,url",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Wait site deployment complete",
+			"type": "shell",
+			"command": "gh run watch 37338499773 --repo blindvrong/monamoureuse --exit-status",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

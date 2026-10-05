@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { Heart, Search, Shuffle } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Heart, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
 type Song = {
@@ -19,7 +19,6 @@ const songs: Song[] = [
 ]
 
 const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
-const moods = ['Tous', ...Array.from(new Set(songs.map((song) => song.mood))).slice(0, 6)]
 const loveLetters = [
   {
     title: 'À toi, Lïa',
@@ -323,8 +322,6 @@ function LoveLetter() {
 }
 
 export default function Page() {
-  const [query, setQuery] = useState('')
-  const [activeMood, setActiveMood] = useState('Tous')
   const [songOfTheDayIndex, setSongOfTheDayIndex] = useState(0)
   useEffect(() => {
     const anchor = Date.UTC(2026, 9, 5)
@@ -334,16 +331,9 @@ export default function Page() {
     setSongOfTheDayIndex(((elapsedDays % songs.length) + songs.length) % songs.length)
   }, [])
 
-  const filtered = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase('fr')
-    return songs.filter((song) =>
-      `${song.title} ${song.artist}`.toLocaleLowerCase('fr').includes(normalizedQuery) &&
-      (activeMood === 'Tous' || song.mood === activeMood),
-    )
-  }, [query, activeMood])
   const scheduledSong = songs[songOfTheDayIndex]
-  const featuredSong = filtered.includes(scheduledSong) ? scheduledSong : filtered[0]
-  const otherSongs = filtered.filter((song) => song !== featuredSong)
+  const featuredSong = scheduledSong
+  const otherSongs = songs.filter((song) => song !== featuredSong)
 
   return <main className="site-shell" id="top">
     <div className="ambient ambient-one" /><div className="ambient ambient-two" />
@@ -353,13 +343,7 @@ export default function Page() {
     <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
     <section className="songs-section" id="sons">
       <div className="section-heading songs-heading">
-        <div>
-          <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
-        </div>
-      </div>
-      <div className="controls">
-        <label className="search"><Search size={16} aria-hidden="true" /><input type="search" aria-label="Rechercher un morceau" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un morceau ou un artiste" /></label>
-        <div className="filters" aria-label="Filtrer par ambiance">{moods.map((mood) => <button type="button" aria-pressed={activeMood === mood} className={activeMood === mood ? 'active' : ''} key={mood} onClick={() => setActiveMood(mood)}>{mood}</button>)}</div>
+        <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
       </div>
       {featuredSong ? (
         <>
@@ -370,7 +354,7 @@ export default function Page() {
           </div>}
         </>
       ) : (
-        <div className="empty-results" role="status"><p>Aucun morceau ne correspond à ta recherche.</p><button type="button" onClick={() => { setQuery(''); setActiveMood('Tous') }}>Effacer les filtres</button></div>
+        <div className="empty-results" role="status"><p>Aucun morceau à afficher.</p></div>
       )}
     </section>
     <footer><p>j&apos;ai fait ça en pensant à toi.</p><span>pour toi, Lïa</span></footer>
