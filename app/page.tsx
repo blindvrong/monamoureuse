@@ -24,7 +24,7 @@ const songs: Song[] = [
 
 const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : ''
 const letterNotificationUrl = process.env.NEXT_PUBLIC_LETTER_NOTIFICATION_URL
-const letterProgressKey = 'monamoureuse-letter-progress-v3'
+const letterProgressKey = 'monamoureuse-letter-progress-v4'
 const letterSongs = [
   { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
   { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
