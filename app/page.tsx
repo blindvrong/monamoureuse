@@ -7,15 +7,18 @@ import { reasons } from '@/lib/reasons'
 type Song = {
   title: string
   artist: string
-  mood: string
   spotifyId: string
 }
 
 const songs: Song[] = [
-  { title: 'Silence', artist: 'Marshmello, Khalid', mood: 'Nostalgique', spotifyId: '7vGuf3Y35N4wmASOKLUVVU' },
-  { title: "Who's Lovin' You", artist: 'The Jackson 5', mood: 'Soul', spotifyId: '6cZrsaNb4Zo9E5KHk7gcz5' },
-  { title: 'Only Girl (In The World)', artist: 'Rihanna', mood: 'Énergie', spotifyId: '0AH6WMe3OlAlUb5miXt2FQ' },
-  { title: 'Make It Up', artist: 'Taylor Scott', mood: 'À découvrir', spotifyId: '12oK0sqmBgZ0yR2G1gSqsI' },
+  { title: 'Heart To Heart', artist: 'Mac DeMarco', spotifyId: '7EAMXbLcL0qXmciM5SwMh2' },
+  { title: 'I Wanna Be Yours', artist: 'Arctic Monkeys', spotifyId: '5XeFesFbtLpXzIVDNQP22n' },
+  { title: 'we fell in love in october', artist: 'girl in red', spotifyId: '6IPwKM3fUUzlElbvKw2sKl' },
+  { title: 'Lovers Rock', artist: 'TV Girl', spotifyId: '6dBUzqjtbnIa1TwYbyw5CM' },
+  { title: 'Hush', artist: 'The Marías', spotifyId: '4zXZ5Mq2L6jnsOsTssgRh8' },
+  { title: 'White Ferrari', artist: 'Frank Ocean', spotifyId: '2LMkwUfqC6S6s6qDVlEuzV' },
+  { title: 'Duvet', artist: 'bôa', spotifyId: '42qNWdLKCI41S4uzfamhFM' },
+  { title: 'The Blonde', artist: 'TV Girl', spotifyId: '72cGBEqu7RitIOoACXYjfR' },
 ]
 
 const artists = ['Marshmello', 'Khalid', 'The Jackson 5', 'Rihanna', 'Taylor Scott']
@@ -287,7 +290,7 @@ function LoveLetter() {
   }
 
   return <section className="letter-section" id="lettre" aria-labelledby="lettre-title">
-    <div className="section-heading letter-heading"><div><p className="eyebrow">une petite lettre pour lïa</p><h2 id="lettre-title">Quelques mots<br /><em>rien que pour toi.</em></h2></div><Heart className="letter-heart" fill="currentColor" aria-hidden="true" /></div>
+    <div className="section-heading letter-heading"><div><h2 id="lettre-title">Quelques mots<br /><em>rien que pour toi.</em></h2></div><Heart className="letter-heart" fill="currentColor" aria-hidden="true" /></div>
     <p className="letter-intro">Lïa, je t&apos;aime pour plein de petites choses. Tu peux en découvrir une au hasard.</p>
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p aria-live="polite">{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" type="button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
     <section className="love-letters" aria-labelledby="love-letters-title">
@@ -322,22 +325,12 @@ function LoveLetter() {
 }
 
 export default function Page() {
-  const [songOfTheDayIndex, setSongOfTheDayIndex] = useState(0)
-  useEffect(() => {
-    const anchor = Date.UTC(2026, 9, 5)
-    const today = new Date()
-    const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
-    const elapsedDays = Math.floor((todayUtc - anchor) / 86_400_000)
-    setSongOfTheDayIndex(((elapsedDays % songs.length) + songs.length) % songs.length)
-  }, [])
-
-  const scheduledSong = songs[songOfTheDayIndex]
-  const featuredSong = scheduledSong
-  const otherSongs = songs.filter((song) => song !== featuredSong)
+  const featuredSong = songs[0]
+  const otherSongs = songs.slice(1)
 
   return <main className="site-shell" id="top">
     <div className="ambient ambient-one" /><div className="ambient ambient-two" />
-    <header className="topbar"><a className="brand" href="#top"><span className="brand-mark">♪</span> pour toi</a><nav aria-label="Navigation principale"><a href="#analyse">Analyse</a><a href="#sons">Tes sons</a><a href="#lettre">La lettre</a></nav><span className="date-pill">5 OCT. 2026</span></header>
+    <header className="topbar"><nav aria-label="Navigation principale"><a href="#analyse">Analyse</a><a href="#sons">Tes sons</a><a href="#lettre">La lettre</a></nav><span className="date-pill">5 OCT. 2026</span></header>
     <LoveLetter />
     <section className="stats-grid" id="analyse" aria-label="Analyse de tes écoutes"><div className="stat-card featured"><span className="stat-label">TEMPS ÉCOUTÉ</span><strong>2h 40</strong><p>47 écoutes analysées</p><div className="mini-bars">{[40,72,52,86,64,100,48,80].map((height, i) => <i key={i} style={{ height: `${height}%` }} />)}</div></div><div className="stat-card"><span className="stat-label">TON ARTISTE N°1</span><strong>Drake</strong><p>Le plus présent dans tes écoutes</p><span className="rank">01 / 20</span></div><div className="stat-card"><span className="stat-label">TON GENRE</span><strong>R&B</strong><p>Mais toujours un peu de chaos à côté</p><span className="rank">dreamy · nocturne · soul</span></div></section>
     <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
