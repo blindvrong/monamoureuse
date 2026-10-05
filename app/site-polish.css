@@ -196,6 +196,224 @@ html {
   border-radius: 12px;
 }
 
+.songs-heading {
+  align-items: center;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.songs-heading > div:first-child {
+  max-width: 760px;
+}
+
+.songs-heading h2 em {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.songs-heading .section-intro {
+  margin-inline: auto;
+}
+
+.songs-heading .song-total {
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.songs-heading .song-total strong {
+  font-size: 1.5rem;
+}
+
+.songs-heading .song-total span {
+  font-size: 0.6rem;
+}
+
+.songs-section .controls {
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 2.5rem;
+}
+
+.songs-section .search {
+  width: min(100%, 420px);
+}
+
+.songs-section .filters {
+  justify-content: center;
+}
+
+.featured-song-card {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1rem;
+  border: 1px solid rgb(233 145 117 / 32%);
+  border-radius: 22px;
+  background: #fdf6f2;
+  box-shadow: 0 14px 40px rgb(0 0 0 / 16%);
+}
+
+.featured-song-label {
+  padding: 0.35rem 0.25rem 0.8rem;
+  color: #423431;
+}
+
+.featured-song-label > span,
+.compact-song-list-label {
+  color: #8d6259;
+  font: 500 0.58rem 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+}
+
+.featured-song-label p {
+  margin: 0.35rem 0 0;
+  color: #856d67;
+  font: italic 0.82rem 'Playfair Display', serif;
+}
+
+.featured-song-embed {
+  display: block;
+  width: 100%;
+  height: 180px;
+  border: 0;
+  border-radius: 15px;
+  background: #191919;
+}
+
+.featured-song-fallback {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 112px;
+  padding: 1rem;
+  border-radius: 15px;
+  background: #1d1d1d;
+  color: #fff;
+  text-decoration: none;
+}
+
+.featured-song-fallback > span:nth-child(2) {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.featured-song-fallback strong {
+  font-size: 1rem;
+}
+
+.featured-song-fallback small {
+  color: #bdbdbd;
+  font-size: 0.75rem;
+}
+
+.featured-song-art,
+.compact-song-art {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  color: rgb(255 255 255 / 88%);
+  font: 1.6rem 'Playfair Display', serif;
+}
+
+.featured-song-art {
+  width: 76px;
+  height: 76px;
+  border-radius: 9px;
+}
+
+.compact-song-list {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 760px;
+  margin: 2.5rem auto 0;
+}
+
+.compact-song-list-label {
+  margin: 0 0 0.25rem;
+  text-align: center;
+}
+
+.compact-song-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 70px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 7%);
+  border-radius: 13px;
+  background: #1d1d1d;
+  color: #f6f0e8;
+}
+
+.compact-song-art {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 1.05rem;
+}
+
+.compact-song-art > span {
+  font: 500 0.54rem 'DM Mono', monospace;
+}
+
+.compact-song-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.compact-song-info h3 {
+  overflow: hidden;
+  margin: 0;
+  font: 500 0.84rem 'Playfair Display', serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-song-info p {
+  overflow: hidden;
+  margin: 0.15rem 0 0;
+  color: #bcb7b4;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-song-preview {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+  background: #4b4b4b;
+  color: #f5f5f5;
+  font: 500 0.48rem 'DM Mono', monospace;
+  text-transform: uppercase;
+}
+
+.compact-song-play {
+  display: grid;
+  flex: 0 0 34px;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  color: #171717;
+  text-decoration: none;
+  transition: transform 180ms ease;
+}
+
+.compact-song-play:hover {
+  transform: scale(1.08);
+}
+
+.compact-song-art.peach,
+.featured-song-art.peach { background: linear-gradient(145deg, #d5b18e, #2e8082); }
+.compact-song-art.gold,
+.featured-song-art.gold { background: linear-gradient(145deg, #9c553f, #352b25); }
+.compact-song-art.rose,
+.featured-song-art.rose { background: linear-gradient(145deg, #c25b4e, #6d1828); }
+
 @media (hover: hover) {
   .song-card:hover {
     transform: translateY(-4px);

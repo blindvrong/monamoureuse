@@ -4,8 +4,16 @@ import { useEffect, useMemo, useState } from 'react'
 import { Heart, Play, Search, Shuffle } from 'lucide-react'
 import { reasons } from '@/lib/reasons'
 
-const songs = [
-  { title: 'Silence', artist: 'Marshmello, Khalid', mood: 'Nostalgique', color: 'peach' },
+type Song = {
+  title: string
+  artist: string
+  mood: string
+  color: string
+  spotifyId?: string
+}
+
+const songs: Song[] = [
+  { title: 'Silence', artist: 'Marshmello, Khalid', mood: 'Nostalgique', color: 'peach', spotifyId: '7vGuf3Y35N4wmASOKLUVVU' },
   { title: "Who's Lovin' You", artist: 'The Jackson 5', mood: 'Soul', color: 'gold' },
   { title: 'Only Girl (In The World)', artist: 'Rihanna', mood: 'Énergie', color: 'rose' },
 ]
@@ -226,11 +234,45 @@ const loveLetters = [
   },
 ]
 
-function SongCard({ song, index }: { song: typeof songs[number]; index: number }) {
-  return <article className={`song-card ${song.color}`}>
-    <div className="cover"><span>{String(index + 1).padStart(2, '0')}</span><b>♪</b></div>
-    <div className="song-info"><span className="song-mood">{song.mood}</span><h3>{song.title}</h3><p>{song.artist}</p></div>
-    <a className="play-button" href={`https://open.spotify.com/search/${encodeURIComponent(`${song.title} ${song.artist}`)}`} target="_blank" rel="noreferrer" aria-label={`Chercher ${song.title} de ${song.artist} sur Spotify`}><Play size={14} fill="currentColor" /></a>
+function spotifySearchUrl(song: Song) {
+  return `https://open.spotify.com/search/${encodeURIComponent(`${song.title} ${song.artist}`)}`
+}
+
+function FeaturedSong({ song }: { song: Song }) {
+  return <article className="featured-song-card">
+    <div className="featured-song-label">
+      <span>LE SON DU JOUR</span>
+      <p>{song.title} · {song.artist}</p>
+    </div>
+    {song.spotifyId ? (
+      <iframe
+        className="featured-song-embed"
+        src={`https://open.spotify.com/embed/track/${song.spotifyId}`}
+        title={`${song.title} de ${song.artist} sur Spotify`}
+        allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />
+    ) : (
+      <a className={`featured-song-fallback ${song.color}`} href={spotifySearchUrl(song)} target="_blank" rel="noreferrer">
+        <span className="featured-song-art" aria-hidden="true">♪</span>
+        <span><strong>{song.title}</strong><small>{song.artist} · Écouter sur Spotify</small></span>
+        <span className="compact-song-play" aria-hidden="true"><Play size={15} fill="currentColor" /></span>
+      </a>
+    )}
+  </article>
+}
+
+function CompactSongRow({ song, index }: { song: Song; index: number }) {
+  return <article className="compact-song-row">
+    <span className={`compact-song-art ${song.color}`} aria-hidden="true"><span>{String(index + 1).padStart(2, '0')}</span></span>
+    <div className="compact-song-info">
+      <h3>{song.title}</h3>
+      <p>{song.artist}</p>
+      <span className="compact-song-preview">{song.mood}</span>
+    </div>
+    <a className="compact-song-play" href={spotifySearchUrl(song)} target="_blank" rel="noreferrer" aria-label={`Chercher ${song.title} de ${song.artist} sur Spotify`}>
+      <Play size={14} fill="currentColor" />
+    </a>
   </article>
 }
 
@@ -304,6 +346,8 @@ export default function Page() {
       (activeMood === 'Tous' || song.mood === activeMood),
     )
   }, [query, activeMood])
+  const featuredSong = filtered[0]
+  const otherSongs = filtered.slice(1)
 
   return <main className="site-shell" id="top">
     <div className="ambient ambient-one" /><div className="ambient ambient-two" />
@@ -311,7 +355,31 @@ export default function Page() {
     <LoveLetter />
     <section className="stats-grid" id="analyse" aria-label="Analyse de tes écoutes"><div className="stat-card featured"><span className="stat-label">TEMPS ÉCOUTÉ</span><strong>2h 40</strong><p>47 écoutes analysées</p><div className="mini-bars">{[40,72,52,86,64,100,48,80].map((height, i) => <i key={i} style={{ height: `${height}%` }} />)}</div></div><div className="stat-card"><span className="stat-label">TON ARTISTE N°1</span><strong>Drake</strong><p>Le plus présent dans tes écoutes</p><span className="rank">01 / 20</span></div><div className="stat-card"><span className="stat-label">TON GENRE</span><strong>R&B</strong><p>Mais toujours un peu de chaos à côté</p><span className="rank">dreamy · nocturne · soul</span></div></section>
     <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
-    <section className="songs-section" id="sons"><div className="section-heading songs-heading"><div><p className="eyebrow">les morceaux que je garde pour toi</p><h2>Tes sons préférés</h2><p className="section-intro">Ceux que tu écoutes souvent. Ceux qui me font penser à toi, même quand tu n&apos;es pas là.</p></div><div className="song-total" aria-live="polite"><strong>{filtered.length}</strong><span>morceaux<br />affichés</span></div></div><div className="controls"><label className="search"><Search size={16} aria-hidden="true" /><input type="search" aria-label="Rechercher un morceau" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un morceau ou un artiste" /></label><div className="filters" aria-label="Filtrer par ambiance">{moods.map((mood) => <button type="button" aria-pressed={activeMood === mood} className={activeMood === mood ? 'active' : ''} key={mood} onClick={() => setActiveMood(mood)}>{mood}</button>)}</div></div>{filtered.length > 0 ? <div className="song-grid">{filtered.map((song, index) => <SongCard key={`${song.title}-${song.artist}`} song={song} index={index} />)}</div> : <div className="empty-results" role="status"><p>Aucun morceau ne correspond à ta recherche.</p><button type="button" onClick={() => { setQuery(''); setActiveMood('Tous') }}>Effacer les filtres</button></div>}</section>
+    <section className="songs-section" id="sons">
+      <div className="section-heading songs-heading">
+        <div>
+          <p className="eyebrow">TES SONS</p>
+          <h2>Ceux qui tournent <em>en boucle</em> chez toi</h2>
+          <p className="section-intro">Les morceaux que tu écoutes souvent. Chaque fois que j’en entends un, je pense à toi.</p>
+        </div>
+        <div className="song-total" aria-live="polite"><strong>{filtered.length}</strong><span>morceaux<br />affichés</span></div>
+      </div>
+      <div className="controls">
+        <label className="search"><Search size={16} aria-hidden="true" /><input type="search" aria-label="Rechercher un morceau" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un morceau ou un artiste" /></label>
+        <div className="filters" aria-label="Filtrer par ambiance">{moods.map((mood) => <button type="button" aria-pressed={activeMood === mood} className={activeMood === mood ? 'active' : ''} key={mood} onClick={() => setActiveMood(mood)}>{mood}</button>)}</div>
+      </div>
+      {featuredSong ? (
+        <>
+          <FeaturedSong song={featuredSong} />
+          {otherSongs.length > 0 && <div className="compact-song-list" aria-label="Les autres morceaux">
+            <p className="compact-song-list-label">ET TOUS LES AUTRES</p>
+            {otherSongs.map((song, index) => <CompactSongRow key={`${song.title}-${song.artist}`} song={song} index={index + 1} />)}
+          </div>}
+        </>
+      ) : (
+        <div className="empty-results" role="status"><p>Aucun morceau ne correspond à ta recherche.</p><button type="button" onClick={() => { setQuery(''); setActiveMood('Tous') }}>Effacer les filtres</button></div>
+      )}
+    </section>
     <footer><p>j&apos;ai fait ça en pensant à toi.</p><span>pour toi, Lïa</span></footer>
   </main>
 }
