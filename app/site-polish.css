@@ -17,6 +17,7 @@ html {
   z-index: 5;
   height: 80px;
   gap: 1rem;
+  justify-content: flex-end;
   border-bottom-color: rgb(246 240 232 / 18%);
   background: rgb(25 22 21 / 92%);
   backdrop-filter: blur(16px);
@@ -559,6 +560,10 @@ html {
     flex-direction: column;
     gap: 0.5rem;
   }
+}
+
+.topbar nav {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
