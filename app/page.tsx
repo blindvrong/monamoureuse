@@ -12,6 +12,11 @@ const songs = [
 
 const artists = ['Drake', 'Hamza', 'The Marías', 'The Weeknd', 'The Neighbourhood', 'Cigarettes After Sex']
 const moods = ['Tous', ...Array.from(new Set(songs.map((song) => song.mood))).slice(0, 6)]
+const loveLetterMusic = {
+  title: 'Gymnopédie No. 1',
+  artist: 'Erik Satie · Philippe Entremont',
+  trackId: '5NGtFXVpXSvwunEIGeviY3',
+}
 
 const loveLetters = [
   {
@@ -133,15 +138,16 @@ function LoveLetter() {
           <div className="love-letter-signoff"><span>Je t’aime,</span><strong>Lïa</strong></div>
           {activeLetter === 0 && (
             <div className="love-letter-music">
-              <p>Une musique douce, si tu veux l’écouter en lisant.</p>
+              <p>Gymnopédie No. 1 · Erik Satie</p>
               <iframe
-                title="Silence de Marshmello et Khalid — musique pour accompagner la lettre"
-                src="https://open.spotify.com/embed/track/0SpI4pEG1JtTMhKzcpyEVg?utm_source=generator&theme=0"
+                title={`${loveLetterMusic.title} de ${loveLetterMusic.artist} — musique douce pour accompagner la lettre`}
+                src={`https://open.spotify.com/embed/track/${loveLetterMusic.trackId}?utm_source=generator&theme=0&autoplay=1`}
                 width="100%"
                 height="152"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
+                loading="eager"
               />
+              <small>Si ton navigateur bloque la lecture automatique, appuie sur lecture.</small>
             </div>
           )}
         </article>
@@ -167,9 +173,9 @@ export default function Page() {
     <LoveLetter />
     <section className="stats-grid" id="analyse" aria-label="Analyse de tes écoutes"><div className="stat-card featured"><span className="stat-label">TEMPS ÉCOUTÉ</span><strong>2h 40</strong><p>47 écoutes analysées</p><div className="mini-bars">{[40,72,52,86,64,100,48,80].map((height, i) => <i key={i} style={{ height: `${height}%` }} />)}</div></div><div className="stat-card"><span className="stat-label">TON ARTISTE N°1</span><strong>Drake</strong><p>Le plus présent dans tes écoutes</p><span className="rank">01 / 20</span></div><div className="stat-card"><span className="stat-label">TON GENRE</span><strong>R&B</strong><p>Mais toujours un peu de chaos à côté</p><span className="rank">dreamy · nocturne · soul</span></div></section>
     <section className="artists-section"><div className="section-heading"><div><p className="eyebrow">CE QUI REVIENT TOUJOURS</p><h2>Tes artistes préférés</h2></div><span className="section-count">01 — 06</span></div><div className="artist-list">{artists.map((artist, index) => <div className="artist-row" key={artist}><span className="artist-number">0{index + 1}</span><div><h3>{artist}</h3><p>{['1er artiste de toujours','2e artiste de toujours','Ton côté bedroom pop','Le roi des nuits','Toujours dans la rotation','Pour les moments calmes'][index]}</p></div><span className="artist-genre">{['hip-hop / rap','rap français','dreamy','R&B','alternative','dream pop'][index]}</span><span className="arrow">↗</span></div>)}</div></section>
-    <section className="music-player-section top-player" aria-label="Ta musique préférée"><div><p className="eyebrow">LE SON QUI TE RESSEMBLE LE PLUS</p><h2>Silence <em>en fond.</em></h2><p>Marshmello & Khalid · ton morceau le plus marquant</p></div><div className="player-card"><div className="player-art">♪</div><div><strong>Silence</strong><span>Marshmello, Khalid</span><div className="player-line"><i /></div></div><Volume2 size={18} aria-hidden="true" /><a href="https://open.spotify.com/track/0SpI4pEG1JtTMhKzcpyEVg" target="_blank" rel="noreferrer" aria-label="Écouter Silence sur Spotify"><Play size={15} fill="currentColor" /></a></div></section>
+    <section className="music-player-section top-player" aria-label="Ta musique préférée"><div><p className="eyebrow">LE SON QUI TE RESSEMBLE LE PLUS</p><h2>{loveLetterMusic.title} <em>en fond.</em></h2><p>{loveLetterMusic.artist} · un peu de douceur</p></div><div className="player-card"><div className="player-art">♪</div><div><strong>{loveLetterMusic.title}</strong><span>{loveLetterMusic.artist}</span><div className="player-line"><i /></div></div><Volume2 size={18} aria-hidden="true" /><a href={`https://open.spotify.com/track/${loveLetterMusic.trackId}`} target="_blank" rel="noreferrer" aria-label={`Écouter ${loveLetterMusic.title} sur Spotify`}><Play size={15} fill="currentColor" /></a></div></section>
     <section className="songs-section" id="sons"><div className="section-heading songs-heading"><div><p className="eyebrow">les morceaux que je garde pour toi</p><h2>Tes sons préférés</h2><p className="section-intro">Ceux que tu écoutes souvent. Ceux qui me font penser à toi, même quand tu n&apos;es pas là.</p></div><div className="song-total" aria-live="polite"><strong>{filtered.length}</strong><span>morceaux<br />affichés</span></div></div><div className="controls"><label className="search"><Search size={16} aria-hidden="true" /><input type="search" aria-label="Rechercher un morceau" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un morceau ou un artiste" /></label><div className="filters" aria-label="Filtrer par ambiance">{moods.map((mood) => <button type="button" aria-pressed={activeMood === mood} className={activeMood === mood ? 'active' : ''} key={mood} onClick={() => setActiveMood(mood)}>{mood}</button>)}</div></div>{filtered.length > 0 ? <div className="song-grid">{filtered.map((song, index) => <SongCard key={`${song.title}-${song.artist}`} song={song} index={index} />)}</div> : <div className="empty-results" role="status"><p>Aucun morceau ne correspond à ta recherche.</p><button type="button" onClick={() => { setQuery(''); setActiveMood('Tous') }}>Effacer les filtres</button></div>}</section>
-    <section className="music-player-section bottom-player" aria-label="Musique de fond pour Lïa"><div><p className="eyebrow">À ÉCOUTER EN LISANT</p><h2>Le son de Lïa.</h2><p>Appuie sur play, puis laisse la page te raconter votre histoire.</p></div><a className="spotify-frame" href="https://open.spotify.com/track/0SpI4pEG1JtTMhKzcpyEVg" target="_blank" rel="noreferrer" aria-label="Ouvrir Silence de Marshmello et Khalid sur Spotify"><div className="spotify-frame-art">♪</div><div><strong>Silence</strong><span>Marshmello, Khalid</span><small>Écouter sur Spotify ↗</small></div></a></section>
+    <section className="music-player-section bottom-player" aria-label="Musique de fond pour Lïa"><div><p className="eyebrow">À ÉCOUTER EN LISANT</p><h2>Le son de Lïa.</h2><p>Un piano tout doux pour accompagner ta lettre.</p></div><a className="spotify-frame" href={`https://open.spotify.com/track/${loveLetterMusic.trackId}`} target="_blank" rel="noreferrer" aria-label={`Ouvrir ${loveLetterMusic.title} de ${loveLetterMusic.artist} sur Spotify`}><div className="spotify-frame-art">♪</div><div><strong>{loveLetterMusic.title}</strong><span>{loveLetterMusic.artist}</span><small>Écouter sur Spotify ↗</small></div></a></section>
     <footer><p>j&apos;ai fait ça en pensant à toi.</p><span>pour toi, Lïa</span></footer>
   </main>
 }

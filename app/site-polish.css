@@ -226,6 +226,14 @@ html {
   border-radius: 8px;
 }
 
+.love-letter-music small {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
 @media (hover: hover) {
   .song-card:hover {
     transform: translateY(-4px);
