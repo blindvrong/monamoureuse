@@ -298,6 +298,57 @@ html {
   border-top: 1px solid var(--line);
 }
 
+.beginnings-card {
+  max-width: 780px;
+  margin-top: 2rem;
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  border: 1px solid rgb(135 206 250 / 20%);
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgb(135 206 250 / 10%), transparent 60%),
+    #17232d;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 16%);
+}
+
+.beginnings-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--accent);
+  font: 500 0.62rem 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+}
+
+.beginnings-card h3 {
+  margin: 1rem 0 1.25rem;
+  color: var(--cream);
+  font: 500 clamp(1.8rem, 4vw, 2.6rem) 'Playfair Display', serif;
+  letter-spacing: -0.05em;
+}
+
+.beginnings-body {
+  display: grid;
+  gap: 1rem;
+  color: #d2c9c1;
+  font-size: 0.98rem;
+  line-height: 1.85;
+}
+
+.beginnings-body p {
+  margin: 0;
+}
+
+.beginnings-body p:first-child {
+  color: var(--cream);
+  font: italic 500 1.08rem / 1.75 'Playfair Display', serif;
+}
+
+.beginnings-signoff {
+  margin: 1.5rem 0 0;
+  color: var(--accent);
+  font: italic 500 1rem / 1.6 'Playfair Display', serif;
+}
+
 .returning-visitor-note {
   margin: -1rem 0 1.25rem;
   color: var(--accent);

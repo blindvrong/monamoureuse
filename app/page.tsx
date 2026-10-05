@@ -29,6 +29,13 @@ const finalLetterParagraphs = [
   'je t’aime pas seulement pour tout ce que tu fais ou tout ce que t’as, je t’aime parce que c’est toi.',
   'Et personne d’autre pourrait être toi.',
 ]
+const beginningsParagraphs = [
+  'Je repense souvent à nos premières parties de Phasmophobia. On s’est rencontrés au milieu d’une enquête, sans savoir que ce moment allait ouvrir une si belle histoire.',
+  'Après ça, on a continué à parler, d’abord sur Discord, puis sur Snap. Petit à petit, les messages sont devenus des habitudes, les habitudes des conversations qu’on attendait, et les conversations cette complicité qui n’appartient qu’à nous.',
+  'J’ai appris à aimer nos délires, nos discussions qui partent dans tous les sens et ces moments simples où ta présence suffit à rendre ma journée plus belle.',
+  'Tout n’a pas toujours été facile. On a connu des incompréhensions et des moments où il a fallu s’écouter et se retrouver. Mais je tiens à nous, à ce qu’on construit, et à la façon dont on continue d’avancer ensemble.',
+  'Aujourd’hui, quand je repense à ce début inattendu, je suis surtout reconnaissant que cette partie nous ait fait nous rencontrer. Je ne sais pas tout ce que l’avenir nous réserve, mais j’ai envie de continuer à écrire la suite avec toi.',
+]
 
 function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]; onPlay: () => void }) {
   return <div className="love-letter-music">
@@ -191,6 +198,14 @@ function LoveLetter({ isReturningVisitor }: { isReturningVisitor: boolean }) {
     {isReturningVisitor && <p className="returning-visitor-note">Bon retour, mon chou. Ça me fait plaisir de te retrouver, Lïa. <span aria-hidden="true">♥</span></p>}
     <p className="letter-intro">Lïa, je t&apos;aime pour plein de petites choses. Tu peux en découvrir une au hasard.</p>
     <div className="reason-card"><span className="reason-number">{String(reasonIndex + 1).padStart(2, '0')} / 100</span><p aria-live="polite">{reason.charAt(0).toUpperCase() + reason.slice(1)}.</p><button className="shuffle-button" type="button" onClick={showRandomReason}><Shuffle size={15} /> une autre raison</button></div>
+    <section className="beginnings-card" aria-labelledby="beginnings-title">
+      <div className="beginnings-kicker"><span>LE DÉBUT DE NOUS</span><Heart size={16} fill="currentColor" aria-hidden="true" /></div>
+      <h3 id="beginnings-title">De Phasmophobia à notre histoire</h3>
+      <div className="beginnings-body">
+        {beginningsParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      </div>
+      <p className="beginnings-signoff">Et je suis heureux que nos chemins se soient croisés. <span aria-hidden="true">♥</span></p>
+    </section>
     <section className="love-letters" aria-labelledby="love-letters-title">
       <div className="love-letters-heading">
         <h3 id="love-letters-title">La lettre pour mon amour</h3>
