@@ -385,10 +385,7 @@ function LoveLetter() {
     const readLetter = loveLetters[currentLetterIndex]
     setCurrentLetterIndex(nextLetterIndex)
 
-    if (!letterNotificationUrl) {
-      setNotificationStatus('Les alertes e-mail ne sont pas encore configurées.')
-      return
-    }
+    if (!letterNotificationUrl) return
 
     setNotificationStatus('Envoi de l’alerte e-mail…')
     try {
