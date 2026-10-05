@@ -5,10 +5,10 @@ import './site-polish.css'
 const basePath = process.env.GITHUB_ACTIONS === 'true' ? '/monamoureuse' : ''
 
 export const metadata: Metadata = {
-  title: 'Pour toi — tes sons préférés',
+  title: 'Surprise mon chou',
   description: 'Une petite bande-son de toi, entre nostalgie, R&B et nuits étoilées.',
   generator: 'v0.app',
-  icons: { icon: `${basePath}/icon.svg`, apple: `${basePath}/apple-icon.png` },
+  icons: { icon: [], apple: [] },
 }
 
 export const viewport: Viewport = {
