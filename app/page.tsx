@@ -9,6 +9,7 @@ const audioBasePath = process.env.NODE_ENV === 'production' ? '/monamoureuse' : 
 const letterNotificationUrl = process.env.NEXT_PUBLIC_LETTER_NOTIFICATION_URL
 const letterProgressKey = 'monamoureuse-letter-progress-v4'
 const siteVisitKey = 'monamoureuse-site-visited-v1'
+const comfortNoteVersionsKey = 'monamoureuse-comfort-note-versions-v1'
 const letterSongs = [
   { title: 'Passionfruit', artist: 'Drake', src: `${audioBasePath}/passionfruit.mp3` },
   { title: 'Make It Up', artist: 'Taylor Scott', src: `${audioBasePath}/make-it-up.mp3` },
@@ -40,37 +41,109 @@ const comfortNotes = [
   {
     id: 'smile',
     prompt: 'Quand tu as besoin de sourire',
-    title: 'Je parie que ton sourire est toujours aussi beau',
-    paragraphs: [
-      'Même dans les journées un peu grises, j’espère qu’un petit quelque chose réussira à te faire sourire.',
-      'Et si tu ne trouves rien, rappelle-toi qu’il y a quelqu’un qui pense à toi et qui aime te voir heureuse. ♥',
+    variants: [
+      {
+        title: 'Je parie que ton sourire est toujours aussi beau',
+        paragraphs: [
+          'Même dans les journées un peu grises, j’espère qu’un petit quelque chose réussira à te faire sourire.',
+          'Et si tu ne trouves rien, rappelle-toi qu’il y a quelqu’un qui pense à toi et qui aime te voir heureuse. ♥',
+        ],
+      },
+      {
+        title: 'Petite mission du jour : sourire',
+        paragraphs: [
+          'Imagine-moi en train d’essayer de te faire rire avec une blague probablement pas très drôle.',
+          'Si ça t’a juste fait souffler du nez, je prends quand même : j’espère que ton sourire n’était pas loin. ♥',
+        ],
+      },
+      {
+        title: 'Ton sourire, c’est mon rayon de soleil',
+        paragraphs: [
+          'J’aime le voir apparaître, même pour une toute petite chose.',
+          'Alors garde ce mot comme un rappel : tu mérites plein de raisons de sourire, aujourd’hui et tous les jours.',
+        ],
+      },
     ],
   },
   {
     id: 'miss',
     prompt: 'Quand je te manque',
-    title: 'Un petit bout de moi près de toi',
-    paragraphs: [
-      'Même quand on n’est pas côte à côte, tu gardes une place toute particulière dans mes pensées.',
-      'Pense à l’un de nos délires, à une conversation qui t’a fait rire, ou simplement au fait qu’on se retrouvera bientôt pour se raconter plein de choses.',
+    variants: [
+      {
+        title: 'Un petit bout de moi près de toi',
+        paragraphs: [
+          'Même quand on n’est pas côte à côte, tu gardes une place toute particulière dans mes pensées.',
+          'Pense à l’un de nos délires, à une conversation qui t’a fait rire, ou simplement au fait qu’on se retrouvera bientôt pour se raconter plein de choses.',
+        ],
+      },
+      {
+        title: 'La distance ne change pas ma pensée',
+        paragraphs: [
+          'Si je te manque un peu, ferme les yeux et repense à un moment où on riait tous les deux.',
+          'Je suis peut-être loin à cet instant, mais je pense à toi et j’ai déjà hâte de te retrouver. ♥',
+        ],
+      },
+      {
+        title: 'On se retrouve bientôt',
+        paragraphs: [
+          'En attendant le prochain moment ensemble, garde près de toi un de nos souvenirs préférés.',
+          'Et n’oublie pas : même chacun de notre côté, on partage toujours cette histoire qui est à nous.',
+        ],
+      },
     ],
   },
   {
     id: 'hard-day',
     prompt: 'Quand ta journée est difficile',
-    title: 'Tu n’as pas besoin de tout porter d’un coup',
-    paragraphs: [
-      'Tu as le droit d’être fatiguée, de faire une pause et de prendre les choses une à une. Tu n’as pas besoin d’avoir toutes les réponses maintenant.',
-      'J’espère que demain sera plus doux. En attendant, je t’envoie tout mon amour et un gros câlin à distance.',
+    variants: [
+      {
+        title: 'Tu n’as pas besoin de tout porter d’un coup',
+        paragraphs: [
+          'Tu as le droit d’être fatiguée, de faire une pause et de prendre les choses une à une. Tu n’as pas besoin d’avoir toutes les réponses maintenant.',
+          'J’espère que demain sera plus doux. En attendant, je t’envoie tout mon amour et un gros câlin à distance.',
+        ],
+      },
+      {
+        title: 'Prends une petite pause, mon amour',
+        paragraphs: [
+          'Respire doucement. Tu peux laisser le reste attendre quelques minutes et t’accorder un instant rien qu’à toi.',
+          'Tu n’as pas à être parfaite ni à tout réussir aujourd’hui. Je suis fier de toi, même dans les journées compliquées.',
+        ],
+      },
+      {
+        title: 'Cette journée ne te résume pas',
+        paragraphs: [
+          'Une journée difficile ne change rien à la personne merveilleuse que tu es.',
+          'Sois douce avec toi-même ce soir. Je t’envoie un câlin immense, à garder aussi longtemps qu’il le faut. ♥',
+        ],
+      },
     ],
   },
   {
     id: 'love',
     prompt: 'Quand tu veux un mot doux',
-    title: 'C’est toi que je choisis',
-    paragraphs: [
-      'J’aime nos petits moments, nos discussions et cette complicité qu’on a construite à notre façon.',
-      'Je suis heureux que nos chemins se soient croisés, mon chou. Je t’aime pour la personne que tu es, tout simplement.',
+    variants: [
+      {
+        title: 'C’est toi que je choisis',
+        paragraphs: [
+          'J’aime nos petits moments, nos discussions et cette complicité qu’on a construite à notre façon.',
+          'Je suis heureux que nos chemins se soient croisés, mon chou. Je t’aime pour la personne que tu es, tout simplement.',
+        ],
+      },
+      {
+        title: 'Tu es ma personne préférée',
+        paragraphs: [
+          'J’aime ta façon d’être, tes petites habitudes et tous ces détails qui font que tu es toi.',
+          'Je ne cherche pas une grande raison aujourd’hui : je voulais juste te rappeler que je t’aime. ♥',
+        ],
+      },
+      {
+        title: 'Un mot tout simple : je t’aime',
+        paragraphs: [
+          'Je t’aime dans les grands moments comme dans les petits, dans nos fous rires comme dans nos conversations tranquilles.',
+          'Et je suis vraiment heureux de partager un bout de ma vie avec toi, mon chou.',
+        ],
+      },
     ],
   },
 ]
@@ -94,6 +167,7 @@ function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]
 function LoveLetter({ isReturningVisitor }: { isReturningVisitor: boolean }) {
   const [reasonIndex, setReasonIndex] = useState(0)
   const [openComfortNoteId, setOpenComfortNoteId] = useState<string | null>(null)
+  const [openComfortNoteVariantIndex, setOpenComfortNoteVariantIndex] = useState(0)
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0)
   const [completedLetters, setCompletedLetters] = useState<Set<number>>(new Set())
   const [isLetterProgressLoaded, setIsLetterProgressLoaded] = useState(false)
@@ -168,6 +242,50 @@ function LoveLetter({ isReturningVisitor }: { isReturningVisitor: boolean }) {
       while (next === current && reasons.length > 1) next = Math.floor(Math.random() * reasons.length)
       return next
     })
+  }
+
+  function openComfortNote(noteId: string) {
+    const note = comfortNotes.find((item) => item.id === noteId)
+    if (!note) return
+
+    let storedVersions: Record<string, number> = {}
+    try {
+      const savedVersions = localStorage.getItem(comfortNoteVersionsKey)
+      if (savedVersions) {
+        const parsed: unknown = JSON.parse(savedVersions)
+        if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+          for (const item of comfortNotes) {
+            const version = (parsed as Record<string, unknown>)[item.id]
+            if (typeof version === 'number' && Number.isInteger(version) && version >= 0 && version < item.variants.length) {
+              storedVersions[item.id] = version
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Impossible de charger les versions des petits mots.', error)
+    }
+
+    const previousVersion = storedVersions[note.id]
+    const nextVersion = previousVersion === undefined
+      ? Math.floor(Math.random() * note.variants.length)
+      : (previousVersion + 1) % note.variants.length
+
+    storedVersions[note.id] = nextVersion
+    try {
+      localStorage.setItem(comfortNoteVersionsKey, JSON.stringify(storedVersions))
+    } catch (error) {
+      console.error('Impossible d’enregistrer la version du petit mot.', error)
+    }
+
+    setOpenComfortNoteVariantIndex(nextVersion)
+    setOpenComfortNoteId(note.id)
+  }
+
+  function openRandomComfortNote() {
+    const availableNotes = comfortNotes.filter((note) => note.id !== openComfortNoteId)
+    const note = availableNotes[Math.floor(Math.random() * availableNotes.length)]
+    if (note) openComfortNote(note.id)
   }
 
   function setCurrentLetterCompleted(isCompleted: boolean) {
@@ -257,20 +375,28 @@ function LoveLetter({ isReturningVisitor }: { isReturningVisitor: boolean }) {
           type="button"
           key={note.id}
           aria-expanded={openComfortNoteId === note.id}
-          onClick={() => setOpenComfortNoteId((current) => current === note.id ? null : note.id)}
+          onClick={() => {
+            if (openComfortNoteId === note.id) setOpenComfortNoteId(null)
+            else openComfortNote(note.id)
+          }}
         >
           <Heart size={16} aria-hidden="true" />
           <span>{note.prompt}</span>
           <span className="comfort-note-arrow" aria-hidden="true">{openComfortNoteId === note.id ? '−' : '＋'}</span>
         </button>)}
       </div>
+      <button className="comfort-note-random" type="button" onClick={openRandomComfortNote}>
+        <Shuffle size={16} aria-hidden="true" />
+        Tire-moi un petit mot au hasard
+      </button>
       {openComfortNoteId && (() => {
         const note = comfortNotes.find((item) => item.id === openComfortNoteId)
         if (!note) return null
+        const variant = note.variants[openComfortNoteVariantIndex]
         return <article className="comfort-note-message" id="comfort-note-message" aria-live="polite">
           <span className="comfort-note-message-label">UN PETIT MOT POUR TOI</span>
-          <h4>{note.title}</h4>
-          {note.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          <h4>{variant.title}</h4>
+          {variant.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </article>
       })()}
     </section>
