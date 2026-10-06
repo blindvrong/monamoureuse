@@ -349,6 +349,98 @@ html {
   font: italic 500 1rem / 1.6 'Playfair Display', serif;
 }
 
+.comfort-notes {
+  max-width: 780px;
+  margin-top: 3rem;
+}
+
+.comfort-notes-heading {
+  margin-bottom: 1.25rem;
+}
+
+.comfort-notes-kicker,
+.comfort-note-message-label {
+  color: var(--accent);
+  font: 500 0.6rem 'DM Mono', monospace;
+  letter-spacing: 0.13em;
+}
+
+.comfort-notes-heading h3 {
+  margin: 0.55rem 0 0;
+  color: var(--cream);
+  font: 500 clamp(2rem, 4vw, 2.8rem) 'Playfair Display', serif;
+  letter-spacing: -0.05em;
+}
+
+.comfort-notes-heading p {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.comfort-note-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.comfort-note-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 58px;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgb(135 206 250 / 20%);
+  border-radius: 12px;
+  background: #17232d;
+  color: var(--cream);
+  font: 500 0.88rem 'DM Sans', sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.comfort-note-choice > svg {
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.comfort-note-choice:hover,
+.comfort-note-choice.is-open {
+  transform: translateY(-1px);
+  border-color: rgb(135 206 250 / 55%);
+  background: #1d3544;
+}
+
+.comfort-note-arrow {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.comfort-note-message {
+  margin-top: 1rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid rgb(135 206 250 / 24%);
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgb(135 206 250 / 10%), transparent 60%),
+    #17232d;
+  animation: surprise-card-in 350ms ease both;
+}
+
+.comfort-note-message h4 {
+  margin: 0.75rem 0 1rem;
+  color: var(--cream);
+  font: italic 500 clamp(1.35rem, 3vw, 1.8rem) / 1.35 'Playfair Display', serif;
+}
+
+.comfort-note-message p {
+  margin: 0.75rem 0 0;
+  color: #d2c9c1;
+  line-height: 1.8;
+}
+
 .returning-visitor-note {
   margin: -1rem 0 1.25rem;
   color: var(--accent);
@@ -905,6 +997,10 @@ html {
 @media (max-width: 600px) {
   .site-shell {
     padding-inline: 1.25rem;
+  }
+
+  .comfort-note-choices {
+    grid-template-columns: 1fr;
   }
 
   .topbar {

@@ -36,6 +36,44 @@ const beginningsParagraphs = [
   'Tout n’a pas toujours été facile. On a connu des incompréhensions et des moments où il a fallu s’écouter et se retrouver. Mais je tiens à nous, à ce qu’on construit, et à la façon dont on continue d’avancer ensemble.',
   'Aujourd’hui, quand je repense à ce début inattendu, je suis surtout reconnaissant que cette partie nous ait fait nous rencontrer. Je ne sais pas tout ce que l’avenir nous réserve, mais j’ai envie de continuer à écrire la suite avec toi.',
 ]
+const comfortNotes = [
+  {
+    id: 'smile',
+    prompt: 'Quand tu as besoin de sourire',
+    title: 'Je parie que ton sourire est toujours aussi beau',
+    paragraphs: [
+      'Même dans les journées un peu grises, j’espère qu’un petit quelque chose réussira à te faire sourire.',
+      'Et si tu ne trouves rien, rappelle-toi qu’il y a quelqu’un qui pense à toi et qui aime te voir heureuse. ♥',
+    ],
+  },
+  {
+    id: 'miss',
+    prompt: 'Quand je te manque',
+    title: 'Un petit bout de moi près de toi',
+    paragraphs: [
+      'Même quand on n’est pas côte à côte, tu gardes une place toute particulière dans mes pensées.',
+      'Pense à l’un de nos délires, à une conversation qui t’a fait rire, ou simplement au fait qu’on se retrouvera bientôt pour se raconter plein de choses.',
+    ],
+  },
+  {
+    id: 'hard-day',
+    prompt: 'Quand ta journée est difficile',
+    title: 'Tu n’as pas besoin de tout porter d’un coup',
+    paragraphs: [
+      'Tu as le droit d’être fatiguée, de faire une pause et de prendre les choses une à une. Tu n’as pas besoin d’avoir toutes les réponses maintenant.',
+      'J’espère que demain sera plus doux. En attendant, je t’envoie tout mon amour et un gros câlin à distance.',
+    ],
+  },
+  {
+    id: 'love',
+    prompt: 'Quand tu veux un mot doux',
+    title: 'C’est toi que je choisis',
+    paragraphs: [
+      'J’aime nos petits moments, nos discussions et cette complicité qu’on a construite à notre façon.',
+      'Je suis heureux que nos chemins se soient croisés, mon chou. Je t’aime pour la personne que tu es, tout simplement.',
+    ],
+  },
+]
 
 function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]; onPlay: () => void }) {
   return <div className="love-letter-music">
@@ -55,6 +93,7 @@ function LetterSongPlayer({ song, onPlay }: { song: (typeof letterSongs)[number]
 
 function LoveLetter({ isReturningVisitor }: { isReturningVisitor: boolean }) {
   const [reasonIndex, setReasonIndex] = useState(0)
+  const [openComfortNoteId, setOpenComfortNoteId] = useState<string | null>(null)
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0)
   const [completedLetters, setCompletedLetters] = useState<Set<number>>(new Set())
   const [isLetterProgressLoaded, setIsLetterProgressLoaded] = useState(false)
@@ -205,6 +244,35 @@ function LoveLetter({ isReturningVisitor }: { isReturningVisitor: boolean }) {
         {beginningsParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       </div>
       <p className="beginnings-signoff">Et je suis heureux que nos chemins se soient croisés. <span aria-hidden="true">♥</span></p>
+    </section>
+    <section className="comfort-notes" aria-labelledby="comfort-notes-title">
+      <div className="comfort-notes-heading">
+        <span className="comfort-notes-kicker">QUAND TU EN AS ENVIE</span>
+        <h3 id="comfort-notes-title">À ouvrir quand…</h3>
+        <p>Choisis le petit mot dont tu as besoin aujourd’hui.</p>
+      </div>
+      <div className="comfort-note-choices">
+        {comfortNotes.map((note) => <button
+          className={`comfort-note-choice${openComfortNoteId === note.id ? ' is-open' : ''}`}
+          type="button"
+          key={note.id}
+          aria-expanded={openComfortNoteId === note.id}
+          onClick={() => setOpenComfortNoteId((current) => current === note.id ? null : note.id)}
+        >
+          <Heart size={16} aria-hidden="true" />
+          <span>{note.prompt}</span>
+          <span className="comfort-note-arrow" aria-hidden="true">{openComfortNoteId === note.id ? '−' : '＋'}</span>
+        </button>)}
+      </div>
+      {openComfortNoteId && (() => {
+        const note = comfortNotes.find((item) => item.id === openComfortNoteId)
+        if (!note) return null
+        return <article className="comfort-note-message" id="comfort-note-message" aria-live="polite">
+          <span className="comfort-note-message-label">UN PETIT MOT POUR TOI</span>
+          <h4>{note.title}</h4>
+          {note.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </article>
+      })()}
     </section>
     <section className="love-letters" aria-labelledby="love-letters-title">
       <div className="love-letters-heading">
